@@ -1,0 +1,45 @@
+{
+  "name": "angular-mandrill",
+  "version": "0.0.2",
+  "dependencies": {
+    "angular": "~1.4.3"
+  },
+  "main": "dist/angular-mandrill.js",
+  "keywords": [
+    "mandrill",
+    "mailchimp",
+    "angular",
+    "email",
+    "client",
+    "json",
+    "api"
+  ],
+  "ignore": [
+    "app",
+    "test",
+    "node_modules",
+    "bower_components",
+    ".bowerrc",
+    ".tmp",
+    ".gitignore",
+    ".gitattributes",
+    ".jshintignore",
+    ".jshintrc",
+    ".travis.yml",
+    ".editorconfig",
+    "Gruntfile.js",
+    "README.md"
+  ],
+  "appPath": "app",
+  "homepage": "https://github.com/mrkvngrkn/angular-mandrill",
+  "_release": "0.0.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.0.2",
+    "commit": "d681213e6e6fd8013d791edc35c4fceba934b71d"
+  },
+  "_source": "https://github.com/mrkvngrkn/angular-mandrill.git",
+  "_target": "^0.0.2",
+  "_originalSource": "angular-mandrill",
+  "_direct": true
+}

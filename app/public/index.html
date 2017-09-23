@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-br" ng-app="condominiofacil">
+<head>
+	<base href="/">
+	<meta http-equiv="Content-Language" content="pt-br">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<link rel="stylesheet" type="text/css" href="css/reset.css">
+	<link rel="stylesheet" type="text/css" href="css/estilo.css">
+	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css" media="all">
+	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap-theme.min.css" media="all">
+	<link rel="stylesheet" type="text/css" href="css/theme.css" />
+	<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" />
+	<script type="text/javascript" src="js/lib/jquery.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/jquery-ui.css" />
+	<link rel="stylesheet" type="text/css" href="css/angular-material.css"/>
+	<link rel="stylesheet" type="text/css" href="css/primeui.min.css" />
+	<link rel="stylesheet" type="text/css" href="css/carrousel.css" />
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- Import´s do angular -->
+	<script src="js/lib/angular.min.js"></script>
+    <script src="js/lib/angular-animate.min.js"></script>
+    <script src="js/lib/angular-aria.min.js"></script>
+    <script src="js/lib/angular-material.min.js"></script>
+
+	<!-- <script src="js/lib/angular.js"></script> -->
+	<script src="js/lib/angular-ui-router.min.js"></script>
+
+	<!-- Import para o envio de E-mail  -->
+	<script src="js/lib/angular-mandrill.js"></script>
+	
+
+	<!-- Controllers do Angular -->
+	<script src="js/main.js"></script>
+	<script src="js/controllers/home-controller.js"></script>
+	<script src="js/controllers/login-controller.js"></script>
+	<script src="js/controllers/principal-controller.js"></script>
+	<script src="js/controllers/contato-controller.js"></script>
+	<script src="js/controllers/boletos-controller.js"></script>
+	<script src="js/controllers/propagandas-controller.js"></script>
+
+	
+	<script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
+	<script src="js/lib/bootbox.js"></script>
+	<script src="js/lib/ngBootbox.min.js"></script>
+
+	<script type="text/javascript" src="js/lib/moment.js"></script>
+	<script type="text/javascript" src="js/lib/pt-br.js"></script>
+	<script type="text/javascript" src="js/lib/angular-moment.js"></script> 
+	<script type="text/javascript" src="js/lib/jquery-ui.js"></script> 
+	<script type="text/javascript" src="js/lib/primeui.js"></script> 
+	<script type="text/javascript" src="js/lib/x-tag-core.min.js"></script> 
+	<script type="text/javascript" src="js/lib/primeelements.js"></script> 
+	<script type="text/javascript" src="js/lib/mustache.min.js"></script> 
+
+	<!-- Propagandas do site que ficarão sendo apresentadas.
+	https://www.google.com/adsense/new/u/0/pub-8203324650722374/home -->
+<!-- 	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<script>
+	  (adsbygoogle = window.adsbygoogle || []).push({
+	    google_ad_client: "ca-pub-8203324650722374",
+	    enable_page_level_ads: true
+	  });
+	</script> -->
+
+
+	<script src="js/lib/token-interceptor.js"></script>
+
+	<title>Condomínio Fácil</title>
+</head>
+	<body  >
+	<script type="text/javascript">
+		    $(function () {
+		        handleSelect = function(event, value) {
+		            document.getElementById('select').show([{severity: 'info', summary: 'Day Selected', detail: event }]);
+		        };
+		        $('p-datepicker').children('input').puiinputtext();
+		        $('#doc').puitabview();
+		    });
+
+		$(document).ready(function(e) {
+		    $("#datepicker").datepicker({
+		        dayNamesMin: ['D','S','T','Q','Q','S','S','D'],
+		        dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],
+		        dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],
+		        monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+		        monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+		        dateFormat: 'dd/mm/yy',
+		        nextText: 'Próximo',
+		        prevText: 'Anterior'
+		    });
+		});
+		   
+		 $(document).on('click.nav','.navbar-collapse.in',function(e) {
+		    if( $(e.target).is('a') ) {
+		        $(this).removeClass('in').addClass('collapse');
+		    }
+		  });
+
+	</script>
+		  <nav class="navbar navbar-default navbar-fixed-top navbar-inverse ">
+			  <div class=" container " >
+			  	<div class="navbar-header" style="display: flex; align-items: center; align-content: space-between; margin-top: -12px; height: 70px ">
+			  		<div class=" text-left navbar-toggle  collapsed col-xs-2 col-sm-2 col-md-2 col-lg-2" data-toggle="collapse"
+                    	data-target="#menu" aria-expanded="false" aria-controls="menu">
+			              <span class="glyphicon glyphicon-menu-hamburger btn-lg" style="color: white" ></span>
+		            </div>
+		            <div class="  text-center text-uppercase col-xs-8 col-sm-8 col-md-8 col-lg-8">
+				    	<b  style="color: white; ">{{tituloPagina}}</b>
+				    </div>
+				    <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1" style="margin-right: 3em; " >
+						<a  ng-if="!logado" href="login" style="color: white!important">
+						   	Login
+						</a>
+						<a  ng-if="logado" href="#" ng-click="cancelar()" style="color: white!important">
+						   	Logoff
+						</a>
+					</div>
+				  </div>
+		            <!-- <div id="menu" class="collapse navbar-collapse" ng-click="fecharMenu()"> -->
+		            <div id="menu" class="collapse navbar-collapse" ng-click="fecharMenu()">
+	            	   <ul class="nav navbar-nav " >
+			              <li  class="text-uppercase" style="color: white;">
+			                <a href="home" >Home</a>
+			                <a ui-sref="principal" style=" " >Acompanhamento</a>
+			                <a ui-sref="#" style=" " ng-click="alterarFlag()">Boletos</a>
+			                <a ui-sref="contato" style=" " >Contato</a>
+			              </li>
+			            </ul>
+		            </div>
+	            </div>
+		  </nav>
+		<br/>
+		<br/>
+		<br/>
+		  	<div ui-view ></div>
+			<br/>
+			<br/>
+			<br/>
+			<footer class="container blockquote-reverse navbar navbar-default  navbar-fixed-bottom navbar-inverse">
+				<address>
+				  <strong style="color: white" >Condomínio Fácil</strong><br>
+				  <a href="mailto:#">godoirezende@gmail.com</a>
+				</address>
+			</footer>
+
+
+	</body>
+
+</html>

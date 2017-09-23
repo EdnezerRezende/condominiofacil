@@ -1,0 +1,83 @@
+<div ng-init="verificaBoletosAtivos()" >
+	<div class="container">
+			<h3 class="text-center" >
+				Agenda do Condomínio
+			</h3>
+			<p-panel  title="Racionamento" toggleable >
+				<table  id="entradas" class="table table-striped ">
+						<thead  >
+							<tr >
+								<th class="text-center"><strong>Data</strong></th>
+								<th class="text-center"><strong>Evento</strong></th>
+							</tr>
+						</thead>
+						<tbody ng-repeat="evento in eventos | orderBy: 'dataProgramada'" >
+							<tr ng-if="evento.descricao == 'Racionamento' " >
+								<td class="text-center"> {{evento.dataProgramada | date: 'dd/MM/yyyy'}} </td>
+								<td class="text-center"> {{evento.descricao }} </td>
+								<td class="text-center"><span class="glyphicon glyphicon-tint " aria-hidden="true"></span><span class="glyphicon glyphicon-ban-circle " aria-hidden="true"></span></td>
+							</tr>
+						</tbody>
+				</table>
+					
+			</p-panel>
+			<p-panel title="Reuniões" toggleable>
+				<table  id="entradas" class="table table-striped ">
+						<thead  >
+							<tr >
+								<th class="text-center"><strong>Data</strong></th>
+								<th class="text-center"><strong>Evento</strong></th>
+							</tr>
+						</thead>
+						<tbody  ng-repeat="evento in eventos | orderBy: 'dataProgramada'" >
+							<tr ng-if="evento.descricao != 'Racionamento' " >
+								<td class="text-center"> {{evento.dataProgramada | date: 'dd/MM/yyyy'}} </td>
+								<td class="text-center"> {{evento.descricao }} </td>
+								<td class="text-center"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span></td>
+							</tr>
+						</tbody>
+					</table>
+			</p-panel>
+	</div>
+	<div >
+		<p-accordion id="multiple"  ng-repeat="referencia in referencias | orderBy: '-referencia'">
+				<h2 class="text-center " >Contas do Mês {{referencia.referencia | date: 'MM/yyyy' }}</h2>
+			    <p-tab title="Entradas" ng-repeat="item in movimentacao | orderBy: 'descricao'">
+			       <table  id="entradas" class="table table-striped ">
+							<thead  >
+								<tr>
+									<th><strong>Descrição</strong></th>
+									<th><strong>Data</strong></th>
+									<th><strong>Valor</strong></th>
+								</tr>
+							</thead>
+							<tbody  ng-repeat="item in movimentacao | orderBy: 'descricao'" >
+								<tr ng-if="item.tipoRegistro == 'E' && referencia.referencia == item.referencia" >
+									<td> {{item.descricao}} </td>
+									<td> {{item.referencia | date: 'MM/dd/yyyy'}} </td>
+									<td> {{item.valor | currency: 'R$ '}} </td>
+								</tr>
+							</tbody>
+						</table>
+			    </p-tab>
+			    <p-tab title="Saídas" ng-repeat="item in movimentacao | orderBy: 'descricao'">
+			        <table id="saidas" class="table table-striped " >
+						<thead>
+							<tr>
+								<th><strong>Descrição</strong></th>
+								<th><strong>Data</strong></th>
+								<th><strong>Valor</strong></th>
+							</tr>
+						</thead>
+						<tbody ng-repeat="item in movimentacao | orderBy: 'descricao'">
+							<tr ng-if="item.tipoRegistro == 'S' && referencia.referencia == item.referencia">
+								<td> {{item.descricao}} </td>
+								<td> {{item.referencia | date: 'MM/dd/yyyy'}} </td>
+								<td> {{item.valor | currency: 'R$ '}} </td>
+							</tr>
+						</tbody>
+					</table>
+			    </p-tab>
+		</p-accordion>
+	</div>
+</div>

@@ -1,0 +1,38 @@
+
+<div class="container ">
+	<div class="alert alert-danger" ng-show="error">
+		<button class="close" data-dismiss="alert">x</button>
+	 	<center><strong>Erro!</strong> Tente mais tarde!</center>
+	</div>
+	<div class="alert alert-success" ng-show="success">
+		<button class="close" data-dismiss="alert">x</button>
+		<center><strong>Ok! </strong> Sua mensagem foi enviada.</center>
+	</div>
+
+	<form  class="form-group" name="FormContato" ng-submit="enviarEmail()">
+
+		<div ng-class="{ 'has-error has-feedback form-group ' : FormContato.name.$invalid, 'form-group has-success has-feedback' :FormContato.name.$valid  }" >
+		  <label class="control-label" >Nome</label>
+		  <input name="name" class="form-control" type="txt" ng-model="user.nome" required />
+		  <span ng-show="FormContato.name.$invalid" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+		  <span ng-show="FormContato.name.$valid" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+		</div>
+		<div ng-class="{ 'has-error has-feedback form-group ' : FormContato.email.$invalid, 'form-group has-success has-feedback' :FormContato.email.$valid  }" >
+		  <label class="control-label" >E-mail</label>
+		  <input name="email" class="form-control" type="email" ng-model="user.email" required />
+		  <span ng-show="FormContato.email.$invalid" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+		  <span ng-show="FormContato.email.$valid" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+		</div>
+		<div ng-class="{ 'has-error has-feedback form-group ' : FormContato.mensagem.$invalid, 'form-group has-success has-feedback' :FormContato.mensagem.$valid  }" >
+		  <label class="control-label" >Mensagem</label>
+		  <textarea name="mensagem" class="form-control"  ng-model="user.mensagem" required /></textarea>
+		  <span ng-show="FormContato.mensagem.$invalid" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+		  <span ng-show="FormContato.mensagem.$valid" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+		</div>
+		<input type="submit" class="btn btn-lg" value="Enviar mensagem" ng-class="{'disabled btn-warning' : FormContato.$invalid , 'btn-success' : FormContato.$valid}">
+		<button class="btn btn-danger btn-lg" ng-click="voltarHome()"> Cancelar
+			
+		</button>
+
+	</form> 
+</div>

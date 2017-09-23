@@ -1,0 +1,31 @@
+<div class="container-fluid">
+	<br/>
+	<div class="panel panel-default">
+		<div class="table-responsive">
+		    <table id="Boletos" class="table table-striped " >
+				<thead >
+					<tr>
+						<th><strong>Ref.</strong></th>
+						<th><strong>Valor</strong></th>
+						<th><strong>Multa/Juros</strong></th>
+						<th><strong>Data Pgto</strong></th>
+						<th><strong>Data Baixa</strong></th>
+					</tr>
+				</thead>
+				<!-- ng-init="verificarAtraso(item)" -->
+				<tbody ng-repeat="item in boletos | orderBy: '-referencia'" >
+					<tr  ng-class="{'danger': (item.dataPagamento | date: 'yyyyMMdd') < dataFormatada && !item.boletoPago}" >			
+						<td > {{item.referencia | date: 'MM/yyyy'}} </td>
+						<td> {{item.valor | currency: 'R$ '}} </td>
+						<td> {{item.juros + item.multa| currency: 'R$ '}} </td>
+						<td> {{item.dataPagamento | date: 'dd/MM/yyyy'}} </td>
+						<td> {{item.dataPago | date: 'dd/MM/yyyy'}} </td>
+
+					</tr>
+				</tbody>
+			</table>
+					<br/>
+		</div>
+	</div>
+
+</div>
