@@ -1,6 +1,18 @@
-angular.module('condominiofacil', ['ui.router', 'angular-mandrill', 'angularMoment', 'ngBootbox', 'ngMaterial', 'ngAnimate'])
-.config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, MandrillProvider){
+angular.module('condominiofacil', ['ui.router', 'angular-mandrill', 'angularMoment', 'ngBootbox', 'ngMaterial', 'ngAnimate', 'ngMessages'])
+.config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, MandrillProvider, $mdDateLocaleProvider ){
 
+	//configurações do DataPeckir
+	$mdDateLocaleProvider.months = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+	$mdDateLocaleProvider.shortMonths = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+	$mdDateLocaleProvider.days = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
+	$mdDateLocaleProvider.shortDays = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb','Dom'];
+	$mdDateLocaleProvider.firstDayOfWeek = 1;
+	$mdDateLocaleProvider.formatDate = function(date) {
+		if (date != null){
+	   		return moment(date).format('DD-MM-YYYY');
+		}
+		return '';
+	};
 
 	MandrillProvider.setApiKey('Uvr2MvNa1AJY7vG15BnNIQ');
 
@@ -38,6 +50,11 @@ angular.module('condominiofacil', ['ui.router', 'angular-mandrill', 'angularMome
 	    templateUrl: 'parciais/contato.html',
 	    controller: 'ContatoController'
 	  })
+	  .state('cadastramento', {
+	    url: "/cadastramento",
+	    templateUrl: 'parciais/cadastramento.html',
+	    controller: 'CadastramentoController'
+	  })
   // Página ativada quando logar (conterá Disponibilização das contas Mensais, contas em aberto e Pagamento de Contas)
 	  .state('principal', {
 	    url: "/principal",
@@ -56,7 +73,7 @@ angular.module('condominiofacil', ['ui.router', 'angular-mandrill', 'angularMome
 	$rootScope.rotaBoleto = false;
 	$rootScope.usuario = {};
 	$rootScope.boletos = [];
-
+	$rootScope.perfilAutorizado = false;
 	$rootScope.idLogin = '';
 
 	$rootScope.eventos =[];
@@ -80,11 +97,12 @@ angular.module('condominiofacil', ['ui.router', 'angular-mandrill', 'angularMome
        });
     };
 
-    $rootScope.cancelar = function(){
+    $rootScope.logoff = function(){
     	delete $window.sessionStorage.token;
     	$rootScope.rotaBoleto = false;
     	$rootScope.usuario = {};
 		$rootScope.boletos = [];
+		$rootScope.perfilAutorizado = false;
     	$rootScope.logado = false;
     	$location.path("/home");
     }

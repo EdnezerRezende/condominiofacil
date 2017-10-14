@@ -19,7 +19,6 @@ module.exports = function(app) {
                      var token = jwt.sign({login: usuario.login}, app.get('secret'), {
                          expiresIn: 84600
                      });
-                     console.log('Autenticado: token adicionado na resposta');
                      
                      res.set('x-access-token', token); 
 
@@ -27,7 +26,6 @@ module.exports = function(app) {
                      for (var i = 0; i < results.length; i++) {
                          identificacao = results[i];
                      };
-                     console.log(identificacao);
                      res.json(identificacao);
                      res.end(); 
                  }

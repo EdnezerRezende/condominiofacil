@@ -6,6 +6,8 @@ angular.module('condominiofacil').controller('PrincipalController', function($sc
   $scope.referencias = [];
   $scope.apartamento = {};
   $rootScope.logado = true;
+  $scope.vlrEntrada = [];
+  $scope.vlrSaida = [];
 
   $rootScope.apresentarEventoDia = function(evento){
     var nowDate = Date('yyyy/MM/dd HH:mm:ss');
@@ -19,17 +21,41 @@ angular.module('condominiofacil').controller('PrincipalController', function($sc
     }
   };
 
-
 	$http({
       method: 'GET',
       url: '/movimentacao'
     })
     .then(function (success) {
       $scope.movimentacao = success.data;
-    }, function(error){
-      console.log(error);
+     
+    }, function( error ){
+      console.log( error );
     });
  
+  $http({
+      method: 'GET',
+      url: '/vlrEntrada'
+    })
+    .then(function (success) {
+      $scope.vlrEntrada = success.data;
+     
+    }, function( error ){
+      console.log( error );
+    });
+
+  $http({
+      method: 'GET',
+      url: '/vlrSaida'
+    })
+    .then(function (success) {
+      $scope.vlrSaida = success.data;
+     
+    }, function( error ){
+      console.log( error );
+    });
+
+
+
     $http({
       method: 'GET',
       url: '/apartamento/' + $rootScope.idLogin 
@@ -80,5 +106,7 @@ angular.module('condominiofacil').controller('PrincipalController', function($sc
 
     }
   };
+
+  
 
 });

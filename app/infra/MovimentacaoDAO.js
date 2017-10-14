@@ -8,8 +8,18 @@ MovimentacaoDAO.prototype.lista = function(callback) {
     this._connection.query(sql, callback);
 }
 
+MovimentacaoDAO.prototype.listaVlrEntrada = function(callback) {
+	var sql = 'SELECT  mE.referencia, sum(mE.valor) as vlrEntrada FROM movimentacao mE where mE.tipoRegistro = "E" group by mE.referencia ';
+    this._connection.query(sql, callback);
+}
+
+MovimentacaoDAO.prototype.listaVlrSaida = function(callback) {
+	var sql = 'SELECT  mS.referencia, sum(mS.valor) as vlrSaida FROM movimentacao mS where mS.tipoRegistro = "S" group by mS.referencia ';
+    this._connection.query(sql, callback);
+}
+
 MovimentacaoDAO.prototype.listaReferencia = function(callback) {
-	var sql = 'select distinct referencia.referencia from movimentacao referencia';
+	var sql = 'select * from referencia';
     this._connection.query(sql, callback);
 }
 

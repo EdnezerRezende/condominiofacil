@@ -1,0 +1,97 @@
+<div class="container">
+	
+	<ul class="nav nav-tabs nav-fixed">
+	  <li role="presentation" class="active"><a href="#agenda" aria-controls="agenda" role="tab" data-toggle="tab">Agenda</a></li>
+	  <li role="presentation"><a href="#boletos" aria-controls="contas" role="tab" data-toggle="tab">Boletos</a></li>
+	  <li role="presentation"><a href="#contas" aria-controls="contas" role="tab" data-toggle="tab">Contas do Condomínio</a></li>
+	</ul>
+
+	<div class="tab-content painel-animado">
+	    <div role="tabpanel "  class="tab-pane fade in  active" id="agenda">
+	    	<div class="alert alert-info" role="alert" ng-show="mostraErro">
+			  Já Consta este Item na Lista!
+			</div>
+			<div class="alert alert-success alert-dismissible" role="alert" ng-show="mensagemSucesso.length">
+				<button id="alerta" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			  	{{mensagemSucesso}}
+			</div>
+	    	<div class="regularPosicao">
+		    	<form name="agenda" class="form-inline text-center regulaLayoutCadastramentoTodos" ng-submit="inserirEventoCadastro()">
+			    	<div class="col-xs-4 col-md-4  text-center">
+			    	  	<md-input-container class="regulaLayoutCadastramentoData">
+				    	   <!-- <label for="data" class="col-sm-2 control-label">Data</label> -->
+				    	   	<md-datepicker ng-model="evento.data"   name="data" md-placeholder="Insira uma data" required ></md-datepicker>
+			          		<div ng-messages="agenda.$submitted && agenda.data.$error && agenda.$invalid">
+				            	<div ng-message="required">Favor informar uma data</div>
+				          	</div>
+				        </md-input-container>
+					</div>
+					<div class=" col-xs-4 col-md-4 alinhaVertical">
+						<md-input-container >
+				          <label>Tipo de Evento</label>
+				          <md-select name="descricao" ng-model="evento.descricao" required>
+					            <md-option value="Racionamento">Racionamento</md-option>
+					            <md-option value="Reunião">Reunião</md-option>
+					            <md-option value="Outros">Outros</md-option>
+					       </md-select>
+							<div ng-messages="agenda.$submitted && agenda.descricao.$error && agenda.$invalid">
+				            	<div ng-message="required">Favor informar o Evento!</div>
+				          	</div>
+						</md-input-container>
+
+						
+					</div>
+					<div class="col-xs-4 col-md-4 alinhaVertical">
+						<md-input-container >
+							<button type="submit" ng-disabled="agenda.$invalid" class="btn btn-default btn-primary">Inserir</button>
+							<!-- <a href="#" class="btn btn-default btn-danger">Cancelar</a> -->
+						</md-input-container>
+					</div>
+				</form>
+			</div>
+			<div >
+				<table   class="table table-striped "  >
+					<thead  >
+						<tr >
+							<th class="text-center"><strong>Data</strong></th>
+							<th class="text-center"><strong>Evento</strong></th>
+						</tr>
+					</thead>
+					<tbody >
+						<tr class="painel-animado" ng-repeat="item in eventos | orderBy: 'dataProgramada'">
+							<td class="text-center"> {{ item.data | date: 'dd/MM/yyyy' }} </td>
+							<td class="text-center"> {{ item.descricao }} </td>
+							<td class="text-center" ng-if=" item.descricao == 'Racionamento' " >
+								<span class=" glyphicon glyphicon-tint " aria-hidden="true" ></span>
+								<span class=" glyphicon glyphicon-ban-circle " aria-hidden="true" ></span>
+							</td>
+							<td class="text-center" ng-if="item.descricao != 'Racionamento' " >
+								<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+							</td>
+							<td class="text-center"  >
+								<a href="#" ng-click="removerItem(item)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
+							</td>
+						</tr>
+					</tbody>
+					
+				</table>
+				<div class="text-center">
+					<br/>
+					<br/>
+					<a href="#" class="btn btn-default btn-primary" ng-click="salvarRegistros()" ng-disabled="!eventos.length">Salvar</a>
+					<a href="#" ng-bootbox-confirm="Todos os Registros serão apagados, deseja confirmar?"
+	        		ng-bootbox-confirm-action="removerTodos()" ng-bootbox-confirm-action-cancel=""
+					  class="btn btn-default btn-danger">Cancelar</a>
+				</div>
+			</div>
+	    </div>
+	    <div role="tabpanel" class="tab-pane fade" id="boletos">
+	    	<h3>Boletos</h3>
+	    </div>
+	    <div role="tabpanel" class="tab-pane fade" id="contas">
+	    	<h3>Contas</h3>
+	    </div>
+	</div>
+
+
+</div>

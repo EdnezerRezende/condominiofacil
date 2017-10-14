@@ -1,0 +1,72 @@
+header {
+    height: 100%;
+    position: relative;
+}
+html,
+body{ 
+	
+	overflow-x: hidden;
+}
+@media (min-width: 768px){
+	.navbar-toggle {
+		display: grid !important;
+	}
+	.alinhaMenu{
+	
+	}
+	.menuPrincipal.navbar-header{
+    	float: none!important; 
+	}
+
+}
+.menuPrincipal{
+	display: flex;
+	align-items: center; 
+	align-content: space-between; 
+	margin-top: -12px; 
+	height: 70px; 
+}
+.posicaoCarrousel{
+	color: #FFF;
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 80%;
+    border-radius: 10px;
+    position: absolute !important; 
+    top: 50% ;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+@media (max-width: 683px){
+	.regulaLayoutCadastramentoData{
+		 display: flex !important;
+	}
+}
+@media (max-width: 599px){
+	.regulaLayoutCadastramentoTodos{
+		 display: inline-grid !important;
+	}
+	.alinhaVertical {
+		width: 100% !important;
+	}
+	.regularPosicao{
+		margin-left: 20%;
+	}
+}
+
+
+
+.painel-animado {
+
+	 -moz-transition:transform 0.8s;
+	 -webkit-transition:transform 0.8s;
+	 -ms-transition:transform 0.8s;
+	 -o-transition:transform 0.8s;
+	 transition:transform 0.8s;
+}
+.painel-animado.ng-leave-active {
+  -moz-transform: scale(0.1);
+  -webkit-transform: scale(0.1);
+  -ms-transform: scale(0.1);
+  -o-transform: scale(0.1);
+  transform: scale(0.1);
+}

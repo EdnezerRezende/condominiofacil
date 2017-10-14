@@ -14,6 +14,14 @@ angular.module('condominiofacil').controller('LoginController', function($scope,
 	    .then(function (success) {
 	    	$rootScope.logado = true;
 	    	$rootScope.idLogin = success.data.loginId;
+	    	var vlrPerfil = success.data.perfilId;
+
+	    	if ( vlrPerfil == 1 ){
+	    		$rootScope.perfilAutorizado = true;
+	    	} else {
+	    		$rootScope.perfilAutorizado = false;
+	    	}
+	    	
 	    	 $http({
 			    method: 'GET',
 			    url: '/boletos/' + $rootScope.idLogin 

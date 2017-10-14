@@ -11,6 +11,23 @@ AgendaDAO.prototype.lista = function(callback) {
     this._connection.query(sql, now, callback);
 }
 
+AgendaDAO.prototype.salvaLista = function(eventosAgenda, callback) {
+	var values = [];
+	
+	var sql = 'insert into agenda ( dataProgramada, descricao ) VALUES ? ' ;
+
+	for (var i = eventosAgenda.length - 1; i >= 0; i--) {
+		var now = moment(eventosAgenda[i].data).format('YYYY-MM-DD ');
+		var tratar = [
+				now,
+				eventosAgenda[i].descricao
+		];
+		values.push(tratar);
+	}
+
+    this._connection.query(sql, [values], callback);
+}
+
 module.exports = function(){
     return AgendaDAO;
 };
