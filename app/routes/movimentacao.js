@@ -12,6 +12,44 @@ module.exports = function(app) {
         connection.end();
     });
 
+     app.post('/movimentacao', function(req, res) {
+        var contas = [];
+        for (var i = req.body.length - 1; i >= 0; i--) {
+            contas.push(req.body[i]);
+        }
+
+        var connection = app.infra.connectionFactory();
+
+        var movimentacaoDAO = new app.infra.MovimentacaoDAO(connection);
+        movimentacaoDAO.salvaLista(contas, function(err, result) {
+            if(err) throw err;
+            
+            var guardaResultado = '';
+            var compararRef = '';
+
+            var moment = require('moment');
+
+            for (var i = contas.length - 1; i >= 0; i--) {
+                var referenciaAtual = moment(contas[i].dataPagamento).set('date', 1).format('YYYY-MM-DD ');
+                if (compararRef != referenciaAtual || compararRef == '' ){
+                    compararRef = referenciaAtual;
+                    
+                    var connection = app.infra.connectionFactory();
+
+                    var movimentacaoDAO = new app.infra.MovimentacaoDAO(connection);
+                    movimentacaoDAO.inserirReferencia(referenciaAtual, function(err, results) {
+                        if(err) throw err;
+                        guardaResultado = results;
+                    })
+                }
+            };
+            res.json(guardaResultado);
+
+        });
+ 
+        connection.end();
+    });
+
     app.get('/vlrEntrada', function(req, res) {
         var connection = app.infra.connectionFactory();
 

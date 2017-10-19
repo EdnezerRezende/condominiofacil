@@ -1,9 +1,10 @@
-<div class="container">
+<div class="">
 	
 	<ul class="nav nav-tabs nav-fixed">
 	  <li role="presentation" class="active"><a href="#agenda" aria-controls="agenda" role="tab" data-toggle="tab">Agenda</a></li>
-	  <li role="presentation"><a href="#boletos" aria-controls="contas" role="tab" data-toggle="tab">Boletos</a></li>
-	  <li role="presentation"><a href="#contas" aria-controls="contas" role="tab" data-toggle="tab">Contas do Condomínio</a></li>
+	  <li role="presentation"><a href="#boletos" aria-controls="boletos" role="tab" data-toggle="tab">Boletos</a></li>
+	  <li role="presentation"><a href="#cadUsuario" aria-controls="cadUsuario" role="tab" data-toggle="tab">Condômínos</a></li>
+	  <li role="presentation"><a href="#contas" aria-controls="contas" role="tab" data-toggle="tab">Despesas</a></li>
 	</ul>
 
 	<div class="tab-content painel-animado">
@@ -15,7 +16,7 @@
 				<button id="alerta" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			  	{{mensagemSucesso}}
 			</div>
-	    	<div class="regularPosicao">
+	    	<div class="regularPosicao container-fluid">
 		    	<form name="agenda" class="form-inline text-center regulaLayoutCadastramentoTodos" ng-submit="inserirEventoCadastro()">
 			    	<div class="col-xs-4 col-md-4  text-center">
 			    	  	<md-input-container class="regulaLayoutCadastramentoData">
@@ -58,7 +59,7 @@
 						</tr>
 					</thead>
 					<tbody >
-						<tr class="painel-animado" ng-repeat="item in eventos | orderBy: 'dataProgramada'">
+						<tr class="painel-animado" ng-repeat="item in eventos | orderBy: 'data'">
 							<td class="text-center"> {{ item.data | date: 'dd/MM/yyyy' }} </td>
 							<td class="text-center"> {{ item.descricao }} </td>
 							<td class="text-center" ng-if=" item.descricao == 'Racionamento' " >
@@ -69,7 +70,7 @@
 								<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
 							</td>
 							<td class="text-center"  >
-								<a href="#" ng-click="removerItem(item)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
+								<a href="#" ng-click="removerItem(item, 1)"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
 							</td>
 						</tr>
 					</tbody>
@@ -80,7 +81,7 @@
 					<br/>
 					<a href="#" class="btn btn-default btn-primary" ng-click="salvarRegistros()" ng-disabled="!eventos.length">Salvar</a>
 					<a href="#" ng-bootbox-confirm="Todos os Registros serão apagados, deseja confirmar?"
-	        		ng-bootbox-confirm-action="removerTodos()" ng-bootbox-confirm-action-cancel=""
+	        		ng-bootbox-confirm-action="removerTodos(1)" ng-bootbox-confirm-action-cancel=""
 					  class="btn btn-default btn-danger">Cancelar</a>
 				</div>
 			</div>
@@ -88,8 +89,122 @@
 	    <div role="tabpanel" class="tab-pane fade" id="boletos">
 	    	<h3>Boletos</h3>
 	    </div>
+	    <div role="tabpanel" class="tab-pane fade" id="cadUsuario">
+	    	<h3>Condômínos</h3>
+	    </div>
 	    <div role="tabpanel" class="tab-pane fade" id="contas">
-	    	<h3>Contas</h3>
+	    	<div class="alert alert-info" role="alert" ng-show="mostraErro">
+			  Já Consta este Item na Lista!
+			</div>
+			<div class="alert alert-success alert-dismissible" role="alert" ng-show="mensagemSucesso.length">
+				<button id="alerta" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			  	{{mensagemSucesso}}
+			</div>
+	    	<div class="regularPosicao">
+		    	<form name="conta" class="form-inline text-center regulaLayoutCadastramentoTodos" ng-submit="inserirContas()">
+		    		<div class="ajustarLayout">
+				    	<div class=" ">
+				    	  	<md-input-container class="">
+					    	   	<md-datepicker ng-model="conta.dataPagamento"   name="dataPagamento" md-placeholder="Data de Pagamento" required ></md-datepicker>
+				          		<div ng-messages="conta.$submitted && conta.dataPagamento.$error && conta.$invalid">
+					            	<div ng-message="required">Favor informar data de Pagamento</div>
+					          	</div>
+					        </md-input-container>
+						</div>
+						<div class="afastamento   ">
+							<md-input-container >
+					          <label>Entrada / Saída</label>
+					          <md-select name="tipoDespesa" ng-model="conta.tipoDespesa" required>
+						            <md-option value="E">Entrada</md-option>
+						            <md-option value="S">Saída</md-option>
+						       </md-select>
+								<div ng-messages="conta.$submitted && conta.tipoDespesa.$error && conta.$invalid">
+					            	<div ng-message="required">Favor informar tipo do Registro!</div>
+					          	</div>
+							</md-input-container>
+						</div>
+						<div class=" afastamento  " >
+							<md-input-container >
+					          <label>Descrição</label>
+					          <md-select name="descricaoDespesa" ng-model="conta.descricaoDespesa" required>
+						            <md-option ng-show="conta.tipoDespesa == 'S' " value="Agua">Água</md-option>
+						            <md-option ng-show="conta.tipoDespesa == 'S' " value="Luz">Luz</md-option>
+						            <md-option ng-show="conta.tipoDespesa == 'S' " value="Limpeza">Limpeza</md-option>
+						            <md-option ng-show="conta.tipoDespesa == 'E' " value="Pagamentos">Pagamentos Efetuados</md-option>
+						            <md-option value="D">Outros</md-option>
+						       </md-select>
+						       
+								<div ng-messages="conta.$submitted && conta.descricaoDespesa.$error && conta.$invalid">
+					            	<div ng-message="required">Favor informar descrição!</div>
+					          	</div>
+							</md-input-container>
+						</div>
+						<div class=" col-sm-3 afastamento text-center " >
+							<md-input-container class="">
+						      <label>Valor</label>
+						      <md-icon class="inativarIcone" md-inactive md-svg-src="img/icons/ic_monetization_on_black_24px.svg" ></md-icon>
+								<input format="number" name="valor" class="text-center" ng-model="valor" zero-filter="true" required />
+								 <md-icon md-inactive md-svg-src="img/icons/ic_account_balance_black_24px" ></md-icon>
+								 <div ng-messages="conta.$submitted && conta.valor.$error && conta.valor.$invalid">
+					            	<div ng-message="required">Favor informar o Valor!</div>
+					          	</div>
+						    </md-input-container>
+						</div>
+					</div>
+					<md-input-container class="md-block" ng-show=" conta.descricaoDespesa == 'D' ">
+			          <label>Descreva</label>
+			          <textarea ng-model="conta.descricaoDespesaDetalhar" md-maxlength="150" max="150" rows="4" md-select-on-focus></textarea>
+			        </md-input-container>
+					<div class="col-xs-12 col-sm-12 text-center">
+						<md-input-container >
+							<button type="submit" ng-disabled="conta.$invalid" class="btn btn-default btn-primary">Inserir</button>
+						</md-input-container>
+					</div>
+				</form>
+			</div>
+			<div >
+				<table   class="table table-striped "  >
+					<thead  >
+						<tr >
+							<th class="text-center"><strong>Data de Pagamento</strong></th>
+							<th class="text-center"><strong>Tipo</strong></th>
+							<th class="text-center"><strong>Descrição</strong></th>
+							<th class="text-center"><strong>Valor</strong></th>
+						</tr>
+					</thead>
+					<tbody >
+						<tr class="painel-animado" ng-repeat="item in contas | orderBy: 'dataPagamento'">
+							<td class="text-center"> {{ item.dataPagamento | date: 'dd/MM/yyyy' }} </td>
+							<td class="text-center"> {{ item.tipoDespesa }} </td>
+							<td class="text-center" ng-if=" !item.descricaoDespesaDetalhar.length "> {{ 
+							item.descricaoDespesa }} </td>
+							<td class="text-center" ng-if=" item.descricaoDespesaDetalhar.length "> {{ item.descricaoDespesaDetalhar }} </td>
+							<td class="text-center"> {{ item.valor | currency: 'R$ '}} </td>
+							<td class="text-center" ng-if="item.tipoDespesa == 'E' " >
+								<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+							</td>
+							<td class="text-center" ng-if="item.tipoDespesa == 'S' " >
+								<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+							</td>
+							<td class="text-center"  >
+								<a href="#" ng-click="alterarItem(item, 4)"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+							</td>
+							<td class="text-center"  >
+								<a href="#" ng-click="removerItem(item, 4)"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+							</td>
+						</tr>
+					</tbody>
+					
+				</table>
+				<div class="text-center">
+					<br/>
+					<br/>
+					<a href="#" class="btn btn-default btn-primary" ng-click="salvarRegistrosDespesas()" ng-disabled="!contas.length">Salvar</a>
+					<a href="#" ng-bootbox-confirm="Todos os Registros serão apagados, deseja confirmar?"
+	        		ng-bootbox-confirm-action="removerTodos(4)" ng-bootbox-confirm-action-cancel=""
+					  class="btn btn-default btn-danger">Cancelar</a>
+				</div>
+			</div>
 	    </div>
 	</div>
 

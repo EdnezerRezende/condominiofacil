@@ -36,10 +36,30 @@ body{
     left: 50%;
     transform: translate(-50%, -50%);
 }
-@media (max-width: 683px){
+.posicaoLogin{
+	color: #FFF;
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 70%;
+    border-radius: 10px;
+    position: absolute !important; 
+    top: 50% ;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+@media (max-width: 754px){
 	.regulaLayoutCadastramentoData{
 		 display: flex !important;
 	}
+	.ajustarLayout{
+		display: flex; 
+	}
+	
+}
+@media (max-width: 763px){
+	.ajustarLayout{
+		display: inline!important; 
+	}
+	
 }
 @media (max-width: 599px){
 	.regulaLayoutCadastramentoTodos{
@@ -51,8 +71,14 @@ body{
 	.regularPosicao{
 		margin-left: 20%;
 	}
-}
 
+}
+@media(min-width: 599px){
+/*	.alinharDespesas{
+		width: 32%;
+    	margin-left: 35%;
+	}*/
+}
 
 
 .painel-animado {
@@ -69,4 +95,17 @@ body{
   -ms-transform: scale(0.1);
   -o-transform: scale(0.1);
   transform: scale(0.1);
+}
+.larguraLogin{
+	width: 60%;
+	margin-left: 20%;
+}
+.ajustarLayout{
+	display: flex; 
+}
+.afastamento{
+	margin-left: 3%;
+}
+.inativarIcone{
+	fill: currentColor!important;
 }

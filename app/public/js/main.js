@@ -1,4 +1,4 @@
-angular.module('condominiofacil', ['ui.router', 'angular-mandrill', 'angularMoment', 'ngBootbox', 'ngMaterial', 'ngAnimate', 'ngMessages'])
+angular.module('condominiofacil', ['ui.router', 'angular-mandrill', 'angularMoment', 'ngBootbox', 'ngMaterial', 'ngAnimate', 'ngMessages', 'luk.money'])
 .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, MandrillProvider, $mdDateLocaleProvider ){
 
 	//configurações do DataPeckir
@@ -118,5 +118,6 @@ angular.module('condominiofacil', ['ui.router', 'angular-mandrill', 'angularMome
     	}
     };
 
+    
 
 }]);
