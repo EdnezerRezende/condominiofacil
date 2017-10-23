@@ -1,25 +1,39 @@
 angular.module('condominiofacil').controller('PrincipalController', function($scope, $rootScope, $stateParams, $window, $http, $location, $ngBootbox, $filter) {
 	
   $rootScope.tituloPagina = 'Acompanhamento';
-
+  $scope.now = new Date();
+  
   $scope.movimentacao = [];
   $scope.referencias = [];
   $scope.apartamento = {};
-  $rootScope.logado = true;
   $scope.vlrEntrada = [];
   $scope.vlrSaida = [];
+  $scope.permiteExcluir = $rootScope.perfilAutorizado;
 
-  $rootScope.apresentarEventoDia = function(evento){
-    var nowDate = Date('yyyy/MM/dd HH:mm:ss');
-    if(evento.dataProgramada == nowDate){
-      $ngBootbox.alert({message: "Hoje é dia de " + evento.descricao + ".", title: "Evento"})
-          .then(function() {
-              $scope.mensagem = "";
-              $scope.titleMensagem = "";
-              $scope.login = 0;
-          });
+
+  $scope.removerItem = function ( item, aba ) {
+    switch(aba){
+      case 1: 
+
+        $http({
+          method: 'DELETE',
+          url: '/agenda/' + item.racionamentoId
+        })
+        .then(function (success) {
+          var indice = $rootScope.eventos.indexOf( item );
+          $rootScope.eventos.splice(indice, 1);
+
+        }, function(error){
+          console.log(error);
+        });
+        
+        break;
+      case 2: 
+        var indice = $scope.movimentacao.indexOf( item );
+            $scope.movimentacao.splice(indice, 1);
+        break;
     }
-  };
+}
 
 	$http({
       method: 'GET',

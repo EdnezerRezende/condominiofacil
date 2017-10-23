@@ -1,27 +1,27 @@
 <!DOCTYPE html>
 <html lang="pt-br" ng-app="condominiofacil">
 <head>
-	<base href="/">
+	<base href="/"> 
 	<meta http-equiv="Content-Language" content="pt-br">
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" type="text/css" href="css/reset.css">
 	<link rel="stylesheet" type="text/css" href="css/estilo.css">
-	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css" media="all">
-	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap-theme.min.css" media="all">
+	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css" media="all">
+	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap-theme.css" media="all">
 	<link rel="stylesheet" type="text/css" href="css/theme.css" />
 	<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" />
 	<link rel="stylesheet" type="text/css" href="css/animate.css" media="all">
+	<link rel='stylesheet' href='css/loading-bar.min.css' type='text/css' media='all' />
 	
 	<link rel="stylesheet" type="text/css" href="css/jquery-ui.css" />
 	<link rel="stylesheet" type="text/css" href="css/angular-material.css"/>
 	<link rel="stylesheet" type="text/css" href="css/primeui.min.css" />
 	<link rel="stylesheet" type="text/css" href="css/carrousel.css" />
-
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="shortcut icon" href="#favicon.ico">
 
 	<!-- Import´s do angular -->
-	<script src="js/lib/angular.min.js"></script>
+	<script src="js/lib/angular.js"></script>
     <script src="js/lib/angular-animate.min.js"></script>
     <script src="js/lib/angular-aria.min.js"></script>
     <script src="js/lib/angular-material.min.js"></script>
@@ -46,6 +46,7 @@
 
 	<script type="text/javascript" src="js/lib/jquery.js"></script>
 	
+	<script type="text/javascript" src="js/lib/jquery-ui.js"></script> 
 	<script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
 	<script src="js/lib/bootbox.js"></script>
 	<script src="js/lib/ngBootbox.min.js"></script>
@@ -53,12 +54,13 @@
 	<script type="text/javascript" src="js/lib/moment.js"></script>
 	<script type="text/javascript" src="js/lib/pt-br.js"></script>
 	<script type="text/javascript" src="js/lib/angular-moment.js"></script> 
-	<script type="text/javascript" src="js/lib/jquery-ui.js"></script> 
 	<script type="text/javascript" src="js/lib/primeui.js"></script> 
 	<script type="text/javascript" src="js/lib/x-tag-core.min.js"></script> 
 	<script type="text/javascript" src="js/lib/primeelements.js"></script> 
 	<script type="text/javascript" src="js/lib/mustache.min.js"></script> 
 	<script type="text/javascript" src="js/lib/angular-money-directive.min.js"></script>
+	<script type="text/javascript" src="js/lib/angular-locale_pt-br.js"></script>
+
 
 	<!-- Propagandas do site que ficarão sendo apresentadas.
 	https://www.google.com/adsense/new/u/0/pub-8203324650722374/home -->
@@ -70,6 +72,7 @@
 	  });
 	</script> -->
 
+	<script type='text/javascript' src='js/lib/loading-bar.min.js'></script>
 
 	<script src="js/lib/token-interceptor.js"></script>
 
@@ -124,7 +127,7 @@
 				    	<b  style="color: white; ">{{tituloPagina}}</b>
 				    </div>
 				    <div class="text-right " style="margin-right: 3em; " >
-						<a  ng-if="!logado" href="login" style="color: white!important">
+						<a  ng-if="!logado" href="login"  style="color: white!important">
 						   	Login
 						</a>
 						<a  ng-if="logado" href="#" ng-click="logoff()" style="color: white!important">
@@ -133,7 +136,7 @@
 					</div>
 				</div>
 	            <!-- <div id="menu" class="collapse navbar-collapse" ng-click="fecharMenu()"> -->
-	            <div id="menu" class="collapse  "  ng-click="fecharMenu()">
+	            <div id="menu" class="collapse navbar-collapse "  >
             	   <ul class="nav navbar-nav " >
 		              <li  class="text-uppercase" style="color: white;">
 		                <a href="home" >Home</a>

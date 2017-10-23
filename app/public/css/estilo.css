@@ -5,7 +5,7 @@ header {
 html,
 body{ 
 	
-	overflow-x: hidden;
+	overflow-x: hidden; 
 }
 @media (min-width: 768px){
 	.navbar-toggle {
@@ -69,7 +69,9 @@ body{
 		width: 100% !important;
 	}
 	.regularPosicao{
-		margin-left: 20%;
+		top: 50%;
+	    left: 50%;
+	    transform: translate(25%, 0%);
 	}
 
 }

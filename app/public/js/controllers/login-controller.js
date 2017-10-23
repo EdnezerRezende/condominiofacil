@@ -27,7 +27,6 @@ angular.module('condominiofacil').controller('LoginController', function($scope,
 			    url: '/boletos/' + $rootScope.idLogin 
 			  })
 			  .then(function (success) {
-			    console.log($rootScope.boletos);
 			    $rootScope.boletos = success.data;
 			    if($rootScope.rotaBoleto){
 			    	$location.path('/boletos'); 

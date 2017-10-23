@@ -27,5 +27,19 @@ module.exports = function(app) {
         connection.end();
     });
 
+     app.delete('/agenda/:racionamentoId', function(req, res) {
+        var id = req.params.racionamentoId;
+        console.log(id);
+        var connection = app.infra.connectionFactory();
+
+        var agendaDAO = new app.infra.AgendaDAO(connection);
+        agendaDAO.deletaItem(id, function(err, results) {
+            if(err) throw err;
+            res.json(results);
+        });
+ 
+        connection.end();
+    });
+
   
 }

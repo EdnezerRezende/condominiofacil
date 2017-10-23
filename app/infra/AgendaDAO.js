@@ -28,6 +28,13 @@ AgendaDAO.prototype.salvaLista = function(eventosAgenda, callback) {
     this._connection.query(sql, [values], callback);
 }
 
+AgendaDAO.prototype.deletaItem = function(id, callback) {
+	console.log("Id: " + id);
+	var sql = 'delete from agenda where racionamentoId = ? ' ;
+
+    this._connection.query(sql, id, callback);
+}
+
 module.exports = function(){
     return AgendaDAO;
 };

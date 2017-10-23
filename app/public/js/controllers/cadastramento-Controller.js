@@ -39,33 +39,19 @@ $scope.removerTodos = function(aba) {
 $scope.alterarItem = function(item, aba){
 	switch(aba){
 		case 1:
+			$scope.evento = item;
 			break;
 		case 2:
 			break;
 		case 3: 
 			break;
 		case 4:
-			var convValorString = item.valor.toString();
-			var guardaVlrAntesPonto = convValorString.substr(0, convValorString.indexOf('.'));
-			//var convVirgulaPonto = convValorString.replace(",", ".");
-			//var tratarDecimal = convVirgulaPonto.substr(0, convVirgulaPonto.indexOf('.'));
-			var guardaVlrDepoisPonto = convValorString.substr(convValorString.indexOf('.')+1, convValorString.indexOf(','));
-			//var tratarAposPonto = convValorString.substr(convValorString.indexOf('.')+1, 2);
-			var guardaVlrDecimal = convValorString.substr(convValorString.indexOf(',')+1, 2);
-			//var valorAcertado = tratarDecimal + '.'+ tratarAposPonto;
-			var valorAcertado = '';
-			if ( guardaVlrAntesPonto.length ){
-				valorAcertado += guardaVlrAntesPonto + '.';
-			}
-			valorAcertado += guardaVlrDepoisPonto + ',' + guardaVlrDecimal;
-			
-			$scope.valor = parseFloat(valorAcertado);
-			//$scope.valor = convValorString;
-			console.log("Valor Inserido: "+$scope.valor);
+			console.log(item.valor);
+			$scope.valor = item.valor;
 			$scope.conta = item;
-			$scope.removerItem( item,aba );
 			break;
 	}
+	$scope.removerItem( item,aba );
 }
 
 
@@ -135,7 +121,6 @@ $scope.inserirContas = function(){
 	$scope.mostraErro = false;
 
 	if ( $scope.conta != null && $scope.conta.dataPagamento != null ) {
-		console.log("Data Pagamento: "+$scope.conta.dataPagamento);
 		var jaInserido = false;
 
 		//Verificar se já tem registro inserido igual ao que está sendo enviado!
@@ -153,13 +138,24 @@ $scope.inserirContas = function(){
 	        $scope.mostraErro = true;
 			jaInserido = false;
 		}else{
-			console.log($scope.valor);
-			var convValorString = $scope.valor.toString();
-			var replac = convValorString.replace(".", "");
-			var tratarValor = replac.substr( 0, replac.indexOf(',') );
-			tratarValor += ".";
-			tratarValor += replac.substr( replac.indexOf(',') + 1, 2 );
-			$scope.conta.valor = parseFloat(tratarValor);
+			var countPonto = 0;
+			var temVirgula = false;
+			for (var i = 0; i < $scope.valor.length; i++) {
+				if ( $scope.valor[i] == '.' ){
+					countPonto++;
+				}
+				if ( $scope.valor[i] == ',' ) {
+					temVirgula = true;
+				}
+			}
+			var replac = $scope.valor;
+			if ( countPonto == 1 && temVirgula ) {
+				replac = $scope.valor.replace(".", "");
+			} 
+
+			var tirarInverterVirgulaParaPonto = replac.replace(",", ".");
+			$scope.conta.valor = tirarInverterVirgulaParaPonto;
+
 			if ( $scope.conta.descricaoDespesaDetalhar != null && $scope.conta.descricaoDespesaDetalhar != '' ){
 				$scope.conta.descricaoDespesa = $scope.conta.descricaoDespesaDetalhar;
 			}

@@ -1,4 +1,4 @@
-angular.module('condominiofacil', ['ui.router', 'angular-mandrill', 'angularMoment', 'ngBootbox', 'ngMaterial', 'ngAnimate', 'ngMessages', 'luk.money'])
+angular.module('condominiofacil', ['ui.router', 'angular-mandrill', 'angularMoment', 'ngBootbox', 'ngMaterial', 'ngAnimate', 'ngMessages', 'luk.money', 'angular-loading-bar'])
 .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, MandrillProvider, $mdDateLocaleProvider ){
 
 	//configurações do DataPeckir
@@ -67,6 +67,8 @@ angular.module('condominiofacil', ['ui.router', 'angular-mandrill', 'angularMome
 
 	amMoment.changeLocale('pt-br');
 
+	
+
 	$rootScope.tituloPagina = '';
 	$rootScope.loginEfetuado = 'false';
 	$rootScope.logado = false;
@@ -89,13 +91,7 @@ angular.module('condominiofacil', ['ui.router', 'angular-mandrill', 'angularMome
 		$location.path('/home');	
 	}
 
-    $rootScope.fecharMenu = function (){
-       var navMain = $("#menu");
-       navMain.on("click", "a", null, function () {
-           navMain.collapse('hide');
-           javascript:void(0);
-       });
-    };
+
 
     $rootScope.logoff = function(){
     	delete $window.sessionStorage.token;
