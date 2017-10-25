@@ -3,6 +3,7 @@ var load = require('express-load');
 var bodyParser = require('body-parser');
 var history = require('connect-history-api-fallback');
 var consign = require('consign');
+
 /*var fs = require('fs');
  var https = require('https');
  var path = require('path');
@@ -20,7 +21,6 @@ module.exports = function() {
     app.set('view engine', 'ejs');
     app.set('views', './app/public');
      // app.use('/', express.static(path.join(__dirname, '..', directoryToServe)));
-
 	app.use(bodyParser.urlencoded({extended: true}));
 	app.use(bodyParser.json());
     

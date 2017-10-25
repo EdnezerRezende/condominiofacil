@@ -38,6 +38,7 @@
     "moment": "^2.18.1",
     "ng-currency-mask": "^1.0.0",
     "ngbootbox": "^0.2.0",
+    "node-schedule": "^1.2.5",
     "nodemailer": "^4.1.0",
     "normalize.css": "^7.0.0",
     "popper": "^1.0.0",

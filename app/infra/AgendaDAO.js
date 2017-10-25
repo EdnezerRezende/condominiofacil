@@ -11,6 +11,12 @@ AgendaDAO.prototype.lista = function(predio, callback) {
     this._connection.query(sql, [now, predio], callback);
 }
 
+AgendaDAO.prototype.listaTudo = function( callback ) {
+
+	var sql = 'select * from agenda  ' ;
+    this._connection.query(sql, callback);
+}
+
 AgendaDAO.prototype.salvaLista = function(eventosAgenda, callback) {
 	var values = [];
 	
@@ -34,6 +40,12 @@ AgendaDAO.prototype.deletaItem = function(id, callback) {
 	var sql = 'delete from agenda where racionamentoId = ? ' ;
 
     this._connection.query(sql, id, callback);
+}
+
+AgendaDAO.prototype.deletaEventoPassado = function(id, callback) {
+	var sql = 'delete from agenda where racionamentoId = ? ' ;
+
+    this._connection.query(sql, [id], callback);
 }
 
 module.exports = function(){

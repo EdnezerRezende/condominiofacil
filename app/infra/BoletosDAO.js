@@ -14,6 +14,25 @@ BoletosDAO.prototype.lista = function(idLogin, callback) {
     this._connection.query(sql, idLogin, callback);
 }
 
+BoletosDAO.prototype.obterTodosBoletos = function( callback ) {
+    var sql = 'select b.loginId, b.boletoId, b.referencia, b.valor, b.multa, b.juros, b.dataPagamento,   ';
+    sql += ' b.dataPago, b.boletoAtraso, b.boletoAberto, b.boletoPago, apt.numeroApt, apt.apartamentoId ';
+    sql += ' from boletos b ';
+    sql += ' inner join apartamento apt on b.numeroApartamento = apt.apartamentoId ';
+    sql += ' where b.boletoPago = 0 '
+
+    this._connection.query(sql, callback);
+}
+
+BoletosDAO.prototype.atualizaMultaJurosBoleto = function( boleto, callback ) {
+   
+    var sql = 'update boletos b set b.boletoAtraso = ?, b.boletoAberto = ? , b.multa = ?, b.juros = ? ';
+        sql += ' where b.boletoId = ?  ';
+
+    this._connection.query(sql, [boleto.boletoAtraso, boleto.boletoAberto, boleto.multa, boleto.juros, boleto.boletoId ], callback);
+}
+
+
 BoletosDAO.prototype.listaTodos = function(idLogin, callback) {
     var sql = 'select b.boletoId, b.loginId, b.referencia, b.valor, b.multa, b.juros, b.dataPagamento,   ';
     sql += ' b.dataPago, b.boletoAtraso, b.descricao, b.boletoAberto, b.boletoPago, apt.numeroApt, apt.apartamentoId ';
