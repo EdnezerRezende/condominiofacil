@@ -1,15 +1,17 @@
 angular.module('condominiofacil').controller('PrincipalController', function($scope, $rootScope, $stateParams, $window, $http, $location, $ngBootbox, $filter) {
 	
   $rootScope.tituloPagina = 'Acompanhamento';
-  $scope.now = new Date();
+  $scope.nowEvento = new Date();
   
   $scope.movimentacao = [];
-  $scope.referencias = [];
-  $scope.apartamento = {};
+  $scope.referencias = []; 
+  $scope.apartamento = {}; 
   $scope.vlrEntrada = [];
   $scope.vlrSaida = [];
   $scope.permiteExcluir = $rootScope.perfilAutorizado;
-
+  $scope.EmiteMensagemSucesso = "";
+  $scope.EmiteMensagemErro = "";
+  $scope.eventos =[];
 
   $scope.removerItem = function ( item, aba ) {
     switch(aba){
@@ -20,24 +22,68 @@ angular.module('condominiofacil').controller('PrincipalController', function($sc
           url: '/agenda/' + item.racionamentoId
         })
         .then(function (success) {
-          var indice = $rootScope.eventos.indexOf( item );
-          $rootScope.eventos.splice(indice, 1);
+          var indice = $scope.eventos.indexOf( item );
+          $scope.eventos.splice(indice, 1);
+          $scope.EmiteMensagemSucesso = "O Evento " + item.descricao +  " deletado com sucesso!";
 
         }, function(error){
+          $scope.EmiteMensagemErro = "Não foi possível deletar o evento, tente novamente mais tarde!";
           console.log(error);
         });
         
         break;
       case 2: 
-        var indice = $scope.movimentacao.indexOf( item );
-            $scope.movimentacao.splice(indice, 1);
-        break;
+        $http({
+          method: 'DELETE',
+          url: '/movimentacao/' + item.movimentoId + '/' +item.referencia + '/' + $rootScope.predioUsuario
+        })
+        .then(function (success) {
+          
+          var deletouReferencia = success.data.affectedRows;
+          
+          console.log(success);
+
+          var indice = $scope.movimentacao.indexOf( item );
+          $scope.movimentacao.splice(indice, 1);
+
+          if ( item.tipoRegistro == 'E' ){
+            for (var i = 0; i < $scope.vlrEntrada.length; i++) {
+              var dataEventoFormatada = $filter('date')($scope.vlrEntrada[i].referencia , 'yyyy-MM-dd');
+              var dataItemFormatada = $filter('date')(item.referencia , 'yyyy-MM-dd');
+              if (dataEventoFormatada == dataItemFormatada) {
+                  $scope.vlrEntrada[i].vlrEntrada -= item.valor;
+                  break;
+              }
+            }
+          }else{
+            for (var i = 0; i < $scope.vlrSaida.length; i++) {
+              var dataEventoFormatada = $filter('date')($scope.vlrSaida[i].referencia , 'yyyy-MM-dd');
+              var dataItemFormatada = $filter('date')(item.referencia , 'yyyy-MM-dd');
+              if (dataEventoFormatada == dataItemFormatada) {
+                  $scope.vlrSaida[i].vlrSaida -= item.valor;
+                  break;
+              }
+            }
+          }
+
+          if ( deletouReferencia > 0 ){
+            var indice = $scope.referencias.indexOf( item.referencia );
+            $scope.referencias.splice(indice, 1);
+          }
+            
+          $scope.EmiteMensagemSucesso = "A conta " + item.descricao + " no valor de R$ " +item.valor+ " foi deletada com sucesso!";
+
+        }, function(error){
+          $scope.EmiteMensagemErro = "Não foi possível deletar esta conta, tente novamente mais tarde!";
+          console.log(error);
+        });
+        break; 
     }
 }
 
 	$http({
       method: 'GET',
-      url: '/movimentacao'
+      url: '/movimentacao/'+$rootScope.predioUsuario
     })
     .then(function (success) {
       $scope.movimentacao = success.data;
@@ -48,7 +94,7 @@ angular.module('condominiofacil').controller('PrincipalController', function($sc
  
   $http({
       method: 'GET',
-      url: '/vlrEntrada'
+      url: '/vlrEntrada/'+ $rootScope.predioUsuario
     })
     .then(function (success) {
       $scope.vlrEntrada = success.data;
@@ -59,7 +105,7 @@ angular.module('condominiofacil').controller('PrincipalController', function($sc
 
   $http({
       method: 'GET',
-      url: '/vlrSaida'
+      url: '/vlrSaida/'+ $rootScope.predioUsuario
     })
     .then(function (success) {
       $scope.vlrSaida = success.data;
@@ -80,11 +126,12 @@ angular.module('condominiofacil').controller('PrincipalController', function($sc
       console.log(error);
     });
 
-  $http({
+  $http({ 
     method: 'GET',
-    url: '/movimentacao/referencias'
+    url: '/movimentacao/referencias/'+ $rootScope.predioUsuario
   })
   .then(function (success) {
+    console.log(success);
     $scope.referencias = success.data;
   }, function(error){
     console.log(error);
@@ -92,10 +139,10 @@ angular.module('condominiofacil').controller('PrincipalController', function($sc
 
   $http({
     method: 'GET',
-    url: '/agenda'
+    url: '/agenda/'+ $rootScope.predioUsuario
   })
   .then(function (success) {
-    $rootScope.eventos = success.data;
+    $scope.eventos = success.data;
   }, function(error){
     console.log(error);
   });

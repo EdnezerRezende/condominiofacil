@@ -14,6 +14,8 @@ angular.module('condominiofacil').controller('LoginController', function($scope,
 	    .then(function (success) {
 	    	$rootScope.logado = true;
 	    	$rootScope.idLogin = success.data.loginId;
+	    	$rootScope.predioUsuario = success.data.predio;
+	    	console.log("Predio Logado: "+$rootScope.predioUsuario);
 	    	var vlrPerfil = success.data.perfilId;
 
 	    	if ( vlrPerfil == 1 ){

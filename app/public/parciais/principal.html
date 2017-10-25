@@ -6,6 +6,14 @@
 
 	<div class="tab-content">
 	    <div role="tabpanel" class="tab-pane fade in  active" id="agenda">
+	    	<div class="alert alert-success alert-dismissible" role="alert" ng-show="EmiteMensagemSucesso.length">
+				<button id="alerta" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			  	{{EmiteMensagemSucesso}}
+			</div>
+			<div class="alert alert-danger alert-dismissible" role="alert" ng-show="EmiteMensagemErro.length">
+				<button id="alerta" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			  	{{EmiteMensagemErro}}
+			</div>
 	    	<table   class="table table-striped "  >
 				<thead  >
 					<tr >
@@ -14,7 +22,7 @@
 					</tr>
 				</thead>
 				<tbody >
-					<tr ng-class="{'alert alert-danger': ( evento.dataProgramada | date: 'dd/MM/yyyy' ) == ( now | date: 'dd/MM/yyyy' ) }" class="painel-animado" ng-repeat="evento in eventos | orderBy: 'dataProgramada'">
+					<tr ng-class="{'alert alert-danger': ( evento.dataProgramada | date: 'dd/MM/yyyy' ) == ( nowEvento | date: 'dd/MM/yyyy' ) }" class="painel-animado" ng-repeat="evento in eventos | orderBy: 'dataProgramada'">
 						<td class="text-center" > {{evento.dataProgramada | date: 'dd/MM/yyyy'}} </td>
 						<td class="text-center"> {{evento.descricao }} </td>
 						<td class="text-center" ng-if="evento.descricao == 'Racionamento' ">
@@ -32,9 +40,17 @@
 						</div>
 					</tr>
 				</tbody>
-			</table>
+			</table> 
 	    </div>
 	    <div role="tabpanel" class="tab-pane fade" id="contas">
+	    	<div class="alert alert-success alert-dismissible" role="alert" ng-show="EmiteMensagemSucesso.length">
+				<button id="alerta" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			  	{{EmiteMensagemSucesso}}
+			</div>
+			<div class="alert alert-danger alert-dismissible" role="alert" ng-show="EmiteMensagemErro.length">
+				<button id="alerta" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			  	{{EmiteMensagemErro}}
+			</div>
 	    	<div class="panel-group" id="parent" role="tablist" aria-multiselectable="true">
 			  <div class="panel panel-default" ng-repeat="referencia in referencias | orderBy: '-referencia'">
 			    <div class="panel-heading" role="tab" id="titulo{{referencia.referenciaId}}" >
@@ -95,8 +111,9 @@
 								<td> {{item.dataInserido | date: 'dd/MM/yyyy'}} </td>
 								<td> {{item.valor | currency: 'R$ '}} </td>
 								<div ng-hide="!permiteExcluir" >
-									<td class="text-center" ng-show="permiteExcluir"  >
-										<a href="#" ng-click="removerItem(item, 2)"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+									<td class="text-center" ng-show="permiteExcluir" >
+										<a href="#" ng-bootbox-confirm="Deseja deletar este registro?"
+		        						ng-bootbox-confirm-action="removerItem(item, 2)" ng-bootbox-confirm-action-cancel=""><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
 									</td>
 								</div>
 							</tr>

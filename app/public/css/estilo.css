@@ -29,8 +29,7 @@ body{
 .posicaoCarrousel{
 	color: #FFF;
     background-color: rgba(0, 0, 0, 0.5);
-    width: 80%;
-    border-radius: 10px;
+
     position: absolute !important; 
     top: 50% ;
     left: 50%;
@@ -64,6 +63,7 @@ body{
 @media (max-width: 599px){
 	.regulaLayoutCadastramentoTodos{
 		 display: inline-grid !important;
+		 margin-right: 40%;
 	}
 	.alinhaVertical {
 		width: 100% !important;

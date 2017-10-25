@@ -1,9 +1,11 @@
 module.exports = function(app) {  
-    app.get('/agenda', function(req, res) {
+    app.get('/agenda/:predio', function(req, res) {
         var connection = app.infra.connectionFactory();
-
+        
+        var predio = req.params.predio;
+        console.log(predio);
         var agendaDAO = new app.infra.AgendaDAO(connection);
-        agendaDAO.lista(function(err, results) {
+        agendaDAO.lista(predio, function(err, results) {
         	if(err) throw err;
         	res.json(results);
         });

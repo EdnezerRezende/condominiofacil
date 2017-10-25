@@ -92,8 +92,147 @@
 			</div>
 	    </div>
 	    <div role="tabpanel" class="tab-pane fade" id="boletos">
-	    	<h3>Boletos</h3>
+			<div class="alert alert-success alert-dismissible" role="alert" ng-show="mensagemSucesso.length">
+				<button id="alerta" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			  	{{mensagemSucesso}}
+			</div>
+
+			<div class="regularPosicao">
+				<md-input-container class="md-block">
+					<md-checkbox  name="gerarTudo" ng-model="gerarBoletosTodos" >Deseja Gerar todos os boletos</md-checkbox>
+				</md-input-container>
+				
+				<form name="boletoTodosForm" class="form-inline text-center regulaLayoutCadastramentoTodos" ng-submit="gerarBoletosAutomaticamente()" ng-show="gerarBoletosTodos">
+					<div class="ajustarLayout">	
+						<div class=" ">
+				    	  	<md-input-container class="">
+					    	   	<md-datepicker ng-model="boletoTodos.dataPagamento"   name="dataPagamento" md-placeholder="Data de Pagamento" required ></md-datepicker>
+				          		<div ng-messages="boletoTodosForm.$submitted && boletoTodosForm.dataPagamento.$error && boletoTodosForm.$invalid">
+					            	<div ng-message="required">Favor informar data de Pagamento</div>
+					          	</div>
+					        </md-input-container>
+						</div>
+						
+						<div class=" col-sm-3 afastamento text-center " >
+							<md-input-container class="">
+						      <label>Valor</label>
+						      <md-icon class="inativarIcone" md-inactive md-svg-src="img/icons/ic_monetization_on_black_24px.svg" ></md-icon>
+								<input format="number" name="valorBoleto" class="text-center" ng-model="valorBoleto" zero-filter="true" required />
+								 <md-icon md-inactive md-svg-src="img/icons/ic_account_balance_black_24px" ></md-icon>
+								 <div ng-messages="boletoTodosForm.$submitted && boletoTodosForm.valorBoleto.$error && boletoTodosForm.valorBoleto.$invalid">
+					            	<div ng-message="required">Favor informar o Valor!</div>
+					          	</div>
+						    </md-input-container>
+						</div>
+						<button type="submit" ng-disabled="boletoTodosForm.$invalid" class="btn btn-default btn-primary"  >Gerar Boletos</button>
+					</div>
+				</form>
+
+		    	<form name="boletoForm" class="form-inline text-center regulaLayoutCadastramentoTodos" ng-submit="inserirBoletos()" ng-show="!gerarBoletosTodos">
+		    		<div class="ajustarLayout">
+		    			<!-- <div class="afastamento   ">
+							<md-input-container >
+					          <label>Referência</label>
+					          <md-select ng-model="boleto.referencia"  required>
+						            <md-option ng-repeat="referenciaBoleto in mesReferencia" ng-value="referenciaBoleto.value">{{referenciaBoleto.descricao}}</md-option>
+						       </md-select>
+								<div ng-messages="contaForm.$submitted && contaForm.referencia.$error && contaForm.$invalid">
+					            	<div ng-message="required">Favor informar tipo do Registro!</div>
+					          	</div>
+							</md-input-container>
+						</div> -->
+						<div class="afastamento" >
+							<md-input-container >
+					          <label>Apartamento</label>
+					          <md-select name="apartamento" ng-model="boleto.apartamento"  required>
+						            <md-option ng-repeat="apartamento in apartamentos | orderBy: 'numeroApt'" ng-value="apartamento.apartamentoId">{{apartamento.numeroApt}}</md-option>
+						       </md-select>
+								<div ng-messages="contaForm.$submitted && contaForm.apartamento.$error && contaForm.$invalid">
+					            	<div ng-message="required">Favor informar o apartamento!</div>
+					          	</div>
+							</md-input-container>
+						</div>
+				    	<div class=" ">
+				    	  	<md-input-container class="">
+					    	   	<md-datepicker ng-model="boleto.dataPagamento"   name="dataPagamento" md-placeholder="Data de Pagamento" required ></md-datepicker>
+				          		<div ng-messages="boletoForm.$submitted && boletoForm.dataPagamento.$error && boletoForm.$invalid">
+					            	<div ng-message="required">Favor informar data de Pagamento</div>
+					          	</div>
+					        </md-input-container>
+						</div>
+						
+						<div class=" col-sm-3 afastamento text-center " >
+							<md-input-container class="">
+						      <label>Valor</label>
+						      <md-icon class="inativarIcone" md-inactive md-svg-src="img/icons/ic_monetization_on_black_24px.svg" ></md-icon>
+								<input format="number" name="valorBoleto" class="text-center" ng-model="valorBoleto" zero-filter="true" required />
+								 <md-icon md-inactive md-svg-src="img/icons/ic_account_balance_black_24px" ></md-icon>
+								 <div ng-messages="boletoForm.$submitted && boletoForm.valorBoleto.$error && boletoForm.valorBoleto.$invalid">
+					            	<div ng-message="required">Favor informar o Valor!</div>
+					          	</div>
+						    </md-input-container>
+						</div>
+						<div class=" afastamento  " >
+							<md-input-container >
+					          <label>Descrição</label>
+					          <textarea  name="descricaoBoleto" ng-model="boleto.descricaoBoleto"  md-maxlength="50" rows="1" md-select-on-focus required>
+						      </textarea>
+							  <div ng-messages="boletoForm.$submitted && boletoForm.descricaoBoleto.$error && boletoForm.$invalid">
+				              <div ng-message="required">Favor informar descrição!</div>
+				          	  </div>
+							</md-input-container>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-12 text-center" >
+						<md-input-container >
+							<button type="submit" ng-disabled="boletoForm.$invalid" class="btn btn-default btn-primary">Inserir</button>
+						</md-input-container>
+					</div>
+				</form>
+			</div>
+			<div >
+				<table   class="table table-striped "  >
+					<thead  >
+						<tr >
+							<th class="text-center"  ><strong>Apartamento</strong></th>
+							<th class="text-center"><strong>Data de Pagamento</strong></th>
+							<th class="text-center"><strong>Descrição</strong></th>
+							<th class="text-center"><strong>Valor</strong></th>
+						</tr>
+					</thead>
+					<tbody >
+						<!-- <tr class="painel-animado" ng-repeat="item in boletos track by $index "> -->
+						<tr class="painel-animado" ng-repeat="item in boletos | orderBy: 'dataPagamento' ">
+							<td class="text-center" ng-repeat="apartamento in apartamentos | orderBy: 'numeroApt'" ng-if=" apartamento.apartamentoId == item.apartamento "> {{ apartamento.numeroApt }} </td>
+							<td class="text-center"> {{ item.dataPagamento | date: 'dd/MM/yyyy' }} </td>
+							<td class="text-center" > {{ item.descricaoBoleto }} </td>
+							<td class="text-center"> {{ item.valorBoleto | currency: 'R$ '}} </td>
+							<td class="text-center" >
+								<span class="glyphicon glyphicon-barcode" aria-hidden="true"></span>
+							</td>
+							<td class="text-center"  >
+								<a href="#" ng-click="alterarItem(item, 2)"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+							</td>
+							<td class="text-center"  >
+								<a href="#" ng-click="removerItem(item, 2)"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+							</td>
+						</tr>
+					</tbody>
+					
+				</table>
+				<div class="text-center">
+					<br/>
+					<br/>
+					<div ng-show="boletos.length">
+						<a href="#" class="btn btn-default btn-primary" ng-click="salvarRegistrosBoletos()" ng-disabled="!boletos.length">Salvar</a>
+						<a href="#" ng-bootbox-confirm="Todos os Registros serão apagados, deseja confirmar?"
+		        		ng-bootbox-confirm-action="removerTodos(2)" ng-bootbox-confirm-action-cancel=""
+						  class="btn btn-default btn-danger">Cancelar</a>
+					</div>
+				</div>
+			</div>
 	    </div>
+
 	    <div role="tabpanel" class="tab-pane fade" id="cadUsuario">
 	    	<h3>Condômínos</h3>
 	    </div>

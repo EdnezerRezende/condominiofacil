@@ -77,8 +77,8 @@ angular.module('condominiofacil', ['ui.router', 'angular-mandrill', 'angularMome
 	$rootScope.boletos = [];
 	$rootScope.perfilAutorizado = false;
 	$rootScope.idLogin = '';
+	$rootScope.predioUsuario = '';
 
-	$rootScope.eventos =[];
 
 	$rootScope.goBack = function(){
       $rootScope.detalharCardapio.observacao = "";
