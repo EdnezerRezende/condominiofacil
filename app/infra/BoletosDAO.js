@@ -83,6 +83,15 @@ BoletosDAO.prototype.atualizarBoletos = function(boletosAtualizar, callback) {
     this._connection.query(sql, [dataHoje, boletosAtualizar.valor, values], callback);
 }
 
+BoletosDAO.prototype.deletarBoletoPorId = function(id, callback) {
+
+    var sql = 'delete from boletos  where boletoId = ? ';
+   
+    this._connection.query(sql, [id], callback);
+}
+
+
+
 module.exports = function(){
     return BoletosDAO;
 };

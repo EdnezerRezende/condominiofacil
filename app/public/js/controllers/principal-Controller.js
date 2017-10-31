@@ -1,4 +1,4 @@
-angular.module('condominiofacil').controller('PrincipalController', function($scope, $rootScope, $stateParams, $window, $http, $location, $ngBootbox, $filter) {
+angular.module('condominiofacil').controller('PrincipalController', function(  $scope, $rootScope, $stateParams, $window, $http, $location, $ngBootbox, $filter, $mdDialog) {
 	
   $rootScope.tituloPagina = 'Acompanhamento';
   $scope.nowEvento = new Date();
@@ -12,6 +12,9 @@ angular.module('condominiofacil').controller('PrincipalController', function($sc
   $scope.EmiteMensagemSucesso = "";
   $scope.EmiteMensagemErro = "";
   $scope.eventos =[];
+  $rootScope.paginasUsuario = [];
+
+ 
 
   $scope.removerItem = function ( item, aba ) {
     switch(aba){
@@ -168,6 +171,6 @@ angular.module('condominiofacil').controller('PrincipalController', function($sc
     }
   };
 
-  
+
 
 });

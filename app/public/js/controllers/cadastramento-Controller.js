@@ -1,4 +1,4 @@
-angular.module('condominiofacil').controller('CadastramentoController', function($scope, $rootScope, $stateParams, $window, $http, $location, $ngBootbox, $filter) {
+angular.module('condominiofacil').controller('CadastramentoController', function( $scope, $rootScope, $stateParams, $window, $http, $location, $ngBootbox, $filter) {
 
 $rootScope.tituloPagina = 'Administrativo';
 
@@ -62,8 +62,22 @@ $scope.removerItem = function ( item, aba ) {
 			$scope.eventos.splice(indice, 1);
 			break;
 		case 2: 
-			var indice = $scope.boletos.indexOf( item );
-			$scope.boletos.splice(indice, 1);
+			if ( item.boletoId != null ){
+				$http({
+				   method: 'DELETE',
+				   url: '/boletos/' + item.boletoId 
+				 })
+				 .then(function (success) {
+				   var indice = $scope.boletosExistentes.indexOf( item );
+				   $scope.boletosExistentes.splice(indice, 1);
+				   $scope.mensagemSucesso = 'Boleto do apartamento ' + item.numeroApt + ' foi deletado!';
+				 }, function(error){
+				   console.log(error);
+				});
+			}else{
+				var indice = $scope.boletos.indexOf( item );
+				$scope.boletos.splice(indice, 1);
+			}
 			break;
 		case 3:
 			break;
@@ -94,6 +108,7 @@ $scope.alterarItem = function(item, aba){
 	switch(aba){
 		case 1:
 			$scope.evento = item;
+			$scope.removerItem( item,aba )
 			break;
 		case 2:
 			if ( $scope.gerarBoletosTodos ){
@@ -107,9 +122,9 @@ $scope.alterarItem = function(item, aba){
 		case 4:
 			$scope.valor = item.valor;
 			$scope.conta = item;
+			$scope.removerItem( item,aba )
 			break;
 	}
-	$scope.removerItem( item,aba );
 }
 
 $scope.mostraErro = false;
@@ -138,6 +153,7 @@ $scope.inserirEventoCadastro = function(){
 		if ( jaInserido ){
 	        $scope.mostraErro = true;
 			jaInserido = false;
+
 		}else{
 			$scope.eventos.push($scope.evento);
 		}
@@ -174,7 +190,7 @@ $scope.boletos = [];
 $scope.valorBoleto = '';
 $scope.boletoTodos = {};
 $scope.gerarBoletosTodos = false;
-
+$scope.boletosExistentes = [];
 
 $scope.apartamentos = [];
 
@@ -210,6 +226,18 @@ $http({
   console.log( error );
 });
 
+$http({
+   method: 'GET',
+   url: '/boletos/buscarTodos/' + $rootScope.idLogin 
+ })
+ .then(function (success) {
+
+   $scope.boletosExistentes = success.data;
+   console.log($scope.boletosExistentes);
+ }, function(error){
+   console.log(error);
+});
+
 $scope.gerarBoletosAutomaticamente = function(){
 	for (var i = 0; i < $scope.apartamentos.length; i++) {
 		if ( $scope.boletoTodos.dataPagamento != null ){
@@ -217,7 +245,7 @@ $scope.gerarBoletosAutomaticamente = function(){
 			$scope.tratarCampoValorInserir();//Inserir Valor do Boleto
 
 			var mes = $filter('date')($scope.boletoTodos.dataPagamento , 'MM');
-			$scope.boleto.descricaoBoleto = 'Boleto referente ao Mês de ' + mes;
+		 	$scope.boleto.descricaoBoleto = 'Boleto referente ao Mês de ' + mes;
 			$scope.boleto.loginId = $scope.apartamentos[i].loginId;//Inserir O LoginId do responsável do Apartamento
 			$scope.boleto.apartamento = $scope.apartamentos[i].apartamentoId;
 			$scope.boleto.predio = $rootScope.predioUsuario;
@@ -242,7 +270,8 @@ $scope.gerarBoletosAutomaticamente = function(){
 				if ( dataAInserir.getDate() == dataJaInserida.getDate() 
 					&& $scope.boletos[i].descricaoBoleto == $scope.boleto.descricaoBoleto
 					&& $scope.boletos[i].apartamento == $scope.boleto.apartamento ){
-					jaInserido = true;
+					$scope.removerItem($scope.boletos[i], 2);
+					//jaInserido = true;
 					break;
 				} 
 			}
@@ -250,6 +279,7 @@ $scope.gerarBoletosAutomaticamente = function(){
 			if ( jaInserido ){
 		        $scope.mostraErro = true;
 				jaInserido = false;
+
 			}else{
 				var countPonto = 0;
 				var temVirgula = false;
@@ -294,6 +324,18 @@ $scope.gerarBoletosAutomaticamente = function(){
 		    .then(function ( success ) {
 		      $scope.mensagemSucesso = "Os Boletos foram cadastrados com sucesso!";
 		      $scope.boletos = [];
+		      
+		      $http({
+			   method: 'GET',
+			   url: '/boletos/buscarTodos/' + $rootScope.idLogin 
+			  }).then(function (success) {
+
+			   $scope.boletosExistentes = success.data;
+			   console.log($scope.boletosExistentes);
+			   }, function(error){
+			  	 console.log(error);
+			   });
+
 		    }, function( error ){
 		      console.log( error );
 		    });

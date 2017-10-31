@@ -1,0 +1,83 @@
+<div layout="column" >
+  <md-content layout-padding>
+    <form name="minhaContaForm" ng-submit="atualizaDadosPessoais()">
+      <div layout-gt-sm="row">
+        <md-input-container class="md-block" flex-gt-sm>
+          <label>Nome Completo</label>
+          <input md-maxlength="45" required name="nomeCompleto" ng-model="dadosPessoais.nomeCompleto" />
+
+          <div ng-messages="minhaContaForm.nomeCompleto.$error" ng-if="!showHints">
+            <div ng-message="required">Nome é obrigatório.</div>
+            <div ng-message="md-maxlength">Pode conter no máximo 10</div>
+          </div>
+        </md-input-container>
+
+        <md-input-container class="md-block" flex-gt-sm>
+          <label>Nome</label>
+          <input md-maxlength="10" required name="nomeApelido" ng-model="dadosPessoais.nomeApelido" />
+
+          <div ng-messages="minhaContaForm.nomeApelido.$error" >
+            <div ng-message="required">Nome é obrigatório.</div>
+            <div ng-message="md-maxlength">Pode conter no máximo 10</div>
+          </div>
+        </md-input-container>
+
+        <div flex="5" hide-xs hide-sm>
+          <!-- Spacer //-->
+        </div>
+      </div>
+      <div layout-gt-sm="row">
+        <md-input-container class="md-block" flex-gt-sm>
+          <label>CPF</label>
+          <!-- <input name="cpf" ng-model="dadosPessoais.cpf"   /> -->
+          <input type="text" name="cpf" ng-model="dadosPessoais.cpf" cpf-validator mask='999.999.999-99'> 
+          <ul ng-messages="minhaContaForm.cpf.$error">
+            <li ng-message="cpfInvalid">CPF não é válido</li>
+            <li ng-message="cpfIncomplet">CPF está incompleto</li>
+          </ul>
+
+        </md-input-container>
+
+        <md-input-container class="md-block" flex-gt-sm>
+          <label>Identidade</label>
+          <input name="identidade" ng-model="dadosPessoais.identidade"  />
+
+          
+        </md-input-container>
+
+
+      </div>
+
+      <div layout-gt-sm="row">
+
+        <md-input-container class="md-block" flex-gt-sm>
+          <label>E-mail</label>
+          <input name="email" ng-model="dadosPessoais.email"
+                 required minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/" />
+
+          
+        </md-input-container>
+
+        <div flex="5" hide-xs hide-sm>
+          <!-- Spacer //-->
+        </div>
+
+        <md-input-container class="md-block" flex-gt-sm>
+          <label>Celular</label>
+          <input type="text" name="telefone" ng-model="dadosPessoais.telefone" mask='(99) 99999-9999'  >
+          <!-- <input name="telefone"  ng-model="dadosPessoais.telefone"  /> -->
+        </md-input-container>
+
+      </div>
+      <div class=" form-group">
+        <md-input-container >
+          <button type="submit" ng-disabled="minhaContaForm.$invalid" class="btn  btn-primary" >Atualizar Dados</button>
+          <!-- <a href="#" class="btn btn-default btn-danger">Cancelar</a> -->
+          <button class="btn btn-danger " ng-click="voltarHome()"> Cancelar</button>
+        </md-input-container>
+      </div>
+
+    </form>
+  </md-content>
+
+</div>

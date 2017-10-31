@@ -98,7 +98,7 @@
 			</div>
 
 			<div class="regularPosicao">
-				<md-input-container class="md-block">
+				<md-input-container class="md-block ">
 					<md-checkbox  name="gerarTudo" ng-model="gerarBoletosTodos" >Deseja Gerar todos os boletos</md-checkbox>
 				</md-input-container>
 				
@@ -106,9 +106,9 @@
 					<div class="ajustarLayout">	
 						<div class=" ">
 				    	  	<md-input-container class="">
-					    	   	<md-datepicker ng-model="boletoTodos.dataPagamento"   name="dataPagamento" md-placeholder="Data de Pagamento" required ></md-datepicker>
+					    	   	<md-datepicker ng-model="boletoTodos.dataPagamento"   name="dataPagamento" md-placeholder="Data de Vencimento" required ></md-datepicker>
 				          		<div ng-messages="boletoTodosForm.$submitted && boletoTodosForm.dataPagamento.$error && boletoTodosForm.$invalid">
-					            	<div ng-message="required">Favor informar data de Pagamento</div>
+					            	<div ng-message="required">Favor informar data de Vencimento</div>
 					          	</div>
 					        </md-input-container>
 						</div>
@@ -154,9 +154,9 @@
 						</div>
 				    	<div class=" ">
 				    	  	<md-input-container class="">
-					    	   	<md-datepicker ng-model="boleto.dataPagamento"   name="dataPagamento" md-placeholder="Data de Pagamento" required ></md-datepicker>
+					    	   	<md-datepicker ng-model="boleto.dataPagamento"   name="dataPagamento" md-placeholder="Data de Vencimento" required ></md-datepicker>
 				          		<div ng-messages="boletoForm.$submitted && boletoForm.dataPagamento.$error && boletoForm.$invalid">
-					            	<div ng-message="required">Favor informar data de Pagamento</div>
+					            	<div ng-message="required">Favor informar data de Vencimento</div>
 					          	</div>
 					        </md-input-container>
 						</div>
@@ -195,7 +195,7 @@
 					<thead  >
 						<tr >
 							<th class="text-center"  ><strong>Apartamento</strong></th>
-							<th class="text-center"><strong>Data de Pagamento</strong></th>
+							<th class="text-center"><strong>Data de Vencimento</strong></th>
 							<th class="text-center"><strong>Descrição</strong></th>
 							<th class="text-center"><strong>Valor</strong></th>
 						</tr>
@@ -230,6 +230,39 @@
 						  class="btn btn-default btn-danger">Cancelar</a>
 					</div>
 				</div>
+
+				<h3 class="text-center">Boletos Já Inseridos</h3>
+				<table   class="table table-striped "  >
+					<thead  >
+						<tr >
+							<th class="text-center"  ><strong>Apartamento</strong></th>
+							<th class="text-center"><strong>Data de Vencimento</strong></th>
+							<th class="text-center"><strong>Descrição</strong></th>
+							<th class="text-center"><strong>Valor</strong></th>
+						</tr>
+					</thead>
+					<tbody >
+						<!-- <tr class="painel-animado" ng-repeat="item in boletos track by $index "> -->
+						<tr class="painel-animado"  ng-repeat="item in boletosExistentes | orderBy: 'dataPagamento' ">
+							<td class="text-center" ng-repeat="apartamento in apartamentos | orderBy: 'numeroApt'" ng-if=" apartamento.apartamentoId == item.apartamentoId "> {{ apartamento.numeroApt }} </td>
+							<td class="text-center"> {{ item.dataPagamento | date: 'dd/MM/yyyy' }} </td>
+							<td class="text-center" > {{ item.descricao }} </td>
+							<td class="text-center"> {{ item.valor + item.juros + item.multa | currency: 'R$ '}} </td>
+							<td class="text-center" >
+								<span class="glyphicon glyphicon-barcode" aria-hidden="true"></span>
+							</td>
+							<td class="text-center"  >
+								<a href="#" 
+								ng-bootbox-confirm="Este Boleto será deletado da base, deseja continuar?"
+		        				ng-bootbox-confirm-action="removerItem(item, 2)" ng-bootbox-confirm-action-cancel="">
+		        					<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+		        				</a>
+							</td>
+						</tr>
+					</tbody>
+					
+				</table>
+
 			</div>
 	    </div>
 
@@ -249,9 +282,9 @@
 		    		<div class="ajustarLayout">
 				    	<div class=" ">
 				    	  	<md-input-container class="">
-					    	   	<md-datepicker ng-model="conta.dataPagamento"   name="dataPagamento" md-placeholder="Data de Pagamento" required ></md-datepicker>
+					    	   	<md-datepicker ng-model="conta.dataPagamento"   name="dataPagamento" md-placeholder="Data de Vencimento" required ></md-datepicker>
 				          		<div ng-messages="contaForm.$submitted && contaForm.dataPagamento.$error && contaForm.$invalid">
-					            	<div ng-message="required">Favor informar data de Pagamento</div>
+					            	<div ng-message="required">Favor informar data de Vencimento</div>
 					          	</div>
 					        </md-input-container>
 						</div>
@@ -310,7 +343,7 @@
 				<table   class="table table-striped "  >
 					<thead  >
 						<tr >
-							<th class="text-center"><strong>Data de Pagamento</strong></th>
+							<th class="text-center"><strong>Data de Vencimento</strong></th>
 							<th class="text-center"><strong>Descrição</strong></th>
 							<th class="text-center"><strong>Valor</strong></th>
 						</tr>

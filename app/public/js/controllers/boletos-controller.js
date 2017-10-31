@@ -1,7 +1,7 @@
-angular.module('condominiofacil').controller('BoletosController', function($scope, $rootScope, $stateParams, $window, $http, $location, $ngBootbox, $filter) {
+angular.module('condominiofacil').controller('BoletosController', function( $scope, $rootScope, $stateParams, $window, $http, $location, $ngBootbox, $filter) {
 	$rootScope.tituloPagina = 'Boletos';
 	$rootScope.rotaBoleto = true;
-	$scope.boletosTodos = [];
+	$scope.boletosTodos = []; 
 	$scope.mensagemSucessoBoleto = '';
 
 	$http({

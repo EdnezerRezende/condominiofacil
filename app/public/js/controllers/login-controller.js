@@ -1,4 +1,4 @@
-angular.module('condominiofacil').controller('LoginController', function($scope, $rootScope, $stateParams, $window, $http, $location) {
+angular.module('condominiofacil').controller('LoginController', function(  $scope, $rootScope, $stateParams, $window, $http, $location) {
 	$rootScope.tituloPagina = 'Login';
 	$scope.mensagem = '';
 	$rootScope.usuario.login = '';
@@ -8,7 +8,7 @@ angular.module('condominiofacil').controller('LoginController', function($scope,
 
 		$http({
 	      method: 'POST',
-	      url: '/autenticar',
+	      url: '/autenticar', 
 	      data: $rootScope.usuario
 	    })
 	    .then(function (success) {
@@ -24,6 +24,8 @@ angular.module('condominiofacil').controller('LoginController', function($scope,
 	    		$rootScope.perfilAutorizado = false;
 	    	}
 	    	
+	    	 $rootScope.buscarDadosUsuario();
+	    	 
 	    	 $http({
 			    method: 'GET',
 			    url: '/boletos/' + $rootScope.idLogin 

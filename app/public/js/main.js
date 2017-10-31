@@ -1,4 +1,4 @@
-angular.module('condominiofacil', ['ui.router', 'angular-mandrill', 'angularMoment', 'ngBootbox', 'ngMaterial', 'ngAnimate', 'ngMessages', 'luk.money', 'angular-loading-bar'])
+angular.module('condominiofacil', ['ui.router', 'angular-mandrill', 'angularMoment', 'ngBootbox', 'ngMaterial', 'ngAnimate', 'ngMessages', 'luk.money', 'angular-loading-bar', 'ui.utils.masks', 'ngMask', 'angularjs-br-directive-validator-cpf'])
 .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, MandrillProvider, $mdDateLocaleProvider ){
 
 	//configurações do DataPeckir
@@ -33,7 +33,22 @@ angular.module('condominiofacil', ['ui.router', 'angular-mandrill', 'angularMome
 	    templateUrl: 'parciais/login.html',
 	    controller: 'LoginController'
 	  })
-
+	   .state('alterarSenha', {
+	    url: "/alterarSenha",
+	    templateUrl: 'parciais/alterarSenha.html',
+	    controller: 'AlterarSenhaController'
+	  })
+	   .state('falarSindico', {
+	    url: "/falarSindico",
+	    templateUrl: 'parciais/falarSindico.html',
+	    controller: 'FalarSindicoController'
+	  })
+	   .state('minhaConta', {
+	    url: "/minhaConta",
+	    templateUrl: 'parciais/minhaConta.html',
+	    controller: 'MinhaContaController'
+	  })
+	   
 	   .state('propagandas', {
 	    url: "/propagandas",
 	    templateUrl: 'parciais/propagandas.html',
@@ -78,19 +93,30 @@ angular.module('condominiofacil', ['ui.router', 'angular-mandrill', 'angularMome
 	$rootScope.perfilAutorizado = false;
 	$rootScope.idLogin = '';
 	$rootScope.predioUsuario = '';
+	$rootScope.dadosUsuario = {};
 
 
 	$rootScope.goBack = function(){
-      $rootScope.detalharCardapio.observacao = "";
-      $rootScope.detalharCardapio.quantidade = 1;
-      $rootScope.detalharCardapio.restricao = "";
       $window.history.back();
     };
 
     $rootScope.voltarHome = function(){
 		$location.path('/home');	
 	}
-
+	
+	$rootScope.buscarDadosUsuario = function() {
+		$http({
+		   method: 'POST',
+		   url: '/moradores/idLogin/' + $rootScope.idLogin
+		 })
+		 .then(function (success) {
+		   $rootScope.dadosUsuario = success.data;
+		   
+		   console.log($rootScope.dadosUsuario[0].nome);
+		 }, function(error){
+		   console.log(error);
+		});
+	}
 
 
     $rootScope.logoff = function(){
@@ -99,7 +125,13 @@ angular.module('condominiofacil', ['ui.router', 'angular-mandrill', 'angularMome
     	$rootScope.usuario = {};
 		$rootScope.boletos = [];
 		$rootScope.perfilAutorizado = false;
-    	$rootScope.logado = false;
+    	$rootScope.logado = false; 
+    	$rootScope.dadosUsuario = {};
+    	$ngBootbox.alert({message: "Logoff efetuado com sucesso!", title: "Logoff"})
+        .then(function() {
+            $rootScope.idLogin = '';
+            $rootScope.predioUsuario = '';
+        });
     	$location.path("/home");
     }
 

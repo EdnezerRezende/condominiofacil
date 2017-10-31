@@ -1,0 +1,22 @@
+{
+    "name": "angularjsbr-directive-validator-cpf",
+    "version": "0.5.0",
+    "authors": [
+        "Igor de Paula <principe.borodin@gmail.com>"
+    ],
+    "dependencies": {
+        "angular": "~1.4.0",
+        "angular-messages": "~1.4.0"
+    },
+    "devDependencies": {        
+        "angular-mocks": "~1.4.0"
+    },
+    "description": "Diretiva para validar CPF em AngularJS",
+    "keywords": [
+        "angular",
+        "angularjs",
+        "validator",
+        "validação"
+    ],
+    "license": "MIT"
+}

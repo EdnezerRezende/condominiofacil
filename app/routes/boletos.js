@@ -62,5 +62,20 @@ module.exports = function(app) {
  
         connection.end();
     });
+
+    app.delete('/boletos/:id', function(req, res) {
+        var id = req.params.id;
+        
+        var connection = app.infra.connectionFactory();
+
+        var boletosDAO = new app.infra.BoletosDAO(connection);
+        boletosDAO.deletarBoletoPorId(id, function(err, results) {
+            if(err) throw err;
+            res.json(results);
+        });
+ 
+        connection.end();
+    });
+
   
 } 

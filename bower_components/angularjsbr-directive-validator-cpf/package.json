@@ -1,0 +1,31 @@
+{
+  "name": "AngularProjects",
+  "version": "0.5.0",
+  "description": "",
+  "main": "js/directives.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    
+  },
+  "devDependencies": {
+    "karma-mocha-reporter": "^1.0.2",
+    "mocha": "^2.2.5",
+    "chai": "^2.3.0",
+    "karma": "^0.12.32",
+    "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^0.1.12",
+    "karma-firefox-launcher": "^0.1.6",
+    "karma-jasmine": "^0.3.5",
+    "karma-mocha": "^0.1.10",
+    "karma-phantomjs-launcher": "^0.1.4",
+    "protractor": "^2.1.0",
+    "bower":"~1.4.1"
+  },
+  "scripts": {
+    "test": "karma start --single-run"
+  },
+  "author": "",
+  "license": "ISC"
+}
