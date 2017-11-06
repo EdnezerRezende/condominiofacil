@@ -1,6 +1,8 @@
 angular.module('condominiofacil', ['ui.router', 'angular-mandrill', 'angularMoment', 'ngBootbox', 'ngMaterial', 'ngAnimate', 'ngMessages', 'luk.money', 'angular-loading-bar', 'ui.utils.masks', 'ngMask', 'angularjs-br-directive-validator-cpf'])
 .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, MandrillProvider, $mdDateLocaleProvider ){
 
+
+
 	//configurações do DataPeckir
 	$mdDateLocaleProvider.months = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 	$mdDateLocaleProvider.shortMonths = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
@@ -82,7 +84,7 @@ angular.module('condominiofacil', ['ui.router', 'angular-mandrill', 'angularMome
 
 	amMoment.changeLocale('pt-br');
 
-	
+
 
 	$rootScope.tituloPagina = '';
 	$rootScope.loginEfetuado = 'false';
@@ -147,5 +149,27 @@ angular.module('condominiofacil', ['ui.router', 'angular-mandrill', 'angularMome
     };
 
     
+	$rootScope.tratarCpf = function(){
+		var cpf = $scope.dadosPessoais.cpf;
+		var retirarPonto = cpf.replace(".", "");
+		var retirarPonto2Vezes = retirarPonto.replace(".", "");
+		var retirarHifen = retirarPonto2Vezes.replace("-","");
+		$scope.dadosPessoais.cpf = retirarHifen;
+	}
+
+	$rootScope.tratarTelefone = function(){
+		var telefone = $scope.dadosPessoais.telefone;
+		var retirarAbreParenteses = telefone.replace("(", "");
+		var retirarFechaParenteses = retirarAbreParenteses.replace(")", "");
+		var retirarEspaco = retirarFechaParenteses.replace(" ", "");
+		var retirarHifen = retirarEspaco.replace("-","");
+		$scope.dadosPessoais.telefone = retirarHifen;
+	}
+
+if ( $window.sessionStorage.token && !$rootScope.logado ){
+	delete $window.sessionStorage.token;
+	$location.path('/login');
+}
+
 
 }]);

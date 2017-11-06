@@ -3,7 +3,7 @@ angular.module('condominiofacil').controller('FalarSindicoController', function(
 
 	$scope.user = $rootScope.dadosUsuario[0];
 
-	console.log($scope.user);
+	console.log($scope.user); 
 	
 	$scope.envioContatoSindico = function(){
 		$scope.user.comSindico = true;

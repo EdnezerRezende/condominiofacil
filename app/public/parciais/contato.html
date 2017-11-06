@@ -46,7 +46,7 @@
 	</form> 
 </div> --> 
 <div class="container">
-	<form name="contatoForm" class=" text-center " ng-submit="envioContato()">
+	<form name="contatoForm" class=" text-center " >
     	<div class="form-group text-center">
     	  	<md-input-container class="">
 	    	   <label>Nome</label>
@@ -80,7 +80,7 @@
 
 		<div class=" form-group">
 			<md-input-container >
-				<button type="submit" ng-disabled="contatoForm.$invalid" class="btn  btn-primary" >Enviar Mensagem</button>
+				<button type="button" ng-disabled="contatoForm.$invalid" ng-click="envioContato()" class="btn  btn-primary" >Enviar Mensagem</button>
 				<!-- <a href="#" class="btn btn-default btn-danger">Cancelar</a> -->
 				<button class="btn btn-danger " ng-click="voltarHome()"> Cancelar</button>
 			</md-input-container>

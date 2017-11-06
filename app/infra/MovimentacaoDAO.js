@@ -62,14 +62,10 @@ MovimentacaoDAO.prototype.inserirReferencia = function(values, callback) {
         values.referenciaAtual
     ];
     referencias.push(tratar);
-    console.log(values.referenciaAtual);
-    console.log(values.predio);
 
     var sql = 'insert into referencia ( referencia, predio_id ) ';
-    //sql += ' SELECT "' + referencias + '", ' + values.predio ;
     sql += ' SELECT ?, ? ' ;
     sql += ' FROM DUAL WHERE NOT EXISTS';
-    //sql += ' (SELECT r.referencia FROM referencia r WHERE r.referencia = "' + referencias + '" and r.predio_id = "' + values.predio + '" order by r.referencia) ';
     sql += ' (SELECT r.referencia FROM referencia r WHERE r.referencia = ? and r.predio_id = ? order by r.referencia) ';
     this._connection.query(sql, [referencias, values.predio, referencias, values.predio ], callback);
 }

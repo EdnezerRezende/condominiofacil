@@ -80,6 +80,9 @@ $scope.removerItem = function ( item, aba ) {
 			}
 			break;
 		case 3:
+			var indice = $scope.dadosUsuarios.indexOf( item );
+			$scope.dadosUsuarios.splice(indice, 1);
+			$scope.aptDisponivel.push(item.apartamento);
 			break;
 		case 4: 
 			var indice = $scope.contas.indexOf( item );
@@ -97,6 +100,10 @@ $scope.removerTodos = function(aba) {
 			$scope.boletos = [];
 			break;
 		case 3: 
+			for (var i = 0; i < $scope.dadosUsuarios.length; i++) {
+				$scope.aptDisponivel.push( $scope.dadosUsuarios[i].apartamento);
+			};
+			$scope.dadosUsuarios = [];
 			break;
 		case 4:
 			$scope.contas = [];
@@ -118,6 +125,8 @@ $scope.alterarItem = function(item, aba){
 			$scope.boleto = item;
 			break;
 		case 3: 
+			$scope.aptDisponivel.push( item.apartamento);
+			$scope.dadosCadastrais = item;
 			break;
 		case 4:
 			$scope.valor = item.valor;
@@ -183,6 +192,8 @@ $('#alerta').on('closed.bs.alert', function () {
 
 })
 // Fim da Tab Agenda
+
+
 
 // Inicio da TAB Boletos
 $scope.boleto = {};
@@ -343,6 +354,152 @@ $scope.gerarBoletosAutomaticamente = function(){
 	}
 	
 // Fim da Tab Boletos
+
+//Inicio da TAB Cadastramento de usuários
+	$scope.aptDisponivel = [];
+	$scope.dadosCadastrais = {};
+	$scope.dadosUsuarios = [];
+	$scope.apartamentosCadastrados = [];
+
+	var quantidadeAptUtilizados = 0;
+	for (var i = 0; i < $scope.apartamentos.length; i++) {
+		quantidadeAptUtilizados++;
+	};
+
+	var arrayApartamentoSitio = [11, 21, 31, 12, 22, 32];
+
+	var arrayEncontrouAptJaUtilizado = arrayApartamentoSitio;
+  	
+  	$http({
+      method: 'POST',
+      url: '/moradores/administrador/' + $rootScope.predioUsuario
+    })
+    .then(function ( success ) {
+    	console.log(success);
+     	$scope.apartamentosCadastrados = success.data;
+
+    }, function( error ){
+      console.log( error );
+    });
+
+    $scope.ativarDesativar = function(item){
+		if ( item.ativo == 1) {
+    		item.ativo = 0;
+    		$scope.aptDisponivel.push(item.numeroApt);
+    	}else{
+    		item.ativo = 1;
+    		var indice = $scope.aptDisponivel.indexOf( item.numeroApt );
+    		$scope.aptDisponivel.splice(indice, 1);
+
+    	}
+
+		$http({
+	      method: 'POST',
+	      url: '/moradores/inativarAtivar/' + item.moradorId + '/' + item.ativo
+	    })
+	    .then(function ( success ) {
+	    	console.log(success);
+	    	
+	    }, function( error ){
+	      console.log( error );
+	    });
+    }
+
+	$http({
+      method: 'POST',
+      url: '/predio/' + $rootScope.predioUsuario
+    })
+    .then(function ( success ) {
+      quantidadeAptUtilizados -= success.data[0].qtdApartamentos;
+	  	for (var i = 0; i < $scope.apartamentos.length; i++) {
+	  		for (var j = 0; j < arrayApartamentoSitio.length; j++) {
+	  			if ( $scope.apartamentos[i].numeroApt == arrayApartamentoSitio[j] ) {
+	  				arrayEncontrouAptJaUtilizado.splice( j, 1 );
+	  				$scope.aptDisponivel = arrayEncontrouAptJaUtilizado;
+	  				break;
+	  			}
+	  		}
+	  	}
+
+    }, function( error ){
+      console.log( error );
+    });
+
+    Array.prototype.remove = function() {
+	    var what, a = arguments, L = a.length, ax;
+	    while (L && this.length) {
+	        what = a[--L];
+	        while ((ax = this.indexOf(what)) !== -1) {
+	            this.splice(ax, 1);
+	        }
+	    }
+	    return this;
+	};
+
+	$scope.inserirDadosPessoais = function(){
+		var indice = $scope.dadosUsuarios.indexOf( $scope.dadosCadastrais );
+		if ( indice != -1 ){
+			console.log(indice);
+			$scope.dadosUsuarios.splice( indice, 1 );
+			console.log($scope.dadosUsuarios);
+		}
+		for (var i = 0; i < $scope.aptDisponivel.length; i++) {
+			if ( $scope.dadosCadastrais.apartamento == $scope.aptDisponivel[i] ){
+				$scope.aptDisponivel.remove( $scope.dadosCadastrais.apartamento );
+			}
+		}
+		$scope.dadosCadastrais.ativo = 1;
+		$scope.dadosCadastrais.predio = $rootScope.predioUsuario;
+		$scope.dadosUsuarios.push($scope.dadosCadastrais);
+		$scope.dadosCadastrais = {};
+	}
+
+	$scope.salvarCadastroUsuarios = function(){
+		$scope.tratarCpfUsuario();
+		$scope.tratarTelefoneUsuario();
+		var count = 0;
+
+		for (var i = 0; i < $scope.dadosUsuarios.length; i++) {
+			$http({
+		      method: 'POST',
+		      url: '/moradores/1/2',
+		      data: $scope.dadosUsuarios[i]
+		    })
+		    .then(function ( success ) {
+		    	count++;
+		    	if ( count == $scope.dadosUsuarios.length){
+			    	$scope.mensagemSucesso = "Moradores inserido com sucesso!";
+			      	$scope.dadosUsuarios = [];
+		    	}
+		    }, function( error ){
+		      console.log( error );
+		    });
+		}
+	}
+
+	$scope.tratarCpfUsuario = function(){
+		for (var i = 0; i < $scope.dadosUsuarios.length; i++) {
+			var cpf = $scope.dadosUsuarios[i].cpf;
+			var retirarPonto = cpf.replace(".", "");
+			var retirarPonto2Vezes = retirarPonto.replace(".", "");
+			var retirarHifen = retirarPonto2Vezes.replace("-","");
+			$scope.dadosUsuarios[i].cpf = retirarHifen;
+		}
+	}
+
+	$scope.tratarTelefoneUsuario = function(){
+		for (var i = 0; i < $scope.dadosUsuarios.length; i++) {
+			var celular = $scope.dadosUsuarios[i].celular;
+			var retirarAbreParenteses = celular.replace("(", "");
+			var retirarFechaParenteses = retirarAbreParenteses.replace(")", "");
+			var retirarEspaco = retirarFechaParenteses.replace(" ", "");
+			var retirarHifen = retirarEspaco.replace("-","");
+			$scope.dadosUsuarios[i].celular = retirarHifen;
+		}
+	}
+	
+// Fim da TAB Cadastramento de usuários
+
 
 // Inicio da TAB Despesas
 

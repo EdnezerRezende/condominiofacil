@@ -1,4 +1,4 @@
-<div class="">
+<div class="container-fluid">
 	
 	<ul class="nav nav-tabs nav-fixed">
 	  <li role="presentation" class="active"><a href="#agenda" aria-controls="agenda" role="tab" data-toggle="tab">Agenda</a></li>
@@ -267,7 +267,195 @@
 	    </div>
 
 	    <div role="tabpanel" class="tab-pane fade" id="cadUsuario">
-	    	<h3>Condômínos</h3>
+	    	<div class="alert alert-info" role="alert" ng-show="mostraErro">
+			  Já Consta este Item na Lista!
+			</div>
+			<div class="alert alert-success alert-dismissible" role="alert" ng-show="mensagemSucesso.length">
+				<button id="alerta" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			  	{{mensagemSucesso}}
+			</div>
+			<div class="regularPosicao">
+				<form name="cadastroUsuarioForm" class="form-inline text-center regulaLayoutCadastramentoTodos" ng-if="aptDisponivel.length">
+			      <div layout-gt-sm="row">
+			      	<md-input-container >
+			          <label>Apartamento</label>
+			          <md-select name="apartamento" ng-model="dadosCadastrais.apartamento"  required>
+				            <md-option ng-repeat="apartamento in aptDisponivel | orderBy: 'apartamento'" ng-value="apartamento">{{apartamento}}</md-option>
+				       </md-select>
+						<div ng-messages="cadastroUsuarioForm.$submitted && cadastroUsuarioForm.apartamento.$error && contaForm.$invalid">
+			            	<div ng-message="required">Favor informar o apartamento!</div>
+			          	</div>
+					</md-input-container>
+			        <md-input-container class="md-block" flex-gt-sm>
+			          <label>Nome Completo</label>
+			          <input md-maxlength="45" required name="nomeCompleto" ng-model="dadosCadastrais.nomeCompleto" />
+
+			          <div ng-messages="cadastroUsuarioForm.nomeCompleto.$error" ng-if="!showHints">
+			            <div ng-message="required">Nome é obrigatório.</div>
+			            <div ng-message="md-maxlength">Pode conter no máximo 10</div>
+			          </div>
+			        </md-input-container>
+
+			        <md-input-container class="md-block" flex-gt-sm>
+			          <label>Apelido</label>
+			          <input md-maxlength="10" required name="nomeApelido" ng-model="dadosCadastrais.nomeApelido" />
+
+			          <div ng-messages="cadastroUsuarioForm.nomeApelido.$error" >
+			            <div ng-message="required">Nome é obrigatório.</div>
+			            <div ng-message="md-maxlength">Pode conter no máximo 10</div>
+			          </div>
+			        </md-input-container>
+
+			        <div flex="5" hide-xs hide-sm>
+			          <!-- Spacer //-->
+			        </div>
+			      </div>
+			      <div layout-gt-sm="row">
+			        <md-input-container class="md-block" flex-gt-sm>
+			          <label>CPF</label>
+			          <!-- <input name="cpf" ng-model="dadosCadastrais.cpf"   /> -->
+			          <input type="text" name="cpf" ng-model="dadosCadastrais.cpf" cpf-validator mask='999.999.999-99'> 
+			          <ul ng-messages="cadastroUsuarioForm.cpf.$error">
+			            <li ng-message="cpfInvalid">CPF não é válido</li>
+			            <li ng-message="cpfIncomplet">CPF está incompleto</li>
+			          </ul>
+
+			        </md-input-container>
+
+			      </div>
+
+			      <div layout-gt-sm="row">
+
+			        <md-input-container class="md-block" flex-gt-sm>
+			          <label>E-mail</label>
+			          <input name="email" ng-model="dadosCadastrais.email"
+			                 required minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/" />
+
+			          
+			        </md-input-container>
+
+			        <div flex="5" hide-xs hide-sm>
+			          <!-- Spacer //-->
+			        </div>
+
+			        <md-input-container class="md-block" flex-gt-sm>
+			          <label>Celular</label>
+			          <input type="text" name="celular" ng-model="dadosCadastrais.celular" mask='(99) 99999-9999'  >
+			        </md-input-container>
+
+			        <md-input-container >
+			          <label>Tipo Morador</label>
+			          <md-select name="tipoMorador" ng-model="dadosCadastrais.tipoMorador" required>
+				            <md-option value="0">Dono</md-option>
+				            <md-option value="1">Inquilino</md-option>
+				       </md-select>
+						<div ng-messages="cadastroUsuarioForm.$submitted && cadastroUsuarioForm.tipoMorador.$error && cadastroUsuarioForm.$invalid">
+			            	<div ng-message="required">Favor informar tipo do Registro!</div>
+			          	</div>
+					</md-input-container>
+
+			      </div>
+			      <div class=" form-group">
+			        <md-input-container >
+			          <button type="button" ng-click="inserirDadosPessoais()" ng-disabled="cadastroUsuarioForm.$invalid" class="btn  btn-primary" >Inserir Dados</button>
+			        </md-input-container>
+			      </div>
+			    </form>
+			</div>
+			<div class="panel panel-default">
+				<div class="table-responsive painel-animado" ng-if="aptDisponivel.length && dadosUsuarios.length" >
+					<table   class="table table-striped "   >
+						<thead  >
+							<tr >
+								<th class="text-center"><strong>Apartamento</strong></th>
+								<th class="text-center"><strong>Nome Completo</strong></th>
+								<th class="text-center"><strong>Apelido</strong></th>
+								<th class="text-center"><strong>CPF</strong></th>
+								<th class="text-center"><strong>E-mail</strong></th>
+								<th class="text-center"><strong>Celular</strong></th>
+								<th class="text-center"><strong>Tipo Morador</strong></th>
+								<th class="text-center"><strong>Ativo</strong></th>
+							</tr>
+						</thead>
+						<tbody >
+							<tr class="painel-animado" ng-repeat="item in dadosUsuarios | orderBy: 'apartamento'">
+								<td class="text-center"> {{ item.apartamento }} </td>
+								<td class="text-center"> {{ item.nomeCompleto }} </td>
+								<td class="text-center"> {{ item.nomeApelido }} </td>
+								<td class="text-center"> {{ item.cpf }} </td>
+								<td class="text-center"> {{ item.email }} </td>
+								<td class="text-center"> {{ item.celular }} </td>
+								<td class="text-center" ng-if="item.tipoMorador == 0"> Dono </td>
+								<td class="text-center" ng-if="item.tipoMorador == 1"> Inquilino </td>
+								<td class="text-center"> {{ item.ativo }} </td>
+
+								<td class="text-center"  >
+									<a href="#" ng-click="alterarItem(item, 3)"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+								</td>
+								<td class="text-center"  >
+									<a href="#" ng-click="removerItem(item, 3)"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+								</td>
+							</tr>
+						</tbody>
+						
+					</table>
+				</div>
+				<div class="text-center">
+					<br/>
+					<br/>
+					<div ng-show="dadosUsuarios.length">
+						<a href="#" class="btn btn-default btn-primary" ng-click="salvarCadastroUsuarios()" ng-disabled="!dadosUsuarios.length">Salvar</a>
+						<a href="#" ng-bootbox-confirm="Todos os Registros serão apagados, deseja confirmar?"
+		        		ng-bootbox-confirm-action="removerTodos(3)" ng-bootbox-confirm-action-cancel=""
+						  class="btn btn-default btn-danger">Cancelar</a>
+					</div>
+				</div>
+	    	</div>
+	    	<div class="panel panel-default">
+				<div class="table-responsive painel-animado"  >
+					<h3>Cadastros Existentes</h3>
+					<table   class="table table-striped "   >
+						<thead  >
+							<tr >
+								<th class="text-center"><strong>Apartamento</strong></th>
+								<th class="text-center"><strong>Nome Completo</strong></th>
+								<th class="text-center"><strong>Apelido</strong></th>
+								<th class="text-center"><strong>CPF</strong></th>
+								<th class="text-center"><strong>E-mail</strong></th>
+								<th class="text-center"><strong>Celular</strong></th>
+								<th class="text-center"><strong>Tipo Morador</strong></th>
+								<th class="text-center"><strong>Ativo</strong></th>
+							</tr>
+						</thead>
+						<tbody >
+							<tr class="painel-animado" ng-class="{'alert alert-danger': item.ativo == 0 }" ng-repeat="item in apartamentosCadastrados | orderBy: 'numeroApt'">
+								<td class="text-center"> {{ item.numeroApt }} </td>
+								<td class="text-center"> {{ item.nomeCompleto }} </td>
+								<td class="text-center"> {{ item.nomeApelido }} </td>
+								<td class="text-center"> {{ item.cpf }} </td>
+								<td class="text-center"> {{ item.email }} </td>
+								<td class="text-center"> {{ item.telefone }} </td>
+								<td class="text-center" ng-if="item.tipoMorador == 0"> Dono </td>
+								<td class="text-center" ng-if="item.tipoMorador == 1"> Inquilino </td>
+								<td class="text-center " ng-if="item.ativo == 0" > <button class="btn btn-primary" type="button" ng-click="ativarDesativar(item)"  >Ativar</button> </td>
+								<td class="text-center" ng-if="item.ativo == 1"> <button class="btn btn-primary" type="button" ng-click="ativarDesativar(item)" >Desativar</button> </td>
+								
+							</tr>
+						</tbody>
+						
+					</table>
+				</div>
+				<div class="text-center">
+					<br/>
+					<br/>
+					<div ng-show="dadosUsuarios.length">
+						<a href="#" class="btn btn-default btn-primary" ng-click="salvarCadastroUsuarios()" ng-disabled="!dadosUsuarios.length">Salvar</a>
+						<a href="#" ng-bootbox-confirm="Todos os Registros serão apagados, deseja confirmar?"
+		        		ng-bootbox-confirm-action="removerTodos(3)" ng-bootbox-confirm-action-cancel=""
+						  class="btn btn-default btn-danger">Cancelar</a>
+					</div>
+				</div>
+	    	</div>
 	    </div>
 	    <div role="tabpanel" class="tab-pane fade" id="contas">
 	    	<div class="alert alert-info" role="alert" ng-show="mostraErro">

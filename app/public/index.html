@@ -5,6 +5,7 @@
 	<meta http-equiv="Content-Language" content="pt-br">
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="refresh" content="1500"/> 
 	<link rel="stylesheet" type="text/css" href="css/reset.css">
 	<link rel="stylesheet" type="text/css" href="css/estilo.css">
 	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css" media="all">
@@ -84,7 +85,7 @@
 
 	<title>Condomínio Fácil</title>
 </head>
-	<body  >
+	<body  ng-cloack>
 	<script type="text/javascript">
 		    $(function () {
 		        handleSelect = function(event, value) {
@@ -136,8 +137,8 @@
 						<a  ng-if="!logado" href="login"  style="color: white!important">
 						   	 <span class="text-center glyphicon glyphicon-user" style="color: white" ></span>
 						</a>
-						<div ng-if="logado" class="dropdown text-center " >
-							<h5 class="  " style="color: white; font-size: 9px;">Olá {{dadosUsuario[0].nomeApelido}}</h5>
+						<div ng-if="logado" class="dropdown text-center " ui-sref-opts="{reload: true}" >
+							<h5 class="  " ui-sref-opts="{reload: true}" style="color: white; font-size: 9px;">Olá {{dadosUsuario[0].nomeApelido}}</h5>
 							<a   href="#"  class="dropdown-toggle" id="menuUsuario" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: white!important">
 							   	<span class="glyphicon glyphicon-cog ">
     								<span class="caret text-center"></span>
@@ -147,10 +148,10 @@
 
 							<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="menuUsuario">
 				              <li  class="" style="color: white;">
-				                <a ui-sref="alterarSenha" style=" " >Alterar Senha</a>
-				                <a ui-sref="minhaConta" >Minha Conta</a>
-				                <a ui-sref="falarSindico" style=" " >Falar com Síndico</a>
-				                <a ui-sref="#"  ng-click="logoff()">Logoff</a>
+				                <a ui-sref="alterarSenha" ui-sref-opts="{reload: false}" style=" " >Alterar Senha</a>
+				                <a ui-sref="minhaConta" ui-sref-opts="{reload: false}" >Minha Conta</a>
+				                <a ui-sref="falarSindico" ui-sref-opts="{reload: false}" style=" " >Falar com Síndico</a>
+				                <a ui-sref="#" ui-sref-opts="{reload: false}" ng-click="logoff()">Logoff</a>
 				              </li>
 				            </ul>
 						</div>
@@ -164,10 +165,10 @@
             	   <ul class="nav navbar-nav " >
 		              <li  class="text-uppercase" style="color: white;">
 		                <a href="home" >Home</a>
-		                <a ui-sref="principal" style=" " >Acompanhamento</a>
-		                <a ui-sref="cadastramento" ng-show="perfilAutorizado">Administrativo</a>
-		                <a ui-sref="#" style=" " ng-click="alterarFlag()" >Boletos</a>
-		                <a ui-sref="contato" style=" " >Contato</a>
+		                <a ui-sref="principal" ui-sref-opts="{reload: true}" style=" " >Acompanhamento</a>
+		                <a ui-sref="cadastramento" ui-sref-opts="{reload: true}" ng-show="perfilAutorizado">Administrativo</a>
+		                <a ui-sref="#" style=" " ui-sref-opts="{reload: true}" ng-click="alterarFlag()" >Boletos</a>
+		                <a ui-sref="contato" ui-sref-opts="{reload: true}" style=" " >Contato</a>
 		              </li>
 		            </ul>
 	            </div>
