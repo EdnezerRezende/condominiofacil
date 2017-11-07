@@ -42,6 +42,9 @@
     "primeng": "^4.2.0",
     "primeui": "^4.1.15"
   },
+  "devDependencies": {
+    "should": "^7.0.2"
+  },
   "engines":{
     "node" : "6.11.1",
     "npm" : "3.10.10"
