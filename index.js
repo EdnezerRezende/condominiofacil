@@ -8,6 +8,8 @@
         .listen(port, function() {
             console.log('Servidor ${directoryToServe}/ no endereço https://localhost:${port} ' )
         })*/
-app.listen(3000, function() {
+var porta = process.env.PORT || 3000;
+
+app.listen(porta, function() {
     console.log("Aplicação Condominio Rodando" );
 })
