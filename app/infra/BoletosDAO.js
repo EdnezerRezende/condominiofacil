@@ -5,7 +5,7 @@ function BoletosDAO(connection) {
 var moment = require('moment');
 
 BoletosDAO.prototype.lista = function(idLogin, callback) {
-    var sql = 'select b.loginId, b.referencia, b.valor, b.multa, b.juros, b.dataPagamento,   ';
+    var sql = 'select b.loginId, b.referencia, b.valor, b.multa, b.juros, b.dataPagamento,  b.totPago, ';
     sql += ' b.dataPago, b.boletoAtraso, b.boletoAberto, apt.numeroApt, apt.apartamentoId ';
     sql += ' from boletos b ';
     sql += ' inner join apartamento apt on b.numeroApartamento = apt.apartamentoId ';
@@ -15,7 +15,7 @@ BoletosDAO.prototype.lista = function(idLogin, callback) {
 }
 
 BoletosDAO.prototype.obterTodosBoletos = function( callback ) {
-    var sql = 'select b.loginId, b.boletoId, b.referencia, b.valor, b.multa, b.juros, b.dataPagamento,   ';
+    var sql = 'select b.loginId, b.boletoId, b.referencia, b.valor, b.multa, b.juros, b.dataPagamento, b.totPago,  ';
     sql += ' b.dataPago, b.boletoAtraso, b.boletoAberto, b.boletoPago, apt.numeroApt, apt.apartamentoId ';
     sql += ' from boletos b ';
     sql += ' inner join apartamento apt on b.numeroApartamento = apt.apartamentoId ';
@@ -34,7 +34,7 @@ BoletosDAO.prototype.atualizaMultaJurosBoleto = function( boleto, callback ) {
 
 
 BoletosDAO.prototype.listaTodos = function(idLogin, callback) {
-    var sql = 'select b.boletoId, b.loginId, b.referencia, b.valor, b.multa, b.juros, b.dataPagamento,   ';
+    var sql = 'select b.boletoId, b.loginId, b.referencia, b.valor, b.multa, b.juros, b.dataPagamento, b.totPago,    ';
     sql += ' b.dataPago, b.boletoAtraso, b.descricao, b.boletoAberto, b.boletoPago, apt.numeroApt, apt.apartamentoId ';
     sql += ' from boletos b ';
     sql += ' inner join apartamento apt on b.numeroApartamento = apt.apartamentoId ';
@@ -73,14 +73,14 @@ BoletosDAO.prototype.salvaLista = function(boletos, callback) {
 BoletosDAO.prototype.atualizarBoletos = function(boletosAtualizar, callback) {
     var values = [];
     var dataHoje =  moment().format('YYYY-MM-DD ');
-    var sql = 'update boletos b set b.boletoPago = 1, b.dataPago = ? ,b.valor = ? where b.boletoId = ? ';
+    var sql = 'update boletos b set b.boletoPago = 1, b.dataPago = ? , b.totPago = ? where b.boletoId = ? ';
     
     var tratar = [
             boletosAtualizar.boletoId
     ];
     
     values.push(tratar);
-    this._connection.query(sql, [dataHoje, boletosAtualizar.valor, values], callback);
+    this._connection.query(sql, [dataHoje, boletosAtualizar.totPago, values], callback);
 }
 
 BoletosDAO.prototype.deletarBoletoPorId = function(id, callback) {

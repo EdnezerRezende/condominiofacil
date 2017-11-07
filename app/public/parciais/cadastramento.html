@@ -363,7 +363,7 @@
 			    </form>
 			</div>
 			<div class="panel panel-default">
-				<div class="table-responsive painel-animado" ng-if="aptDisponivel.length && dadosUsuarios.length" >
+				<div class="table-responsive painel-animado" ng-show="dadosUsuarios.length" >
 					<table   class="table table-striped "   >
 						<thead  >
 							<tr >
@@ -412,8 +412,8 @@
 				</div>
 	    	</div>
 	    	<div class="panel panel-default">
+				<h3 class="text-center">Cadastros Existentes</h3>
 				<div class="table-responsive painel-animado"  >
-					<h3>Cadastros Existentes</h3>
 					<table   class="table table-striped "   >
 						<thead  >
 							<tr >
@@ -428,7 +428,7 @@
 							</tr>
 						</thead>
 						<tbody >
-							<tr class="painel-animado" ng-class="{'alert alert-danger': item.ativo == 0 }" ng-repeat="item in apartamentosCadastrados | orderBy: 'numeroApt'">
+							<tr class="painel-animado" ng-class="{'alert alert-danger': item.ativo == 0 }" ng-repeat="item in apartamentosCadastrados | orderBy: ['-ativo', 'numeroApt']">
 								<td class="text-center"> {{ item.numeroApt }} </td>
 								<td class="text-center"> {{ item.nomeCompleto }} </td>
 								<td class="text-center"> {{ item.nomeApelido }} </td>

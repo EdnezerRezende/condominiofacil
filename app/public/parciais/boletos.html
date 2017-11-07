@@ -1,5 +1,9 @@
 <div class="container-fluid">
 	<br/>
+	<div class="alert alert-info alert-dismissible" role="alert" ng-show="mensagemErroBoleto.length">
+		<button id="alerta" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	  	{{mensagemErroBoleto}}
+	</div>
 	<div class="alert alert-success alert-dismissible" role="alert" ng-show="mensagemSucessoBoleto.length">
 		<button id="alerta" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 	  	{{mensagemSucessoBoleto}}
@@ -41,7 +45,8 @@
 						<th><strong>Descrição</strong></th>
 						<th><strong>Valor</strong></th>
 						<th><strong>Multa/Juros</strong></th>
-						<th><strong>Vlr. a pagar</strong></th>
+						<th><strong>Total</strong></th>
+						<th><strong>Total Pago</strong></th>
 						<th><strong>Data Vencimento</strong></th>
 						<th><strong>Baixa</strong></th>
 					</tr>
@@ -51,13 +56,14 @@
 					<tr  class="painel-animado" ng-class="{'danger': (item.dataPagamento | date: 'yyyyMMdd') < dataFormatada && !item.boletoPago}" >
 						<td> {{item.numeroApt}} </td>		
 						<td> {{item.descricao}} </td>	
-						<td> <input type="number" ng-model="item.valor"></td>
+						<td> {{item.valor}}</td>
 						<td> {{item.juros + item.multa | currency: 'R$ '}} </td>
 						<td> {{item.juros + item.multa + item.valor | currency: 'R$ '}} </td>
+						<td> <input format="number" name="valorTotal" class="text-center" ng-model="item.totPago" zero-filter="true" /></td>
 						<td> {{item.dataPagamento | date: 'dd/MM/yyyy'}} </td>
 						<td class="text-center"  >
 							<a href="#" class="btn btn-default btn-primary"
-								ng-bootbox-confirm="Esta Conta será baixada, deseja confirmar?"
+								ng-bootbox-confirm="Esta Conta será quitada, deseja confirmar?"
 		        				ng-bootbox-confirm-action="baixarBoleto(item)" ng-bootbox-confirm-action-cancel=""
 							 >Baixar</a>
 							

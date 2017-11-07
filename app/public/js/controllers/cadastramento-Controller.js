@@ -398,11 +398,26 @@ $scope.gerarBoletosAutomaticamente = function(){
 	      url: '/moradores/inativarAtivar/' + item.moradorId + '/' + item.ativo
 	    })
 	    .then(function ( success ) {
-	    	console.log(success);
 	    	
 	    }, function( error ){
 	      console.log( error );
 	    });
+    }
+
+    $scope.atualizarMoradores = function(){
+	  	$http({
+	      method: 'POST',
+	      url: '/moradores/administrador/' + $rootScope.predioUsuario
+	    })
+	    .then(function ( success ) {
+	    	console.log(success);
+	     	$scope.apartamentosCadastrados = success.data;
+
+	    }, function( error ){
+	      console.log( error );
+	    });
+
+
     }
 
 	$http({
@@ -468,6 +483,7 @@ $scope.gerarBoletosAutomaticamente = function(){
 		    .then(function ( success ) {
 		    	count++;
 		    	if ( count == $scope.dadosUsuarios.length){
+		    		$scope.atualizarMoradores();
 			    	$scope.mensagemSucesso = "Moradores inserido com sucesso!";
 			      	$scope.dadosUsuarios = [];
 		    	}

@@ -3,6 +3,7 @@ angular.module('condominiofacil').controller('BoletosController', function( $sco
 	$rootScope.rotaBoleto = true;
 	$scope.boletosTodos = []; 
 	$scope.mensagemSucessoBoleto = '';
+	$scope.mensagemErroBoleto = '';
 
 	$http({
 	   method: 'GET',
@@ -37,20 +38,28 @@ angular.module('condominiofacil').controller('BoletosController', function( $sco
 	 }
 
 
-	 $scope.baixarBoleto = function(item){
-	 	item.boletoPago = 1;
-	 	
-	 	$http({
-		   method: 'POST',
-		   url: '/boletos/atualizar',
-		   data: item
-		 })
-		 .then(function (success) {
-		   var indice = $scope.boletosTodos.indexOf(item);
-		   $scope.boletosTodos.splice(indice, 1);
-		   $scope.mensagemSucessoBoleto = 'Conta do apartamento ' + item.numeroApt + ' atualizado com sucesso!';
-		 }, function(error){
-		   console.log(error);
-		});
-	 }
+	$scope.baixarBoleto = function(item){
+
+	 	if ( item.totPago >= item.valor ){
+		 	item.boletoPago = 1;
+		 	
+	 		var totSemVirgula = item.totPago.replace(',', '.');
+	 		item.totPago = totSemVirgula;
+
+		 	$http({
+			   method: 'POST',
+			   url: '/boletos/atualizar',
+			   data: item
+			 })
+			 .then(function (success) {
+			   var indice = $scope.boletosTodos.indexOf(item);
+			   $scope.boletosTodos.splice(indice, 1);
+			   $scope.mensagemSucessoBoleto = 'Conta do apartamento ' + item.numeroApt + ' atualizado com sucesso!';
+			 }, function(error){
+			   console.log(error);
+			});
+		}else{
+			$scope.mensagemErroBoleto = 'Valor Total está menor que o Valor do Boleto';
+		}
+	}
 });
