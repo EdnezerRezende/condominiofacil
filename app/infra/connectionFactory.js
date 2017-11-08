@@ -6,7 +6,7 @@ function createDBConnection(){
 			host: 'us-cdbr-iron-east-05.cleardb.net',
 			user: 'be3010b49d1863',
 			password: 'c725247b',
-			connectionLimit: 10,
+			connectionLimit: 100,
 			database: 'heroku_6d0ba34dd13df69',
 		    headers: {
 				'Accept':'application/json',
