@@ -6,7 +6,10 @@ LoginDAO.prototype.findOne = function(usuario, callback) {
   	const login = usuario.login.toString();
     const senha = usuario.senha.toString();
       var sql = 'select loginId, perfilId, predio from login where usuario = ? and senha = md5(?) ' ;
-    this._connection.query(sql, [login, senha], callback);
+    this._connection.query(sql, [login, senha], function(erros, results) {
+            connection.release();
+            callback(erros,results);
+});
 }
 
 LoginDAO.prototype.inserirLogin = function(dadosUsuario, callback) {

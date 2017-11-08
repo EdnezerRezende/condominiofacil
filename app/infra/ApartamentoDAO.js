@@ -7,7 +7,10 @@ ApartamentoDAO.prototype.lista = function(idLogin, callback) {
     sql += '  from apartamento  ';
     sql += ' where apartamento.loginId = ? ';
     
-    this._connection.query(sql, idLogin, callback);
+    this._connection.query(sql, idLogin, function(erros, results) {
+            connection.release();
+            callback(erros,results);
+});
 }
 
 ApartamentoDAO.prototype.listaCompleta = function( predio, callback ) {
@@ -17,7 +20,10 @@ ApartamentoDAO.prototype.listaCompleta = function( predio, callback ) {
     sql += '  where apt.predio = ? and morador.ativo = 1 ';
     sql += '  order by apt.numeroApt ';
     
-    this._connection.query(sql, [predio], callback);
+    this._connection.query(sql, [predio], function(erros, results) {
+            connection.release();
+            callback(erros,results);
+});
 }
 
 ApartamentoDAO.prototype.inserirApartamento = function( dadosUsuario, callback ) {
@@ -27,7 +33,10 @@ ApartamentoDAO.prototype.inserirApartamento = function( dadosUsuario, callback )
     var predio = dadosUsuario.predio;
     var sql = 'insert into apartamento (numeroApt, nomeMorador, loginId, predio)  values ( ?, ?, ?, ? )';
     
-    this._connection.query(sql, [apartamento, nomeMorador, loginId, predio], callback);
+    this._connection.query(sql, [apartamento, nomeMorador, loginId, predio], function(erros, results) {
+            connection.release();
+            callback(erros,results);
+});
 }
 
 module.exports = function(){

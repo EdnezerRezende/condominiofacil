@@ -5,7 +5,10 @@ var moment = require('moment');
 
 MovimentacaoDAO.prototype.lista = function( predio, callback) {
 	var sql = 'select * from movimentacao where predio = ? ';
-    this._connection.query(sql, [predio], callback);
+    this._connection.query(sql, [predio], function(erros, results) {
+            connection.release();
+            callback(erros,results);
+});
 }
 
 MovimentacaoDAO.prototype.salvaLista = function(contas, callback) {
@@ -38,22 +41,34 @@ MovimentacaoDAO.prototype.salvaLista = function(contas, callback) {
         values.push(tratar);
     }
 
-    this._connection.query(sql, [values], callback);
+    this._connection.query(sql, [values], function(erros, results) {
+            connection.release();
+            callback(erros,results);
+});
 }
 
 MovimentacaoDAO.prototype.listaVlrEntrada = function( predio, callback) {
 	var sql = 'SELECT  mE.referencia, sum(mE.valor) as vlrEntrada FROM movimentacao mE where mE.tipoRegistro = "E" and mE.predio = ? group by mE.referencia ';
-    this._connection.query(sql, [predio],  callback);
+    this._connection.query(sql, [predio],  function(erros, results) {
+            connection.release();
+            callback(erros,results);
+});
 }
 
 MovimentacaoDAO.prototype.listaVlrSaida = function( predio, callback) {
 	var sql = 'SELECT  mS.referencia, sum(mS.valor) as vlrSaida FROM movimentacao mS where mS.tipoRegistro = "S" and mS.predio = ? group by mS.referencia ';
-    this._connection.query(sql, [predio], callback);
+    this._connection.query(sql, [predio], function(erros, results) {
+            connection.release();
+            callback(erros,results);
+});
 }
 
 MovimentacaoDAO.prototype.listaReferencia = function(predio, callback) {
 	var sql = 'select * from referencia where predio_id = ? ';
-    this._connection.query(sql, [predio], callback);
+    this._connection.query(sql, [predio], function(erros, results) {
+            connection.release();
+            callback(erros,results);
+});
 }
 
 MovimentacaoDAO.prototype.inserirReferencia = function(values, callback) {
@@ -67,12 +82,18 @@ MovimentacaoDAO.prototype.inserirReferencia = function(values, callback) {
     sql += ' SELECT ?, ? ' ;
     sql += ' FROM DUAL WHERE NOT EXISTS';
     sql += ' (SELECT r.referencia FROM referencia r WHERE r.referencia = ? and r.predio_id = ? order by r.referencia) ';
-    this._connection.query(sql, [referencias, values.predio, referencias, values.predio ], callback);
+    this._connection.query(sql, [referencias, values.predio, referencias, values.predio ], function(erros, results) {
+            connection.release();
+            callback(erros,results);
+});
 }
 
 MovimentacaoDAO.prototype.deletaItem = function(id, callback) {
     var sql = 'delete from movimentacao where movimentoId = ? ' ;
-    this._connection.query(sql, id, callback);
+    this._connection.query(sql, id, function(erros, results) {
+            connection.release();
+            callback(erros,results);
+});
 }
 //Após deletaItem ser executado, ele fará uma consulta neste método para ver se tem algum registro na tabela 
 //movimento e caso não exista, apagará na tabela Referencia.
@@ -83,7 +104,10 @@ MovimentacaoDAO.prototype.deletaReferencia = function(values, callback) {
     sql += '  and (select count(movimentacao.referencia) from movimentacao where movimentacao.referencia = ? and movimentacao.predio = ?) = 0';
     sql += '  and referencia.predio_id = ? ';
 
-    this._connection.query(sql, [values.referenciaAtual,values.referenciaAtual, values.predio, values.predio ], callback);
+    this._connection.query(sql, [values.referenciaAtual,values.referenciaAtual, values.predio, values.predio ], function(erros, results) {
+            connection.release();
+            callback(erros,results);
+});
 }
 
 module.exports = function(){
