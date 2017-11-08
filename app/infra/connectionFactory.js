@@ -23,13 +23,15 @@ function _criaPool(){
 			}
 		})*/
 	}
-	pool =  mysql.createPool({
-	    connectionLimit: 100,
-	    host: 'localhost',
-	    user: 'root',
-	    password: 'admin',
-	    database: 'condominiofacil'
-	});
+	if (!process.env.NODE_ENV){
+		pool =  mysql.createPool({
+		    connectionLimit: 100,
+		    host: 'localhost',
+		    user: 'root',
+		    password: 'admin',
+		    database: 'condominiofacil'
+		});
+	}
 	/*return mysql.createConnection({
 		host: 'localhost',
 		port: 3306,
