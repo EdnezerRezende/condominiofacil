@@ -11,7 +11,10 @@ BoletosDAO.prototype.lista = function(idLogin, callback) {
     sql += ' inner join apartamento apt on b.numeroApartamento = apt.apartamentoId ';
     sql += ' where b.loginId = apt.loginId and apt.loginId = ? ';
     
-    this._connection.query(sql, idLogin, callback);
+    this._connection.query(sql, idLogin, function(erros, results) {
+            connection.release();
+            callback(erros,results);
+});
 }
 
 BoletosDAO.prototype.obterTodosBoletos = function( callback ) {
@@ -21,7 +24,10 @@ BoletosDAO.prototype.obterTodosBoletos = function( callback ) {
     sql += ' inner join apartamento apt on b.numeroApartamento = apt.apartamentoId ';
     sql += ' where b.boletoPago = 0 '
 
-    this._connection.query(sql, callback);
+    this._connection.query(sql, function(erros, results) {
+            connection.release();
+            callback(erros,results);
+});
 }
 
 BoletosDAO.prototype.atualizaMultaJurosBoleto = function( boleto, callback ) {
@@ -29,7 +35,10 @@ BoletosDAO.prototype.atualizaMultaJurosBoleto = function( boleto, callback ) {
     var sql = 'update boletos b set b.boletoAtraso = ?, b.boletoAberto = ? , b.multa = ?, b.juros = ? ';
         sql += ' where b.boletoId = ?  ';
 
-    this._connection.query(sql, [boleto.boletoAtraso, boleto.boletoAberto, boleto.multa, boleto.juros, boleto.boletoId ], callback);
+    this._connection.query(sql, [boleto.boletoAtraso, boleto.boletoAberto, boleto.multa, boleto.juros, boleto.boletoId ], function(erros, results) {
+            connection.release();
+            callback(erros,results);
+});
 }
 
 
@@ -42,7 +51,10 @@ BoletosDAO.prototype.listaTodos = function(idLogin, callback) {
     sql += ' where apt.predio = (select predio from apartamento where loginId = ? ) ';
     sql += ' and b.boletoPago = 0 ';
     
-    this._connection.query(sql, idLogin, callback);
+    this._connection.query(sql, idLogin, function(erros, results) {
+            connection.release();
+            callback(erros,results);
+});
 }
 
 BoletosDAO.prototype.salvaLista = function(boletos, callback) {
@@ -67,7 +79,10 @@ BoletosDAO.prototype.salvaLista = function(boletos, callback) {
         values.push(tratar);
     }
 
-    this._connection.query(sql, [values], callback);
+    this._connection.query(sql, [values], function(erros, results) {
+            connection.release();
+            callback(erros,results);
+});
 }
 
 BoletosDAO.prototype.atualizarBoletos = function(boletosAtualizar, callback) {
@@ -80,14 +95,20 @@ BoletosDAO.prototype.atualizarBoletos = function(boletosAtualizar, callback) {
     ];
     
     values.push(tratar);
-    this._connection.query(sql, [dataHoje, boletosAtualizar.totPago, values], callback);
+    this._connection.query(sql, [dataHoje, boletosAtualizar.totPago, values], function(erros, results) {
+            connection.release();
+            callback(erros,results);
+});
 }
 
 BoletosDAO.prototype.deletarBoletoPorId = function(id, callback) {
 
     var sql = 'delete from boletos  where boletoId = ? ';
    
-    this._connection.query(sql, [id], callback);
+    this._connection.query(sql, [id], function(erros, results) {
+            connection.release();
+            callback(erros,results);
+});
 }
 
 
