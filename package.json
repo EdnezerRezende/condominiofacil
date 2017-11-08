@@ -44,6 +44,9 @@
     "primeng": "^4.2.0",
     "primeui": "^4.1.15"
   },
+  "license": {
+    "private": true
+  },
   "devDependencies": {
     "should": "^7.0.2"
   },
