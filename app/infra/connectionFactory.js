@@ -68,6 +68,7 @@ var connectMySQL = function(callback) {
             });
             return;
         }
+        console.log(connection);
         return callback(null, connection);
     });
 
