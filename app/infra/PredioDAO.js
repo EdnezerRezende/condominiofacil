@@ -7,10 +7,7 @@ PredioDAO.prototype.lista = function(predio, callback) {
     sql += '  from predio apt ';
     sql += ' where apt.predioId = ? ';
     
-    this._connection.query(sql, [predio], function(erros, results) {
-            connection.release();
-            callback(erros,results);
-});
+    this._connection.query(sql, [predio], callback);
 }
 
 

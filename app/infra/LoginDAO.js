@@ -6,10 +6,7 @@ LoginDAO.prototype.findOne = function(usuario, callback) {
   	const login = usuario.login.toString();
     const senha = usuario.senha.toString();
       var sql = 'select loginId, perfilId, predio from login where usuario = ? and senha = md5(?) ' ;
-    this._connection.query(sql, [login, senha], function(erros, results) {
-            connection.release();
-            callback(erros,results);
-});
+    this._connection.query(sql, [login, senha], callback);
 }
 
 LoginDAO.prototype.inserirLogin = function(dadosUsuario, callback) {
@@ -20,10 +17,7 @@ LoginDAO.prototype.inserirLogin = function(dadosUsuario, callback) {
     const predio = dadosUsuario.predio;
 
     var sql = 'insert into login (usuario, senha, perfilId, predio) values ( ?, md5(?), ?, ? ) ' ;
-    this._connection.query(sql, [usuario, senha, perfilId, predio], function(erros, results) {
-            connection.release();
-            callback(erros,results);
-});
+    this._connection.query(sql, [usuario, senha, perfilId, predio], callback);
 }
 
 LoginDAO.prototype.alterarSenha = function(usuario, callback) {
@@ -32,10 +26,7 @@ LoginDAO.prototype.alterarSenha = function(usuario, callback) {
   	const senhaNova = usuario.senhaNova.toString();
 
     var sql = 'update login set senha = md5(?) where loginId = ? and senha = md5(?) ' ;
-    this._connection.query(sql, [senhaNova, loginId, senha ], function(erros, results) {
-            connection.release();
-            callback(erros,results);
-});
+    this._connection.query(sql, [senhaNova, loginId, senha ], callback);
 }
 
 module.exports = function(){

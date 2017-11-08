@@ -12,10 +12,7 @@ var moment = require('moment');
 	sql += ' inner Join apartamento apt on apt.apartamentoId = m.apartamento_id ' ;
 	sql += ' Where apt.predio = ? and m.ativo = 1 ' ;
 
-    this._connection.query(sql, [predioId], function(erros, results) {
-            connection.release();
-            callback(erros,results);
-});
+    this._connection.query(sql, [predioId], callback);
 }
 
  MoradoresDAO.prototype.listaMoradoresAdministradorPredio = function(predioId, callback) {
@@ -27,10 +24,7 @@ var moment = require('moment');
 	sql += ' inner Join apartamento apt on apt.apartamentoId = m.apartamento_id ' ;
 	sql += ' Where apt.predio = ? ' ;
 
-    this._connection.query(sql, [predioId], function(erros, results) {
-            connection.release();
-            callback(erros,results);
-});
+    this._connection.query(sql, [predioId], callback);
 }
 
  MoradoresDAO.prototype.ativarDesativarMoradorPredio = function([moradorId, flagAtivaDesativa], callback) {
@@ -39,10 +33,7 @@ var moment = require('moment');
 	var sql = 'update moradores m set m.ativo = ?, m.dataInativo = ? ' ;
 	sql += ' Where m.moradorId = ? ' ;
 	console.log(sql);
-    this._connection.query(sql, [flagAtivaDesativa, dataInativoAtivo, moradorId], function(erros, results) {
-            connection.release();
-            callback(erros,results);
-});
+    this._connection.query(sql, [flagAtivaDesativa, dataInativoAtivo, moradorId], callback);
 }
 
 MoradoresDAO.prototype.atualizarDadosUsuario = function(dadosUsuario, callback) {
@@ -62,10 +53,7 @@ MoradoresDAO.prototype.atualizarDadosUsuario = function(dadosUsuario, callback) 
 	sql += '  m.cpf = "'+dadosUsuario.cpf+'", m.dataUltimaAlteracao = "'+dataAlterado+'" ' ;
 	sql += ' Where moradorId = "'+dadosUsuario.moradorId+'" ' ;
 	console.log(sql);
-    this._connection.query(sql, function(erros, results) {
-            connection.release();
-            callback(erros,results);
-});
+    this._connection.query(sql, callback);
 }
 
 MoradoresDAO.prototype.inserirDadosUsuario = function(dadosUsuario, callback) {
@@ -86,10 +74,7 @@ MoradoresDAO.prototype.inserirDadosUsuario = function(dadosUsuario, callback) {
 	var sql = 'insert into moradores ( nomeCompleto , nomeApelido , telefone , email , ' ;
 	sql += '  cpf, dataCadastro, ativo, apartamento_id, tipoMorador ) VALUES ( ? )';
 
-    this._connection.query(sql, [values], function(erros, results) {
-            connection.release();
-            callback(erros,results);
-});
+    this._connection.query(sql, [values], callback);
 }
 
 
@@ -100,10 +85,7 @@ MoradoresDAO.prototype.listaMoradorPorIdPredio = function(idLogin, callback) {
 	sql += ' from moradores m ' ;
 	sql += ' inner Join apartamento apt on apt.apartamentoId = m.apartamento_id ' ;
 	sql += ' Where apt.loginId = ?  ' ;
-    this._connection.query(sql, [idLogin], function(erros, results) {
-            connection.release();
-            callback(erros,results);
-});
+    this._connection.query(sql, [idLogin], callback);
 }
 
 module.exports = function(){
