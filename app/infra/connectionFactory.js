@@ -7,10 +7,10 @@ function _criaPool(){
 	    var grupos = urlDeConexao.match(/mysql:\/\/(.*):(.*)@(.*)\/(.*)\?reconnect=true/);
 	    pool =  mysql.createPool({
 	           connectionLimit: 10, // Limite do ClearDB
-	           host: grupos[3],
-	           user: grupos[1],
-	           password: grupos[2],
-	           database: grupos[4]
+	           host: 'us-cdbr-iron-east-05.cleardb.net',
+	           user: 'be3010b49d1863',
+	           password: 'c725247b',
+	           database: 'heroku_6d0ba34dd13df69'
 		});
 		/*return mysql.createConnection({
 			host: 'us-cdbr-iron-east-05.cleardb.net',
