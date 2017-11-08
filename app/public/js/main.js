@@ -1,5 +1,7 @@
-angular.module('condominiofacil', ['ui.router', 'angular-mandrill', 'angularMoment', 'ngBootbox', 'ngMaterial', 'ngAnimate', 'ngMessages'])
+angular.module('condominiofacil', ['ui.router', 'angular-mandrill', 'angularMoment', 'ngBootbox', 'ngMaterial', 'ngAnimate', 'ngMessages', 'luk.money', 'angular-loading-bar', 'ui.utils.masks', 'ngMask', 'angularjs-br-directive-validator-cpf'])
 .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, MandrillProvider, $mdDateLocaleProvider ){
+
+
 
 	//configurações do DataPeckir
 	$mdDateLocaleProvider.months = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
@@ -33,7 +35,22 @@ angular.module('condominiofacil', ['ui.router', 'angular-mandrill', 'angularMome
 	    templateUrl: 'parciais/login.html',
 	    controller: 'LoginController'
 	  })
-
+	   .state('alterarSenha', {
+	    url: "/alterarSenha",
+	    templateUrl: 'parciais/alterarSenha.html',
+	    controller: 'AlterarSenhaController'
+	  })
+	   .state('falarSindico', {
+	    url: "/falarSindico",
+	    templateUrl: 'parciais/falarSindico.html',
+	    controller: 'FalarSindicoController'
+	  })
+	   .state('minhaConta', {
+	    url: "/minhaConta",
+	    templateUrl: 'parciais/minhaConta.html',
+	    controller: 'MinhaContaController'
+	  })
+	   
 	   .state('propagandas', {
 	    url: "/propagandas",
 	    templateUrl: 'parciais/propagandas.html',
@@ -67,6 +84,8 @@ angular.module('condominiofacil', ['ui.router', 'angular-mandrill', 'angularMome
 
 	amMoment.changeLocale('pt-br');
 
+
+
 	$rootScope.tituloPagina = '';
 	$rootScope.loginEfetuado = 'false';
 	$rootScope.logado = false;
@@ -75,27 +94,32 @@ angular.module('condominiofacil', ['ui.router', 'angular-mandrill', 'angularMome
 	$rootScope.boletos = [];
 	$rootScope.perfilAutorizado = false;
 	$rootScope.idLogin = '';
+	$rootScope.predioUsuario = '';
+	$rootScope.dadosUsuario = {};
 
-	$rootScope.eventos =[];
 
 	$rootScope.goBack = function(){
-      $rootScope.detalharCardapio.observacao = "";
-      $rootScope.detalharCardapio.quantidade = 1;
-      $rootScope.detalharCardapio.restricao = "";
       $window.history.back();
     };
 
     $rootScope.voltarHome = function(){
 		$location.path('/home');	
 	}
+	
+	$rootScope.buscarDadosUsuario = function() {
+		$http({
+		   method: 'POST',
+		   url: '/moradores/idLogin/' + $rootScope.idLogin
+		 })
+		 .then(function (success) {
+		   $rootScope.dadosUsuario = success.data;
+		   
+		   console.log($rootScope.dadosUsuario[0].nome);
+		 }, function(error){
+		   console.log(error);
+		});
+	}
 
-    $rootScope.fecharMenu = function (){
-       var navMain = $("#menu");
-       navMain.on("click", "a", null, function () {
-           navMain.collapse('hide');
-           javascript:void(0);
-       });
-    };
 
     $rootScope.logoff = function(){
     	delete $window.sessionStorage.token;
@@ -103,7 +127,13 @@ angular.module('condominiofacil', ['ui.router', 'angular-mandrill', 'angularMome
     	$rootScope.usuario = {};
 		$rootScope.boletos = [];
 		$rootScope.perfilAutorizado = false;
-    	$rootScope.logado = false;
+    	$rootScope.logado = false; 
+    	$rootScope.dadosUsuario = {};
+    	$ngBootbox.alert({message: "Logoff efetuado com sucesso!", title: "Logoff"})
+        .then(function() {
+            $rootScope.idLogin = '';
+            $rootScope.predioUsuario = '';
+        });
     	$location.path("/home");
     }
 
@@ -117,6 +147,29 @@ angular.module('condominiofacil', ['ui.router', 'angular-mandrill', 'angularMome
     		
     	}
     };
+
+    
+	$rootScope.tratarCpf = function(){
+		var cpf = $scope.dadosPessoais.cpf;
+		var retirarPonto = cpf.replace(".", "");
+		var retirarPonto2Vezes = retirarPonto.replace(".", "");
+		var retirarHifen = retirarPonto2Vezes.replace("-","");
+		$scope.dadosPessoais.cpf = retirarHifen;
+	}
+
+	$rootScope.tratarTelefone = function(){
+		var telefone = $scope.dadosPessoais.telefone;
+		var retirarAbreParenteses = telefone.replace("(", "");
+		var retirarFechaParenteses = retirarAbreParenteses.replace(")", "");
+		var retirarEspaco = retirarFechaParenteses.replace(" ", "");
+		var retirarHifen = retirarEspaco.replace("-","");
+		$scope.dadosPessoais.telefone = retirarHifen;
+	}
+
+if ( $window.sessionStorage.token && !$rootScope.logado ){
+	delete $window.sessionStorage.token;
+	$location.path('/login');
+}
 
 
 }]);

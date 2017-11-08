@@ -1,21 +1,22 @@
-<div class="container">
+<div class="container-fluid">
 	
 	<ul class="nav nav-tabs nav-fixed">
 	  <li role="presentation" class="active"><a href="#agenda" aria-controls="agenda" role="tab" data-toggle="tab">Agenda</a></li>
-	  <li role="presentation"><a href="#boletos" aria-controls="contas" role="tab" data-toggle="tab">Boletos</a></li>
-	  <li role="presentation"><a href="#contas" aria-controls="contas" role="tab" data-toggle="tab">Contas do Condomínio</a></li>
+	  <li role="presentation"><a href="#boletos" aria-controls="boletos" role="tab" data-toggle="tab">Boletos</a></li>
+	  <li role="presentation"><a href="#cadUsuario" aria-controls="cadUsuario" role="tab" data-toggle="tab">Condômínos</a></li>
+	  <li role="presentation"><a href="#contas" aria-controls="contas" role="tab" data-toggle="tab">Despesas</a></li>
 	</ul>
 
 	<div class="tab-content painel-animado">
 	    <div role="tabpanel "  class="tab-pane fade in  active" id="agenda">
 	    	<div class="alert alert-info" role="alert" ng-show="mostraErro">
 			  Já Consta este Item na Lista!
-			</div>
+			</div> 
 			<div class="alert alert-success alert-dismissible" role="alert" ng-show="mensagemSucesso.length">
 				<button id="alerta" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			  	{{mensagemSucesso}}
 			</div>
-	    	<div class="regularPosicao">
+	    	<div class="regularPosicao container-fluid">
 		    	<form name="agenda" class="form-inline text-center regulaLayoutCadastramentoTodos" ng-submit="inserirEventoCadastro()">
 			    	<div class="col-xs-4 col-md-4  text-center">
 			    	  	<md-input-container class="regulaLayoutCadastramentoData">
@@ -58,7 +59,7 @@
 						</tr>
 					</thead>
 					<tbody >
-						<tr class="painel-animado" ng-repeat="item in eventos | orderBy: 'dataProgramada'">
+						<tr class="painel-animado" ng-repeat="item in eventos | orderBy: 'data'">
 							<td class="text-center"> {{ item.data | date: 'dd/MM/yyyy' }} </td>
 							<td class="text-center"> {{ item.descricao }} </td>
 							<td class="text-center" ng-if=" item.descricao == 'Racionamento' " >
@@ -69,7 +70,10 @@
 								<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
 							</td>
 							<td class="text-center"  >
-								<a href="#" ng-click="removerItem(item)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
+								<a href="#" ng-click="alterarItem(item, 1)"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+							</td>
+							<td class="text-center"  >
+								<a href="#" ng-click="removerItem(item, 1)"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
 							</td>
 						</tr>
 					</tbody>
@@ -78,18 +82,494 @@
 				<div class="text-center">
 					<br/>
 					<br/>
-					<a href="#" class="btn btn-default btn-primary" ng-click="salvarRegistros()" ng-disabled="!eventos.length">Salvar</a>
-					<a href="#" ng-bootbox-confirm="Todos os Registros serão apagados, deseja confirmar?"
-	        		ng-bootbox-confirm-action="removerTodos()" ng-bootbox-confirm-action-cancel=""
-					  class="btn btn-default btn-danger">Cancelar</a>
+					<div ng-show="eventos.length">
+						<a href="#" class="btn btn-default btn-primary" ng-click="salvarRegistros()" ng-disabled="!eventos.length">Salvar</a>
+						<a href="#" ng-bootbox-confirm="Todos os Registros serão apagados, deseja confirmar?"
+		        		ng-bootbox-confirm-action="removerTodos(1)" ng-bootbox-confirm-action-cancel=""
+						  class="btn btn-default btn-danger">Cancelar</a>
+					</div>
 				</div>
 			</div>
 	    </div>
 	    <div role="tabpanel" class="tab-pane fade" id="boletos">
-	    	<h3>Boletos</h3>
+			<div class="alert alert-success alert-dismissible" role="alert" ng-show="mensagemSucesso.length">
+				<button id="alerta" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			  	{{mensagemSucesso}}
+			</div>
+
+			<div class="regularPosicao">
+				<md-input-container class="md-block ">
+					<md-checkbox  name="gerarTudo" ng-model="gerarBoletosTodos" >Deseja Gerar todos os boletos</md-checkbox>
+				</md-input-container>
+				
+				<form name="boletoTodosForm" class="form-inline text-center regulaLayoutCadastramentoTodos" ng-submit="gerarBoletosAutomaticamente()" ng-show="gerarBoletosTodos">
+					<div class="ajustarLayout">	
+						<div class=" ">
+				    	  	<md-input-container class="">
+					    	   	<md-datepicker ng-model="boletoTodos.dataPagamento"   name="dataPagamento" md-placeholder="Data de Vencimento" required ></md-datepicker>
+				          		<div ng-messages="boletoTodosForm.$submitted && boletoTodosForm.dataPagamento.$error && boletoTodosForm.$invalid">
+					            	<div ng-message="required">Favor informar data de Vencimento</div>
+					          	</div>
+					        </md-input-container>
+						</div>
+						
+						<div class=" col-sm-3 afastamento text-center " >
+							<md-input-container class="">
+						      <label>Valor</label>
+						      <md-icon class="inativarIcone" md-inactive md-svg-src="img/icons/ic_monetization_on_black_24px.svg" ></md-icon>
+								<input format="number" name="valorBoleto" class="text-center" ng-model="valorBoleto" zero-filter="true" required />
+								 <md-icon md-inactive md-svg-src="img/icons/ic_account_balance_black_24px" ></md-icon>
+								 <div ng-messages="boletoTodosForm.$submitted && boletoTodosForm.valorBoleto.$error && boletoTodosForm.valorBoleto.$invalid">
+					            	<div ng-message="required">Favor informar o Valor!</div>
+					          	</div>
+						    </md-input-container>
+						</div>
+						<button type="submit" ng-disabled="boletoTodosForm.$invalid" class="btn btn-default btn-primary"  >Gerar Boletos</button>
+					</div>
+				</form>
+
+		    	<form name="boletoForm" class="form-inline text-center regulaLayoutCadastramentoTodos" ng-submit="inserirBoletos()" ng-show="!gerarBoletosTodos">
+		    		<div class="ajustarLayout">
+		    			<!-- <div class="afastamento   ">
+							<md-input-container >
+					          <label>Referência</label>
+					          <md-select ng-model="boleto.referencia"  required>
+						            <md-option ng-repeat="referenciaBoleto in mesReferencia" ng-value="referenciaBoleto.value">{{referenciaBoleto.descricao}}</md-option>
+						       </md-select>
+								<div ng-messages="contaForm.$submitted && contaForm.referencia.$error && contaForm.$invalid">
+					            	<div ng-message="required">Favor informar tipo do Registro!</div>
+					          	</div>
+							</md-input-container>
+						</div> -->
+						<div class="afastamento" >
+							<md-input-container >
+					          <label>Apartamento</label>
+					          <md-select name="apartamento" ng-model="boleto.apartamento"  required>
+						            <md-option ng-repeat="apartamento in apartamentos | orderBy: 'numeroApt'" ng-value="apartamento.apartamentoId">{{apartamento.numeroApt}}</md-option>
+						       </md-select>
+								<div ng-messages="contaForm.$submitted && contaForm.apartamento.$error && contaForm.$invalid">
+					            	<div ng-message="required">Favor informar o apartamento!</div>
+					          	</div>
+							</md-input-container>
+						</div>
+				    	<div class=" ">
+				    	  	<md-input-container class="">
+					    	   	<md-datepicker ng-model="boleto.dataPagamento"   name="dataPagamento" md-placeholder="Data de Vencimento" required ></md-datepicker>
+				          		<div ng-messages="boletoForm.$submitted && boletoForm.dataPagamento.$error && boletoForm.$invalid">
+					            	<div ng-message="required">Favor informar data de Vencimento</div>
+					          	</div>
+					        </md-input-container>
+						</div>
+						
+						<div class=" col-sm-3 afastamento text-center " >
+							<md-input-container class="">
+						      <label>Valor</label>
+						      <md-icon class="inativarIcone" md-inactive md-svg-src="img/icons/ic_monetization_on_black_24px.svg" ></md-icon>
+								<input format="number" name="valorBoleto" class="text-center" ng-model="valorBoleto" zero-filter="true" required />
+								 <md-icon md-inactive md-svg-src="img/icons/ic_account_balance_black_24px" ></md-icon>
+								 <div ng-messages="boletoForm.$submitted && boletoForm.valorBoleto.$error && boletoForm.valorBoleto.$invalid">
+					            	<div ng-message="required">Favor informar o Valor!</div>
+					          	</div>
+						    </md-input-container>
+						</div>
+						<div class=" afastamento  " >
+							<md-input-container >
+					          <label>Descrição</label>
+					          <textarea  name="descricaoBoleto" ng-model="boleto.descricaoBoleto"  md-maxlength="50" rows="1" md-select-on-focus required>
+						      </textarea>
+							  <div ng-messages="boletoForm.$submitted && boletoForm.descricaoBoleto.$error && boletoForm.$invalid">
+				              <div ng-message="required">Favor informar descrição!</div>
+				          	  </div>
+							</md-input-container>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-12 text-center" >
+						<md-input-container >
+							<button type="submit" ng-disabled="boletoForm.$invalid" class="btn btn-default btn-primary">Inserir</button>
+						</md-input-container>
+					</div>
+				</form>
+			</div>
+			<div >
+				<table   class="table table-striped "  >
+					<thead  >
+						<tr >
+							<th class="text-center"  ><strong>Apartamento</strong></th>
+							<th class="text-center"><strong>Data de Vencimento</strong></th>
+							<th class="text-center"><strong>Descrição</strong></th>
+							<th class="text-center"><strong>Valor</strong></th>
+						</tr>
+					</thead>
+					<tbody >
+						<!-- <tr class="painel-animado" ng-repeat="item in boletos track by $index "> -->
+						<tr class="painel-animado" ng-repeat="item in boletos | orderBy: 'dataPagamento' ">
+							<td class="text-center" ng-repeat="apartamento in apartamentos | orderBy: 'numeroApt'" ng-if=" apartamento.apartamentoId == item.apartamento "> {{ apartamento.numeroApt }} </td>
+							<td class="text-center"> {{ item.dataPagamento | date: 'dd/MM/yyyy' }} </td>
+							<td class="text-center" > {{ item.descricaoBoleto }} </td>
+							<td class="text-center"> {{ item.valorBoleto | currency: 'R$ '}} </td>
+							<td class="text-center" >
+								<span class="glyphicon glyphicon-barcode" aria-hidden="true"></span>
+							</td>
+							<td class="text-center"  >
+								<a href="#" ng-click="alterarItem(item, 2)"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+							</td>
+							<td class="text-center"  >
+								<a href="#" ng-click="removerItem(item, 2)"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+							</td>
+						</tr>
+					</tbody>
+					
+				</table>
+				<div class="text-center">
+					<br/>
+					<br/>
+					<div ng-show="boletos.length">
+						<a href="#" class="btn btn-default btn-primary" ng-click="salvarRegistrosBoletos()" ng-disabled="!boletos.length">Salvar</a>
+						<a href="#" ng-bootbox-confirm="Todos os Registros serão apagados, deseja confirmar?"
+		        		ng-bootbox-confirm-action="removerTodos(2)" ng-bootbox-confirm-action-cancel=""
+						  class="btn btn-default btn-danger">Cancelar</a>
+					</div>
+				</div>
+
+				<h3 class="text-center">Boletos Já Inseridos</h3>
+				<table   class="table table-striped "  >
+					<thead  >
+						<tr >
+							<th class="text-center"  ><strong>Apartamento</strong></th>
+							<th class="text-center"><strong>Data de Vencimento</strong></th>
+							<th class="text-center"><strong>Descrição</strong></th>
+							<th class="text-center"><strong>Valor</strong></th>
+						</tr>
+					</thead>
+					<tbody >
+						<!-- <tr class="painel-animado" ng-repeat="item in boletos track by $index "> -->
+						<tr class="painel-animado"  ng-repeat="item in boletosExistentes | orderBy: 'dataPagamento' ">
+							<td class="text-center" ng-repeat="apartamento in apartamentos | orderBy: 'numeroApt'" ng-if=" apartamento.apartamentoId == item.apartamentoId "> {{ apartamento.numeroApt }} </td>
+							<td class="text-center"> {{ item.dataPagamento | date: 'dd/MM/yyyy' }} </td>
+							<td class="text-center" > {{ item.descricao }} </td>
+							<td class="text-center"> {{ item.valor + item.juros + item.multa | currency: 'R$ '}} </td>
+							<td class="text-center" >
+								<span class="glyphicon glyphicon-barcode" aria-hidden="true"></span>
+							</td>
+							<td class="text-center"  >
+								<a href="#" 
+								ng-bootbox-confirm="Este Boleto será deletado da base, deseja continuar?"
+		        				ng-bootbox-confirm-action="removerItem(item, 2)" ng-bootbox-confirm-action-cancel="">
+		        					<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+		        				</a>
+							</td>
+						</tr>
+					</tbody>
+					
+				</table>
+
+			</div>
+	    </div>
+
+	    <div role="tabpanel" class="tab-pane fade" id="cadUsuario">
+	    	<div class="alert alert-info" role="alert" ng-show="mostraErro">
+			  Já Consta este Item na Lista!
+			</div>
+			<div class="alert alert-success alert-dismissible" role="alert" ng-show="mensagemSucesso.length">
+				<button id="alerta" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			  	{{mensagemSucesso}}
+			</div>
+			<div class="regularPosicao">
+				<form name="cadastroUsuarioForm" class="form-inline text-center regulaLayoutCadastramentoTodos" ng-if="aptDisponivel.length">
+			      <div layout-gt-sm="row">
+			      	<md-input-container >
+			          <label>Apartamento</label>
+			          <md-select name="apartamento" ng-model="dadosCadastrais.apartamento"  required>
+				            <md-option ng-repeat="apartamento in aptDisponivel | orderBy: 'apartamento'" ng-value="apartamento">{{apartamento}}</md-option>
+				       </md-select>
+						<div ng-messages="cadastroUsuarioForm.$submitted && cadastroUsuarioForm.apartamento.$error && contaForm.$invalid">
+			            	<div ng-message="required">Favor informar o apartamento!</div>
+			          	</div>
+					</md-input-container>
+			        <md-input-container class="md-block" flex-gt-sm>
+			          <label>Nome Completo</label>
+			          <input md-maxlength="45" required name="nomeCompleto" ng-model="dadosCadastrais.nomeCompleto" />
+
+			          <div ng-messages="cadastroUsuarioForm.nomeCompleto.$error" ng-if="!showHints">
+			            <div ng-message="required">Nome é obrigatório.</div>
+			            <div ng-message="md-maxlength">Pode conter no máximo 10</div>
+			          </div>
+			        </md-input-container>
+
+			        <md-input-container class="md-block" flex-gt-sm>
+			          <label>Apelido</label>
+			          <input md-maxlength="10" required name="nomeApelido" ng-model="dadosCadastrais.nomeApelido" />
+
+			          <div ng-messages="cadastroUsuarioForm.nomeApelido.$error" >
+			            <div ng-message="required">Nome é obrigatório.</div>
+			            <div ng-message="md-maxlength">Pode conter no máximo 10</div>
+			          </div>
+			        </md-input-container>
+
+			        <div flex="5" hide-xs hide-sm>
+			          <!-- Spacer //-->
+			        </div>
+			      </div>
+			      <div layout-gt-sm="row">
+			        <md-input-container class="md-block" flex-gt-sm>
+			          <label>CPF</label>
+			          <!-- <input name="cpf" ng-model="dadosCadastrais.cpf"   /> -->
+			          <input type="text" name="cpf" ng-model="dadosCadastrais.cpf" cpf-validator mask='999.999.999-99'> 
+			          <ul ng-messages="cadastroUsuarioForm.cpf.$error">
+			            <li ng-message="cpfInvalid">CPF não é válido</li>
+			            <li ng-message="cpfIncomplet">CPF está incompleto</li>
+			          </ul>
+
+			        </md-input-container>
+
+			      </div>
+
+			      <div layout-gt-sm="row">
+
+			        <md-input-container class="md-block" flex-gt-sm>
+			          <label>E-mail</label>
+			          <input name="email" ng-model="dadosCadastrais.email"
+			                 required minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/" />
+
+			          
+			        </md-input-container>
+
+			        <div flex="5" hide-xs hide-sm>
+			          <!-- Spacer //-->
+			        </div>
+
+			        <md-input-container class="md-block" flex-gt-sm>
+			          <label>Celular</label>
+			          <input type="text" name="celular" ng-model="dadosCadastrais.celular" mask='(99) 99999-9999'  >
+			        </md-input-container>
+
+			        <md-input-container >
+			          <label>Tipo Morador</label>
+			          <md-select name="tipoMorador" ng-model="dadosCadastrais.tipoMorador" required>
+				            <md-option value="0">Dono</md-option>
+				            <md-option value="1">Inquilino</md-option>
+				       </md-select>
+						<div ng-messages="cadastroUsuarioForm.$submitted && cadastroUsuarioForm.tipoMorador.$error && cadastroUsuarioForm.$invalid">
+			            	<div ng-message="required">Favor informar tipo do Registro!</div>
+			          	</div>
+					</md-input-container>
+
+			      </div>
+			      <div class=" form-group">
+			        <md-input-container >
+			          <button type="button" ng-click="inserirDadosPessoais()" ng-disabled="cadastroUsuarioForm.$invalid" class="btn  btn-primary" >Inserir Dados</button>
+			        </md-input-container>
+			      </div>
+			    </form>
+			</div>
+			<div class="panel panel-default">
+				<div class="table-responsive painel-animado" ng-show="dadosUsuarios.length" >
+					<table   class="table table-striped "   >
+						<thead  >
+							<tr >
+								<th class="text-center"><strong>Apartamento</strong></th>
+								<th class="text-center"><strong>Nome Completo</strong></th>
+								<th class="text-center"><strong>Apelido</strong></th>
+								<th class="text-center"><strong>CPF</strong></th>
+								<th class="text-center"><strong>E-mail</strong></th>
+								<th class="text-center"><strong>Celular</strong></th>
+								<th class="text-center"><strong>Tipo Morador</strong></th>
+								<th class="text-center"><strong>Ativo</strong></th>
+							</tr>
+						</thead>
+						<tbody >
+							<tr class="painel-animado" ng-repeat="item in dadosUsuarios | orderBy: 'apartamento'">
+								<td class="text-center"> {{ item.apartamento }} </td>
+								<td class="text-center"> {{ item.nomeCompleto }} </td>
+								<td class="text-center"> {{ item.nomeApelido }} </td>
+								<td class="text-center"> {{ item.cpf }} </td>
+								<td class="text-center"> {{ item.email }} </td>
+								<td class="text-center"> {{ item.celular }} </td>
+								<td class="text-center" ng-if="item.tipoMorador == 0"> Dono </td>
+								<td class="text-center" ng-if="item.tipoMorador == 1"> Inquilino </td>
+								<td class="text-center"> {{ item.ativo }} </td>
+
+								<td class="text-center"  >
+									<a href="#" ng-click="alterarItem(item, 3)"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+								</td>
+								<td class="text-center"  >
+									<a href="#" ng-click="removerItem(item, 3)"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+								</td>
+							</tr>
+						</tbody>
+						
+					</table>
+				</div>
+				<div class="text-center">
+					<br/>
+					<br/>
+					<div ng-show="dadosUsuarios.length">
+						<a href="#" class="btn btn-default btn-primary" ng-click="salvarCadastroUsuarios()" ng-disabled="!dadosUsuarios.length">Salvar</a>
+						<a href="#" ng-bootbox-confirm="Todos os Registros serão apagados, deseja confirmar?"
+		        		ng-bootbox-confirm-action="removerTodos(3)" ng-bootbox-confirm-action-cancel=""
+						  class="btn btn-default btn-danger">Cancelar</a>
+					</div>
+				</div>
+	    	</div>
+	    	<div class="panel panel-default">
+				<h3 class="text-center">Cadastros Existentes</h3>
+				<div class="table-responsive painel-animado"  >
+					<table   class="table table-striped "   >
+						<thead  >
+							<tr >
+								<th class="text-center"><strong>Apartamento</strong></th>
+								<th class="text-center"><strong>Nome Completo</strong></th>
+								<th class="text-center"><strong>Apelido</strong></th>
+								<th class="text-center"><strong>CPF</strong></th>
+								<th class="text-center"><strong>E-mail</strong></th>
+								<th class="text-center"><strong>Celular</strong></th>
+								<th class="text-center"><strong>Tipo Morador</strong></th>
+								<th class="text-center"><strong>Ativo</strong></th>
+							</tr>
+						</thead>
+						<tbody >
+							<tr class="painel-animado" ng-class="{'alert alert-danger': item.ativo == 0 }" ng-repeat="item in apartamentosCadastrados | orderBy: ['-ativo', 'numeroApt']">
+								<td class="text-center"> {{ item.numeroApt }} </td>
+								<td class="text-center"> {{ item.nomeCompleto }} </td>
+								<td class="text-center"> {{ item.nomeApelido }} </td>
+								<td class="text-center"> {{ item.cpf }} </td>
+								<td class="text-center"> {{ item.email }} </td>
+								<td class="text-center"> {{ item.telefone }} </td>
+								<td class="text-center" ng-if="item.tipoMorador == 0"> Dono </td>
+								<td class="text-center" ng-if="item.tipoMorador == 1"> Inquilino </td>
+								<td class="text-center " ng-if="item.ativo == 0" > <button class="btn btn-primary" type="button" ng-click="ativarDesativar(item)"  >Ativar</button> </td>
+								<td class="text-center" ng-if="item.ativo == 1"> <button class="btn btn-primary" type="button" ng-click="ativarDesativar(item)" >Desativar</button> </td>
+								
+							</tr>
+						</tbody>
+						
+					</table>
+				</div>
+				<div class="text-center">
+					<br/>
+					<br/>
+					<div ng-show="dadosUsuarios.length">
+						<a href="#" class="btn btn-default btn-primary" ng-click="salvarCadastroUsuarios()" ng-disabled="!dadosUsuarios.length">Salvar</a>
+						<a href="#" ng-bootbox-confirm="Todos os Registros serão apagados, deseja confirmar?"
+		        		ng-bootbox-confirm-action="removerTodos(3)" ng-bootbox-confirm-action-cancel=""
+						  class="btn btn-default btn-danger">Cancelar</a>
+					</div>
+				</div>
+	    	</div>
 	    </div>
 	    <div role="tabpanel" class="tab-pane fade" id="contas">
-	    	<h3>Contas</h3>
+	    	<div class="alert alert-info" role="alert" ng-show="mostraErro">
+			  Já Consta este Item na Lista!
+			</div>
+			<div class="alert alert-success alert-dismissible" role="alert" ng-show="mensagemSucesso.length">
+				<button id="alerta" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			  	{{mensagemSucesso}}
+			</div>
+	    	<div class="regularPosicao">
+		    	<form name="contaForm" class="form-inline text-center regulaLayoutCadastramentoTodos" ng-submit="inserirContas()">
+		    		<div class="ajustarLayout">
+				    	<div class=" ">
+				    	  	<md-input-container class="">
+					    	   	<md-datepicker ng-model="conta.dataPagamento"   name="dataPagamento" md-placeholder="Data de Vencimento" required ></md-datepicker>
+				          		<div ng-messages="contaForm.$submitted && contaForm.dataPagamento.$error && contaForm.$invalid">
+					            	<div ng-message="required">Favor informar data de Vencimento</div>
+					          	</div>
+					        </md-input-container>
+						</div>
+						<div class="afastamento   ">
+							<md-input-container >
+					          <label>Entrada / Saída</label>
+					          <md-select name="tipoDespesa" ng-model="conta.tipoDespesa" required>
+						            <md-option value="E">Entrada</md-option>
+						            <md-option value="S">Saída</md-option>
+						       </md-select>
+								<div ng-messages="contaForm.$submitted && contaForm.tipoDespesa.$error && contaForm.$invalid">
+					            	<div ng-message="required">Favor informar tipo do Registro!</div>
+					          	</div>
+							</md-input-container>
+						</div>
+						<div class=" afastamento  " >
+							<md-input-container >
+					          <label>Descrição</label>
+					          <md-select name="descricaoDespesa" ng-model="conta.descricaoDespesa" required>
+						            <md-option ng-show="conta.tipoDespesa == 'S' " value="Agua">Água</md-option>
+						            <md-option ng-show="conta.tipoDespesa == 'S' " value="Luz">Luz</md-option>
+						            <md-option ng-show="conta.tipoDespesa == 'S' " value="Limpeza">Limpeza</md-option>
+						            <md-option ng-show="conta.tipoDespesa == 'E' " value="Pagamentos">Pagamentos Efetuados</md-option>
+						            <md-option value="D">Outros</md-option>
+						       </md-select>
+						       
+								<div ng-messages="contaForm.$submitted && contaForm.descricaoDespesa.$error && contaForm.$invalid">
+					            	<div ng-message="required">Favor informar descrição!</div>
+					          	</div>
+							</md-input-container>
+						</div>
+						<div class=" col-sm-3 afastamento text-center " >
+							<md-input-container class="">
+						      <label>Valor</label>
+						      <md-icon class="inativarIcone" md-inactive md-svg-src="img/icons/ic_monetization_on_black_24px.svg" ></md-icon>
+								<input format="number" name="valor" class="text-center" ng-model="valor" zero-filter="true" required />
+								 <md-icon md-inactive md-svg-src="img/icons/ic_account_balance_black_24px" ></md-icon>
+								 <div ng-messages="contaForm.$submitted && contaForm.valor.$error && contaForm.valor.$invalid">
+					            	<div ng-message="required">Favor informar o Valor!</div>
+					          	</div>
+						    </md-input-container>
+						</div>
+					</div>
+					<md-input-container class="md-block" ng-show=" conta.descricaoDespesa == 'D' ">
+			          <label>Descreva</label>
+			          <textarea ng-model="conta.descricaoDespesaDetalhar" md-maxlength="150" max="150" rows="4" md-select-on-focus></textarea>
+			        </md-input-container>
+					<div class="col-xs-12 col-sm-12 text-center">
+						<md-input-container >
+							<button type="submit" ng-disabled="contaForm.$invalid" class="btn btn-default btn-primary">Inserir</button>
+						</md-input-container>
+					</div>
+				</form>
+			</div>
+			<div >
+				<table   class="table table-striped "  >
+					<thead  >
+						<tr >
+							<th class="text-center"><strong>Data de Vencimento</strong></th>
+							<th class="text-center"><strong>Descrição</strong></th>
+							<th class="text-center"><strong>Valor</strong></th>
+						</tr>
+					</thead>
+					<tbody >
+						<tr class="painel-animado" ng-repeat="item in contas | orderBy: 'dataPagamento'">
+							<td class="text-center"> {{ item.dataPagamento | date: 'dd/MM/yyyy' }} </td>
+							<td class="text-center" ng-if=" !item.descricaoDespesaDetalhar.length "> {{ 
+							item.descricaoDespesa }} </td>
+							<td class="text-center" ng-if=" item.descricaoDespesaDetalhar.length "> {{ item.descricaoDespesaDetalhar }} </td>
+							<td class="text-center"> {{ item.valor | currency: 'R$ '}} </td>
+							<td class="text-center" ng-if="item.tipoDespesa == 'E' " >
+								<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+							</td>
+							<td class="text-center" ng-if="item.tipoDespesa == 'S' " >
+								<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+							</td>
+							<td class="text-center"  >
+								<a href="#" ng-click="alterarItem(item, 4)"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
+							</td>
+							<td class="text-center"  >
+								<a href="#" ng-click="removerItem(item, 4)"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+							</td>
+						</tr>
+					</tbody>
+					
+				</table>
+				<div class="text-center">
+					<br/>
+					<br/>
+					<div ng-show="contas.length">
+						<a href="#" class="btn btn-default btn-primary" ng-click="salvarRegistrosDespesas()" ng-disabled="!contas.length">Salvar</a>
+						<a href="#" ng-bootbox-confirm="Todos os Registros serão apagados, deseja confirmar?"
+		        		ng-bootbox-confirm-action="removerTodos(4)" ng-bootbox-confirm-action-cancel=""
+						  class="btn btn-default btn-danger">Cancelar</a>
+					</div>
+				</div>
+			</div>
 	    </div>
 	</div>
 

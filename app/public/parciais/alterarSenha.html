@@ -1,0 +1,32 @@
+<div>
+	<p class="alert-danger ">{{mensagem}}</p>
+	<p class="alert-danger ">{{senhaIrregular}}</p>
+
+	<div class="text-center container posicaoLogin" >
+		<div class="">
+			<form ng-submit="alterarSenha()" >
+
+			    <div >
+				    <div class="form-group">
+				        <label>Senha Atual</label>
+				        <input type="password" ng-model="usuarioLogado.senhaAtual" class="form-control">
+				    </div>
+				    <div class="form-group">
+				        <label>Nova Senha</label>
+				        <input type="password" ng-model="usuarioLogado.senhaNova" class="form-control">
+				    </div>
+				    <div class="form-group">
+				        <label>Digite Novamente a Senha</label>
+				        <input type="password" ng-model="usuarioLogado.senhaNovaRepetida" class="form-control">
+				    </div>
+				</div>
+				<div class="list-group larguraLogin" >
+				    <button type="submit"  class="btn btn-default btn-success list-group-item" style="text-align: center; color: white"> Alterar  </button> 
+				    </br>
+				    <button type="button" class="btn btn-default btn-danger list-group-item" ng-click="goBack()" style="text-align: center; color: white"> Cancelar </button>   
+				</div>
+			</form>
+		</div>
+	</div>
+
+</div>

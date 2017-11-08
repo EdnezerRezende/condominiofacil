@@ -6,6 +6,14 @@
 
 	<div class="tab-content">
 	    <div role="tabpanel" class="tab-pane fade in  active" id="agenda">
+	    	<div class="alert alert-success alert-dismissible" role="alert" ng-show="EmiteMensagemSucesso.length">
+				<button id="alerta" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			  	{{EmiteMensagemSucesso}}
+			</div>
+			<div class="alert alert-danger alert-dismissible" role="alert" ng-show="EmiteMensagemErro.length">
+				<button id="alerta" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			  	{{EmiteMensagemErro}}
+			</div>
 	    	<table   class="table table-striped "  >
 				<thead  >
 					<tr >
@@ -14,8 +22,8 @@
 					</tr>
 				</thead>
 				<tbody >
-					<tr  ng-repeat="evento in eventos | orderBy: 'dataProgramada'">
-						<td class="text-center"> {{evento.dataProgramada | date: 'dd/MM/yyyy'}} </td>
+					<tr ng-class="{'alert alert-danger': ( evento.dataProgramada | date: 'dd/MM/yyyy' ) == ( nowEvento | date: 'dd/MM/yyyy' ) }" class="painel-animado" ng-repeat="evento in eventos | orderBy: 'dataProgramada'">
+						<td class="text-center" > {{evento.dataProgramada | date: 'dd/MM/yyyy'}} </td>
 						<td class="text-center"> {{evento.descricao }} </td>
 						<td class="text-center" ng-if="evento.descricao == 'Racionamento' ">
 							<span class="glyphicon glyphicon-tint " aria-hidden="true"></span>
@@ -24,11 +32,25 @@
 						<td class="text-center" ng-if="evento.descricao != 'Racionamento' " >
 							<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
 						</td>
+						<div ng-hide="!permiteExcluir" >
+							<td class="text-center" ng-show="permiteExcluir" >
+								<a href="#" ng-bootbox-confirm="Deseja deletar este registro?"
+		        		ng-bootbox-confirm-action="removerItem(evento, 1)" ng-bootbox-confirm-action-cancel=""><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+							</td>
+						</div>
 					</tr>
 				</tbody>
-			</table>
+			</table> 
 	    </div>
 	    <div role="tabpanel" class="tab-pane fade" id="contas">
+	    	<div class="alert alert-success alert-dismissible" role="alert" ng-show="EmiteMensagemSucesso.length">
+				<button id="alerta" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			  	{{EmiteMensagemSucesso}}
+			</div>
+			<div class="alert alert-danger alert-dismissible" role="alert" ng-show="EmiteMensagemErro.length">
+				<button id="alerta" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			  	{{EmiteMensagemErro}}
+			</div>
 	    	<div class="panel-group" id="parent" role="tablist" aria-multiselectable="true">
 			  <div class="panel panel-default" ng-repeat="referencia in referencias | orderBy: '-referencia'">
 			    <div class="panel-heading" role="tab" id="titulo{{referencia.referenciaId}}" >
@@ -51,14 +73,20 @@
 							
 						</thead>
 						<tbody  ng-repeat="item in movimentacao | orderBy: 'descricao'"  >
-							<tr ng-if="item.tipoRegistro == 'E' && referencia.referencia == item.referencia"  >
+							<tr class="painel-animado" ng-if="item.tipoRegistro == 'E' && referencia.referencia == item.referencia"  >
 								<td> {{item.descricao}} </td>
-								<td> {{item.referencia | date: 'dd/MM/yyyy'}} </td>
+								<td> {{item.dataInserido | date: 'dd/MM/yyyy'}} </td>
 								<td> {{item.valor | currency: 'R$ '}} </td>
+								<div ng-hide="!permiteExcluir" >
+									<td class="text-center" ng-show="permiteExcluir" >
+										<a href="#" ng-bootbox-confirm="Deseja deletar este registro?"
+		        		ng-bootbox-confirm-action="removerItem(item, 2)" ng-bootbox-confirm-action-cancel=""><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+									</td>
+								</div>
 							</tr>
 						
 						</tbody>
-						<tr   >
+						<tr >
 							<th >
 						<br/>
 								<strong ng-if="total.referencia == referencia.referencia" ng-repeat="total in vlrEntrada | orderBy: 'referencia'" >
@@ -78,10 +106,16 @@
 							</tr>
 						</thead>
 						<tbody ng-repeat="item in movimentacao | orderBy: 'descricao'">
-							<tr ng-if="item.tipoRegistro == 'S' && referencia.referencia == item.referencia"  >
+							<tr class="painel-animado" ng-if="item.tipoRegistro == 'S' && referencia.referencia == item.referencia"  >
 								<td> {{item.descricao}} </td>
-								<td> {{item.referencia | date: 'dd/MM/yyyy'}} </td>
+								<td> {{item.dataInserido | date: 'dd/MM/yyyy'}} </td>
 								<td> {{item.valor | currency: 'R$ '}} </td>
+								<div ng-hide="!permiteExcluir" >
+									<td class="text-center" ng-show="permiteExcluir" >
+										<a href="#" ng-bootbox-confirm="Deseja deletar este registro?"
+		        						ng-bootbox-confirm-action="removerItem(item, 2)" ng-bootbox-confirm-action-cancel=""><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+									</td>
+								</div>
 							</tr>
 						</tbody>
 						<tr >
@@ -98,50 +132,6 @@
 			    </div>
 			  </div>
 			</div>
-
-			<!-- <p-accordion id="multiple"  ng-repeat="referencia in referencias | orderBy: '-referencia'">
-					<h2 class="text-center " >Contas do Mês {{referencia.referencia | date: 'MM/yyyy' }}</h2>
-				    <p-tab title="Entradas" ng-repeat="item in movimentacao | orderBy: 'descricao'">
-				       <table  id="entradas" class="table table-striped ">
-								<thead  >
-									<tr>
-										<th><strong>Descrição</strong></th>
-										<th><strong>Data</strong></th>
-										<th><strong>Valor</strong></th>
-									</tr>
-								</thead>
-								<tbody  ng-repeat="item in movimentacao | orderBy: 'descricao'" >
-									<tr ng-if="item.tipoRegistro == 'E' && referencia.referencia == item.referencia" >
-										<td> {{item.descricao}} </td>
-										<td> {{item.referencia | date: 'MM/dd/yyyy'}} </td>
-										<td> {{item.valor | currency: 'R$ '}} </td>
-									</tr>
-								</tbody>
-							</table>
-				    </p-tab>
-				    <p-tab title="Saídas" ng-repeat="item in movimentacao | orderBy: 'descricao'">
-				        <table id="saidas" class="table table-striped " >
-							<thead>
-								<tr>
-									<th><strong>Descrição</strong></th>
-									<th><strong>Data</strong></th>
-									<th><strong>Valor</strong></th>
-								</tr>
-							</thead>
-							<tbody ng-repeat="item in movimentacao | orderBy: 'descricao'">
-								<tr ng-if="item.tipoRegistro == 'S' && referencia.referencia == item.referencia">
-									<td> {{item.descricao}} </td>
-									<td> {{item.referencia | date: 'MM/dd/yyyy'}} </td>
-									<td> {{item.valor | currency: 'R$ '}} </td>
-								</tr>
-							</tbody>
-						</table>
-				    </p-tab>
-			</p-accordion> -->
 	    </div>
 	</div>
-
-					
-					
-					
 </div>

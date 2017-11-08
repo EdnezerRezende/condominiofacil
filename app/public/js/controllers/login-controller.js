@@ -1,4 +1,4 @@
-angular.module('condominiofacil').controller('LoginController', function($scope, $rootScope, $stateParams, $window, $http, $location) {
+angular.module('condominiofacil').controller('LoginController', function(  $scope, $rootScope, $stateParams, $window, $http, $location) {
 	$rootScope.tituloPagina = 'Login';
 	$scope.mensagem = '';
 	$rootScope.usuario.login = '';
@@ -8,12 +8,13 @@ angular.module('condominiofacil').controller('LoginController', function($scope,
 
 		$http({
 	      method: 'POST',
-	      url: '/autenticar',
+	      url: '/autenticar', 
 	      data: $rootScope.usuario
 	    })
 	    .then(function (success) {
 	    	$rootScope.logado = true;
 	    	$rootScope.idLogin = success.data.loginId;
+	    	$rootScope.predioUsuario = success.data.predio;
 	    	var vlrPerfil = success.data.perfilId;
 
 	    	if ( vlrPerfil == 1 ){
@@ -22,12 +23,13 @@ angular.module('condominiofacil').controller('LoginController', function($scope,
 	    		$rootScope.perfilAutorizado = false;
 	    	}
 	    	
+	    	 $rootScope.buscarDadosUsuario();
+	    	 
 	    	 $http({
 			    method: 'GET',
 			    url: '/boletos/' + $rootScope.idLogin 
 			  })
 			  .then(function (success) {
-			    console.log($rootScope.boletos);
 			    $rootScope.boletos = success.data;
 			    if($rootScope.rotaBoleto){
 			    	$location.path('/boletos'); 

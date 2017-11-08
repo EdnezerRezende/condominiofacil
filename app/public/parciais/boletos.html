@@ -1,5 +1,13 @@
 <div class="container-fluid">
 	<br/>
+	<div class="alert alert-info alert-dismissible" role="alert" ng-show="mensagemErroBoleto.length">
+		<button id="alerta" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	  	{{mensagemErroBoleto}}
+	</div>
+	<div class="alert alert-success alert-dismissible" role="alert" ng-show="mensagemSucessoBoleto.length">
+		<button id="alerta" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	  	{{mensagemSucessoBoleto}}
+	</div>
 	<div class="panel panel-default">
 		<div class="table-responsive">
 		    <table id="Boletos" class="table table-striped " >
@@ -8,7 +16,7 @@
 						<th><strong>Ref.</strong></th>
 						<th><strong>Valor</strong></th>
 						<th><strong>Multa/Juros</strong></th>
-						<th><strong>Data Pgto</strong></th>
+						<th><strong>Data Vencimento</strong></th>
 						<th><strong>Data Baixa</strong></th>
 					</tr>
 				</thead>
@@ -17,14 +25,55 @@
 					<tr  ng-class="{'danger': (item.dataPagamento | date: 'yyyyMMdd') < dataFormatada && !item.boletoPago}" >			
 						<td > {{item.referencia | date: 'MM/yyyy'}} </td>
 						<td> {{item.valor | currency: 'R$ '}} </td>
-						<td> {{item.juros + item.multa| currency: 'R$ '}} </td>
+						<td> {{item.juros + item.multa | currency: 'R$ '}} </td>
 						<td> {{item.dataPagamento | date: 'dd/MM/yyyy'}} </td>
 						<td> {{item.dataPago | date: 'dd/MM/yyyy'}} </td>
-
 					</tr>
 				</tbody>
 			</table>
 					<br/>
+		</div>
+	</div>
+	<br/>
+	<div class="panel panel-default painel-animado" ng-show="perfilAutorizado" >
+		<h3 class="text-center">Boletos do Prédio em Aberto</h3>
+		<div class="table-responsive painel-animado">
+		    <table id="Boletos" class="table table-striped painel-animado" >
+				<thead >
+					<tr>
+						<th><strong>Apt.</strong></th>
+						<th><strong>Descrição</strong></th>
+						<th><strong>Valor</strong></th>
+						<th><strong>Multa/Juros</strong></th>
+						<th><strong>Total</strong></th>
+						<th><strong>Total Pago</strong></th>
+						<th><strong>Data Vencimento</strong></th>
+						<th><strong>Baixa</strong></th>
+					</tr>
+				</thead>
+				<!-- ng-init="verificarAtraso(item)" -->
+				<tbody  class="painel-animado"  ng-repeat="item in boletosTodos | orderBy: '-referencia'" >
+					<tr  class="painel-animado" ng-class="{'danger': (item.dataPagamento | date: 'yyyyMMdd') < dataFormatada && !item.boletoPago}" >
+						<td> {{item.numeroApt}} </td>		
+						<td> {{item.descricao}} </td>	
+						<td> {{item.valor}}</td>
+						<td> {{item.juros + item.multa | currency: 'R$ '}} </td>
+						<td> {{item.juros + item.multa + item.valor | currency: 'R$ '}} </td>
+						<td> <input format="number" name="valorTotal" class="text-center" ng-model="item.totPago" zero-filter="true" /></td>
+						<td> {{item.dataPagamento | date: 'dd/MM/yyyy'}} </td>
+						<td class="text-center"  >
+							<a href="#" class="btn btn-default btn-primary"
+								ng-bootbox-confirm="Esta Conta será quitada, deseja confirmar?"
+		        				ng-bootbox-confirm-action="baixarBoleto(item)" ng-bootbox-confirm-action-cancel=""
+							 >Baixar</a>
+							
+						</td>
+					</tr>
+					
+				</tbody>
+			</table>
+			<br/>
+			
 		</div>
 	</div>
 

@@ -1,7 +1,10 @@
-angular.module('condominiofacil').controller('ContatoController', function($scope, $rootScope, $stateParams, $window, $http, $location, $ngBootbox) {
+angular.module('condominiofacil').controller('ContatoController', function(  $scope, $rootScope, $http, $ngBootbox) {
 	$rootScope.tituloPagina = 'Contato';
 	$scope.user = {};
-	$scope.enviarEmail = function(){
+
+
+	$rootScope.envioContato = function(){
+		console.log($scope.user);
 		var email = $scope.user;
 		$http({
 		   method: 'POST',
@@ -10,20 +13,16 @@ angular.module('condominiofacil').controller('ContatoController', function($scop
 		 })
 		 .then(function (success) {
 		   $scope.user = {};
-		    $ngBootbox.alert({message: "E-mail enviado com sucesso, logo retornaremos seu contato, Obrigado!", title: "Contas Em Aberto"})
+		    $ngBootbox.alert({message: "E-mail enviado com sucesso, logo retornaremos seu contato, Obrigado!", title: "Sucesso!"})
 	        .then(function() {
 	            $scope.mensagem = "";
 	            $scope.titleMensagem = "";
 	            $scope.login = 0;
 	        });
-		   $location.path('/contato'); 
+	       
 		 }, function(error){
 		   console.log(error);
 		});
-
-		
-	};
-
-	
+	}
 
 });

@@ -5,7 +5,7 @@ header {
 html,
 body{ 
 	
-	overflow-x: hidden;
+	overflow-x: hidden; 
 }
 @media (min-width: 768px){
 	.navbar-toggle {
@@ -29,30 +29,58 @@ body{
 .posicaoCarrousel{
 	color: #FFF;
     background-color: rgba(0, 0, 0, 0.5);
-    width: 80%;
+
+    position: absolute !important; 
+    top: 50% ;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.posicaoLogin{
+	color: #FFF;
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 70%;
     border-radius: 10px;
     position: absolute !important; 
     top: 50% ;
     left: 50%;
     transform: translate(-50%, -50%);
 }
-@media (max-width: 683px){
+@media (max-width: 754px){
 	.regulaLayoutCadastramentoData{
 		 display: flex !important;
 	}
+	.ajustarLayout{
+		display: flex; 
+	}
+	
+}
+@media (max-width: 763px){
+	.ajustarLayout{
+		display: inline!important; 
+	}
+	
 }
 @media (max-width: 599px){
 	.regulaLayoutCadastramentoTodos{
 		 display: inline-grid !important;
+		 margin-right: 40%;
 	}
 	.alinhaVertical {
 		width: 100% !important;
 	}
 	.regularPosicao{
-		margin-left: 20%;
+		top: 50%;
+	    left: 50%;
+	    transform: translate(25%, 0%);
 	}
-}
 
+}
+@media(min-width: 599px){
+/*	.alinharDespesas{
+		width: 32%;
+    	margin-left: 35%;
+	}*/
+}
 
 
 .painel-animado {
@@ -69,4 +97,20 @@ body{
   -ms-transform: scale(0.1);
   -o-transform: scale(0.1);
   transform: scale(0.1);
+}
+.larguraLogin{
+	width: 60%;
+	margin-left: 20%;
+}
+.ajustarLayout{
+	display: flex; 
+}
+.afastamento{
+	margin-left: 3%;
+}
+.inativarIcone{
+	fill: currentColor!important;
+}
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
 }
