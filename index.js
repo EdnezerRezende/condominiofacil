@@ -11,5 +11,5 @@
 var porta = process.env.PORT || 3000;
 
 app.listen(porta, function() {
-    console.log("Aplicação Condominio Rodando" );
+    console.log("Aplicação Condominio Rodando em Produção" );
 })
