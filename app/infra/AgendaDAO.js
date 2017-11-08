@@ -8,19 +8,13 @@ AgendaDAO.prototype.lista = function(predio, callback) {
 	var now = moment().format('YYYY-MM-DD ');
 
 	var sql = 'select * from agenda where dataProgramada >= ? and predio = ? ' ;
-    this._connection.query(sql, [now, predio], function(erros, results) {
-            connection.release();
-            callback(erros,results);
-});
+    this._connection.query(sql, [now, predio], callback);
 }
 
 AgendaDAO.prototype.listaTudo = function( callback ) {
 
 	var sql = 'select * from agenda  ' ;
-    this._connection.query(sql, function(erros, results) {
-            connection.release();
-            callback(erros,results);
-});
+    this._connection.query(sql, callback);
 }
 
 AgendaDAO.prototype.salvaLista = function(eventosAgenda, callback) {
@@ -38,10 +32,7 @@ AgendaDAO.prototype.salvaLista = function(eventosAgenda, callback) {
 		values.push(tratar);
 	}
 
-    this._connection.query(sql, [values], function(erros, results) {
-            connection.release();
-            callback(erros,results);
-});
+    this._connection.query(sql, [values], callback);
 }
 
 AgendaDAO.prototype.deletaItem = function(id, callback) {
@@ -54,10 +45,7 @@ AgendaDAO.prototype.deletaItem = function(id, callback) {
 AgendaDAO.prototype.deletaEventoPassado = function(id, callback) {
 	var sql = 'delete from agenda where racionamentoId = ? ' ;
 
-    this._connection.query(sql, [id], function(erros, results) {
-            connection.release();
-            callback(erros,results);
-});
+    this._connection.query(sql, [id], callback);
 }
 
 module.exports = function(){
