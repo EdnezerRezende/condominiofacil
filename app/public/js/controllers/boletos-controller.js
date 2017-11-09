@@ -39,12 +39,12 @@ angular.module('condominiofacil').controller('BoletosController', function( $sco
 
 
 	$scope.baixarBoleto = function(item){
+		
+		var totSemVirgula = item.totPago.replace(',', '.');
+	 	item.totPago = totSemVirgula;
 
 	 	if ( item.totPago >= item.valor ){
 		 	item.boletoPago = 1;
-		 	
-	 		var totSemVirgula = item.totPago.replace(',', '.');
-	 		item.totPago = totSemVirgula;
 
 		 	$http({
 			   method: 'POST',

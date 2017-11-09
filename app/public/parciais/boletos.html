@@ -50,7 +50,7 @@
 						<th><strong>Data Vencimento</strong></th>
 						<th><strong>Baixa</strong></th>
 					</tr>
-				</thead>
+				</thead> 
 				<!-- ng-init="verificarAtraso(item)" -->
 				<tbody  class="painel-animado"  ng-repeat="item in boletosTodos | orderBy: '-referencia'" >
 					<tr  class="painel-animado" ng-class="{'danger': (item.dataPagamento | date: 'yyyyMMdd') < dataFormatada && !item.boletoPago}" >
