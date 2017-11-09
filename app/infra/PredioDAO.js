@@ -1,13 +1,18 @@
-function PredioDAO(connection) {
-    this._connection = connection;
+function PredioDAO(app) {
+    this._app = app;
 }
 
 PredioDAO.prototype.lista = function(predio, callback) {
-    var sql = 'select  apt.qtdApartamentos  ';
-    sql += '  from predio apt ';
-    sql += ' where apt.predioId = ? ';
-    
-    this._connection.query(sql, [predio], callback);
+	this._app.infra.connectionFactory(function(err, connection) { 
+	    var sql = 'select  apt.qtdApartamentos  ';
+	    sql += '  from predio apt ';
+	    sql += ' where apt.predioId = ? ';
+	    
+	    connection.query(sql, [predio], function(erros, results) {
+            connection.release();
+            callback(erros,results);
+        });
+    });
 }
 
 

@@ -6,12 +6,10 @@ module.exports = function(app) {
 
     	var usuario = req.body; 
 
-        	var connection = app.infra.connectionFactory();
-
-        	var loginDAO = new app.infra.LoginDAO(connection);
+        	var loginDAO = new app.infra.LoginDAO(app);
 
         	 loginDAO.findOne(usuario, function(err, results) {
-                if (err) throw err;
+                if (err) {console.log("cheguei aqui: "); throw err};
             	if (results == '') {
                      //console.log('Login/senha inválidos');
                      res.sendStatus(401);
@@ -31,22 +29,18 @@ module.exports = function(app) {
                  }
                 
             });
-            connection.end();
     });
 
     app.post('/alterarSenha', function(req,res) {
 
         var usuario = req.body;
 
-            var connection = app.infra.connectionFactory();
-
-            var loginDAO = new app.infra.LoginDAO(connection);
+            var loginDAO = new app.infra.LoginDAO(app);
 
              loginDAO.alterarSenha(usuario, function(err, results) {
                 if (err) throw err;
                 res.json(results);
             });
-            connection.end();
     });
 
 

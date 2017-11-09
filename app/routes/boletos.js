@@ -4,30 +4,26 @@ module.exports = function(app) {
     app.get('/boletos/:idLogin', function(req, res) {
 
     	var idLogin = req.params.idLogin;
-        var connection = app.infra.connectionFactory();
 
-        var boletosDAO = new app.infra.BoletosDAO(connection);
+        var boletosDAO = new app.infra.BoletosDAO(app);
         boletosDAO.lista(idLogin, function(err, results) {
         	if(err) throw err;
         	res.json(results);
         });
  
-        connection.end();
     });
 
     app.get('/boletos/buscarTodos/:idLogin', function(req, res) {
 
         var idLogin = req.params.idLogin;
         console.log("idLogin: "+ idLogin);
-        var connection = app.infra.connectionFactory();
 
-        var boletosDAO = new app.infra.BoletosDAO(connection);
+        var boletosDAO = new app.infra.BoletosDAO(app);
         boletosDAO.listaTodos(idLogin, function(err, results) {
             if(err) throw err;
             res.json(results);
         });
  
-        connection.end();
     });
 
      app.post('/boletos', function(req, res) {
@@ -38,43 +34,35 @@ module.exports = function(app) {
             boletos.push(req.body[i]);
         }
 
-        var connection = app.infra.connectionFactory();
 
-        var boletosDAO = new app.infra.BoletosDAO(connection);
+        var boletosDAO = new app.infra.BoletosDAO(app);
         boletosDAO.salvaLista(boletos, function(err, results) {
             if(err) throw err;
             res.json(results);
         });
  
-        connection.end();
     });
 
     app.post('/boletos/atualizar', function(req, res) {
         var boletosAtualizar = req.body;
 
-        var connection = app.infra.connectionFactory();
-
-        var boletosDAO = new app.infra.BoletosDAO(connection);
+        var boletosDAO = new app.infra.BoletosDAO(app);
         boletosDAO.atualizarBoletos(boletosAtualizar, function(err, results) {
             if(err) throw err;
             res.json(results);
         });
  
-        connection.end();
     });
 
     app.delete('/boletos/:id', function(req, res) {
         var id = req.params.id;
         
-        var connection = app.infra.connectionFactory();
-
-        var boletosDAO = new app.infra.BoletosDAO(connection);
+        var boletosDAO = new app.infra.BoletosDAO(app);
         boletosDAO.deletarBoletoPorId(id, function(err, results) {
             if(err) throw err;
             res.json(results);
         });
  
-        connection.end();
     });
 
   

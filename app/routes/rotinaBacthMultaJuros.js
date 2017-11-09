@@ -11,8 +11,7 @@ module.exports = function(app) {
 	multaJuros = function(){
 		var boletos = [];
 
-        var connection = app.infra.connectionFactory();
-        var boletosDAO = new app.infra.BoletosDAO(connection);
+        var boletosDAO = new app.infra.BoletosDAO(app);
         boletosDAO.obterTodosBoletos(function(err, results) {
             if(err) throw err;
        
@@ -25,7 +24,6 @@ module.exports = function(app) {
 	        }
 
         });
-        connection.end();
 
 	};
 
@@ -49,7 +47,7 @@ module.exports = function(app) {
 	calcularMulta = function(boleto){
 		var taxaMulta = 2;
 		var dataAtual = moment().format('YYYY-MM-DD ');
-		var dataBoleto = moment(boleto.dataPagamento).add(2, 'days').format('YYYY-MM-DD ');
+		var dataBoleto = moment(boleto.dataPagamento).add(1, 'days').format('YYYY-MM-DD ');
 
 		if ( dataAtual > dataBoleto && boleto.multa == 0 ){
 			var valor = boleto.valor;
@@ -61,8 +59,7 @@ module.exports = function(app) {
 	}
 
 	atualizaDados = function(boleto){
-		var connection = app.infra.connectionFactory();
-        var boletosDAO = new app.infra.BoletosDAO(connection);
+        var boletosDAO = new app.infra.BoletosDAO(app);
 
 		boletosDAO.atualizaMultaJurosBoleto(boleto, function(err, results) {
             if(err) throw err;
@@ -70,6 +67,5 @@ module.exports = function(app) {
             console.log("Atualizei multa e Juros do Boleto: "+ boleto.boletoId);
         });
 		
-		connection.end();
 	}
 }

@@ -3,7 +3,6 @@ var load = require('express-load');
 var bodyParser = require('body-parser');
 var history = require('connect-history-api-fallback');
 var consign = require('consign');
-var timeout = require('connect-timeout');
 
 
 /*var fs = require('fs');
@@ -18,8 +17,6 @@ module.exports = function() {
     
    
     app.use(history());
-    app.use(timeout('60s'));
-    app.use(haltOnTimedout);
     app.set('secret', 'seosenhornaoguardaratorreemvaovigiaasentinela'); 
     app.use(express.static('./app/public'));
     app.set('view engine', 'ejs');
@@ -40,9 +37,6 @@ module.exports = function() {
         .then('infra')
         .into(app);
     
-    function haltOnTimedout (req, res, next) {
-      if (!req.timedout) next()
-    }
 
     return app;
 }

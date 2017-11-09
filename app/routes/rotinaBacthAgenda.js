@@ -11,23 +11,18 @@ module.exports = function(app) {
 	eventosPassados = function(){
 		var eventos = [];
 
-        var connection = app.infra.connectionFactory();
-
-        var agendaDAO = new app.infra.AgendaDAO(connection);
+        var agendaDAO = new app.infra.AgendaDAO(app);
         
         agendaDAO.listaTudo( function(err, results) {
         	if(err) throw err;
         	eventos = results;
         	
         	for (var i = 0; i < eventos.length; i++) {
-        		console.log(eventos[i]);
-        		console.log("Antes de Entrar no metodo");
         		atualizaDadosEvento(eventos[i]);
         	}
 
         });
  
-        connection.end();
 
 	};
 
@@ -40,9 +35,8 @@ module.exports = function(app) {
 		console.log(dataHoje);
 		var dataEvento = moment(evento.dataProgramada).add(3, 'days').format('YYYY-MM-DD ');
 		if ( dataHoje > dataEvento ){
-			var connection = app.infra.connectionFactory();
 
-        	var agendaDAO = new app.infra.AgendaDAO(connection);
+        	var agendaDAO = new app.infra.AgendaDAO(app);
 
 			agendaDAO.deletaEventoPassado(evento.racionamentoId, function(err, results) {
 	            if(err) throw err;
@@ -50,7 +44,6 @@ module.exports = function(app) {
 	            console.log("Deletou o evento: "+ evento.descricao);
 	        });
 			
-			connection.end();
 			
 		}
 	}
