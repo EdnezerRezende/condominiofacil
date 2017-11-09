@@ -54,7 +54,6 @@ angular.module('condominiofacil').controller('PrincipalController', function(  $
             for (var i = 0; i < $scope.vlrEntrada.length; i++) {
               var dataEventoFormatada = $filter('date')($scope.vlrEntrada[i].referencia , 'yyyyMM');
               var dataItemFormatada = item.referencia.substring(0,6);
-              console.log(dataEventoFormatada +' - '+ dataItemFormatada);
               if (dataEventoFormatada == dataItemFormatada) {
                   $scope.vlrEntrada[i].vlrEntrada -= item.valor;
                   break;

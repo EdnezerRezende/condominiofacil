@@ -3,12 +3,14 @@ var pool = null;
 
 function _criaPool(){
 	if (process.env.NODE_ENV == 'production'){
+		var urlDeConexao = process.env.CLEARDB_DATABASE_URL;
+		var grupos = urlDeConexao.match(/mysql:\/\/(.*):(.*)@(.*)\/(.*)\?reconnect=true/);
 		pool =  mysql.createPool({
-			host: 'us-cdbr-iron-east-05.cleardb.net',
-			user: 'be3010b49d1863',
-			password: 'c725247b',
+			host: grupos[3],
+			user: grupos[1],
+			password: grupos[2],
 			connectionLimit: 10,
-			database: 'heroku_6d0ba34dd13df69',
+			database: grupos[4],
 		    headers: {
 				'Accept':'application/json',
 				'Content-type':'application/json'
