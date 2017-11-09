@@ -5,7 +5,7 @@ var moment = require('moment');
 
 MovimentacaoDAO.prototype.lista = function( predio, callback) {
     this._app.infra.connectionFactory(function(err, connection) {    
-    	var sql = 'select * from movimentacao where predio = ? ';
+    	var sql = 'select m.descricao, m.tipoRegistro, m.valor, m.dataInserido, m.loginId, m.referencia, m.predio from movimentacao m where m.predio = ? ';
         connection.query(sql, [predio], function(erros, results) {
             connection.release();
             callback(erros,results);
@@ -74,7 +74,7 @@ MovimentacaoDAO.prototype.listaVlrSaida = function( predio, callback) {
 
 MovimentacaoDAO.prototype.listaReferencia = function(predio, callback) {
     this._app.infra.connectionFactory(function(err, connection) { 
-    	var sql = 'select * from referencia where predio_id = ? ';
+    	var sql = 'select r.referencia, m.predio_id from referencia r where r.predio_id = ? ';
         connection.query(sql, [predio], function(erros, results) {
             connection.release();
             callback(erros,results);

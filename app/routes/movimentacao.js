@@ -6,6 +6,7 @@ module.exports = function(app) {
         var movimentacaoDAO = new app.infra.MovimentacaoDAO(app);
         movimentacaoDAO.lista(predio, function(err, results) {
         	if(err) throw err;
+            
         	res.json(results);
         });
     });
