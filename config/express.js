@@ -18,7 +18,7 @@ module.exports = function() {
     
    
     app.use(history());
-    app.use(timeout('5s'));
+    app.use(timeout('60s'));
     app.use(haltOnTimedout);
     app.set('secret', 'seosenhornaoguardaratorreemvaovigiaasentinela'); 
     app.use(express.static('./app/public'));

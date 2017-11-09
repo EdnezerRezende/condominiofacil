@@ -8,6 +8,9 @@
         .listen(port, function() {
             console.log('Servidor ${directoryToServe}/ no endereço https://localhost:${port} ' )
         })*/
+ function haltOnTimedout (req, res, next) {
+  if (!req.timedout) next()
+}        
 var porta = process.env.PORT || 3000;
 
 app.listen(porta, function() {
