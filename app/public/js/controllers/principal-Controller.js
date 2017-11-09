@@ -36,6 +36,9 @@ angular.module('condominiofacil').controller('PrincipalController', function(  $
         
         break;
       case 2: 
+        var guardaDia = item.referencia.substring(0, 2);
+        var guardaAno = item.referencia.substring(3, item.referencia.length);
+        item.referencia = (guardaAno + guardaDia + "01");
         $http({
           method: 'DELETE',
           url: '/movimentacao/' + item.movimentoId + '/' +item.referencia + '/' + $rootScope.predioUsuario
@@ -44,15 +47,14 @@ angular.module('condominiofacil').controller('PrincipalController', function(  $
           
           var deletouReferencia = success.data.affectedRows;
           
-          console.log(success);
-
           var indice = $scope.movimentacao.indexOf( item );
           $scope.movimentacao.splice(indice, 1);
 
           if ( item.tipoRegistro == 'E' ){
             for (var i = 0; i < $scope.vlrEntrada.length; i++) {
-              var dataEventoFormatada = $filter('date')($scope.vlrEntrada[i].referencia , 'yyyy-MM-dd');
-              var dataItemFormatada = $filter('date')(item.referencia , 'yyyy-MM-dd');
+              var dataEventoFormatada = $filter('date')($scope.vlrEntrada[i].referencia , 'yyyyMM');
+              var dataItemFormatada = item.referencia.substring(0,6);
+              console.log(dataEventoFormatada +' - '+ dataItemFormatada);
               if (dataEventoFormatada == dataItemFormatada) {
                   $scope.vlrEntrada[i].vlrEntrada -= item.valor;
                   break;
@@ -60,8 +62,8 @@ angular.module('condominiofacil').controller('PrincipalController', function(  $
             }
           }else{
             for (var i = 0; i < $scope.vlrSaida.length; i++) {
-              var dataEventoFormatada = $filter('date')($scope.vlrSaida[i].referencia , 'yyyy-MM-dd');
-              var dataItemFormatada = $filter('date')(item.referencia , 'yyyy-MM-dd');
+              var dataEventoFormatada = $filter('date')($scope.vlrSaida[i].referencia , 'yyyyMM');
+              var dataItemFormatada = item.referencia.substring(0,6);
               if (dataEventoFormatada == dataItemFormatada) {
                   $scope.vlrSaida[i].vlrSaida -= item.valor;
                   break;
@@ -89,8 +91,13 @@ angular.module('condominiofacil').controller('PrincipalController', function(  $
       url: '/movimentacao/'+$rootScope.predioUsuario
     })
     .then(function (success) {
-      $scope.movimentacao = success.data;
-     
+      for (var i = 0; i < success.data.length; i++) {
+        $scope.movimentacao.push(success.data[i]);
+      }
+     for (var i = 0; i < $scope.movimentacao.length; i++) {
+       $scope.movimentacao[i].referencia = $filter('date')($scope.movimentacao[i].referencia , 'MM/yyyy');
+       $scope.movimentacao[i].dataInserido = $filter('date')($scope.movimentacao[i].dataInserido , 'dd/MM/yyyy');
+     }
     }, function( error ){
       console.log( error );
     });
@@ -101,7 +108,7 @@ angular.module('condominiofacil').controller('PrincipalController', function(  $
     })
     .then(function (success) {
       $scope.vlrEntrada = success.data;
-     
+
     }, function( error ){
       console.log( error );
     });
@@ -134,8 +141,10 @@ angular.module('condominiofacil').controller('PrincipalController', function(  $
     url: '/movimentacao/referencias/'+ $rootScope.predioUsuario
   })
   .then(function (success) {
-    console.log(success);
     $scope.referencias = success.data;
+    for (var i = 0; i < $scope.referencias.length; i++) {
+      $scope.referencias[i].referencia = $filter('date')($scope.referencias[i].referencia , 'MM/yyyy');
+    }
   }, function(error){
     console.log(error);
   });

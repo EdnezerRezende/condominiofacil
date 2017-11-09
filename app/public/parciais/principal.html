@@ -51,12 +51,12 @@
 				<button id="alerta" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			  	{{EmiteMensagemErro}}
 			</div>
-	    	<div class="panel-group" id="parent" role="tablist" aria-multiselectable="true">
+	    	<div class="panel-group" id="parent" role="tablist" aria-multiselectable="true" >
 			  <div class="panel panel-default" ng-repeat="referencia in referencias | orderBy: '-referencia'">
 			    <div class="panel-heading" role="tab" id="titulo{{referencia.referenciaId}}" >
 			      <h4 class="panel-title">
-			        <a role="button" data-toggle="collapse" data-parent="#parent" href="#corpo{{referencia.referenciaId}}" aria-expanded="true" aria-controls="corpo{{referencia.referenciaId}}">
-			          Contas do Mês {{referencia.referencia | date: 'MM/yyyy'}}
+			        <a role="button" data-toggle="collapse" data-parent="#parent" href="#corpo{{referencia.referenciaId}}" aria-expanded="false" aria-controls="corpo{{referencia.referenciaId}}">
+			          Contas do Mês {{ referencia.referencia }}
 			        </a>
 			      </h4>
 			    </div>
@@ -67,7 +67,7 @@
 						<thead  >
 							<tr>
 								<th><strong>Descrição</strong></th>
-								<th><strong>Data</strong></th>
+								<th><strong>Data Vencimento</strong></th>
 								<th><strong>Valor</strong></th>
 							</tr>
 							
@@ -75,7 +75,7 @@
 						<tbody  ng-repeat="item in movimentacao | orderBy: 'descricao'"  >
 							<tr class="painel-animado" ng-if="item.tipoRegistro == 'E' && referencia.referencia == item.referencia"  >
 								<td> {{item.descricao}} </td>
-								<td> {{item.dataInserido | date: 'dd/MM/yyyy'}} </td>
+								<td> {{item.dataInserido }} </td>
 								<td> {{item.valor | currency: 'R$ '}} </td>
 								<div ng-hide="!permiteExcluir" >
 									<td class="text-center" ng-show="permiteExcluir" >
@@ -88,8 +88,8 @@
 						</tbody>
 						<tr >
 							<th >
-						<br/>
-								<strong ng-if="total.referencia == referencia.referencia" ng-repeat="total in vlrEntrada | orderBy: 'referencia'" >
+						<br/>	
+								<strong ng-if="(total.referencia | date: 'MM/yyyy' ) == referencia.referencia" ng-repeat="total in vlrEntrada | orderBy: 'referencia'" >
 									Total Entrada: {{total.vlrEntrada | currency: 'R$ ' }}
 								</strong>
 						<br/>
@@ -108,7 +108,7 @@
 						<tbody ng-repeat="item in movimentacao | orderBy: 'descricao'">
 							<tr class="painel-animado" ng-if="item.tipoRegistro == 'S' && referencia.referencia == item.referencia"  >
 								<td> {{item.descricao}} </td>
-								<td> {{item.dataInserido | date: 'dd/MM/yyyy'}} </td>
+								<td> {{item.dataInserido }} </td>
 								<td> {{item.valor | currency: 'R$ '}} </td>
 								<div ng-hide="!permiteExcluir" >
 									<td class="text-center" ng-show="permiteExcluir" >
@@ -121,7 +121,7 @@
 						<tr >
 							<th  >
 						<br/>
-								<strong ng-if="total.referencia == referencia.referencia" ng-repeat="total in vlrSaida | orderBy: 'referencia'" >
+								<strong ng-if="(total.referencia | date: 'MM/yyyy' ) == referencia.referencia" ng-repeat="total in vlrSaida | orderBy: 'referencia'" >
 									Total Saída: {{total.vlrSaida | currency: 'R$ ' }}
 								</strong>
 						<br/>
