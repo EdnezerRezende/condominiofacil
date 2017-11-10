@@ -148,7 +148,9 @@ $scope.inserirEventoCadastro = function(){
 	$scope.mostraErro = false;
 	if ( $scope.evento.data != null && $scope.evento.data != "" ) {
 		var jaInserido = false;
-
+ 		
+ 		$scope.evento.data.setHours(11);
+ 		console.log($scope.evento.data.getHours());
 		//Verificar se já tem registro inserido igual ao que está sendo enviado!
 		for (var i = 0; i < $scope.eventos.length; i++) {
 			if ( $scope.evento.data.getDate() == $scope.eventos[i].data.getDate() 
