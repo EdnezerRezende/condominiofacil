@@ -94,7 +94,7 @@ angular.module('condominiofacil').controller('PrincipalController', function(  $
         $scope.movimentacao.push(success.data[i]);
       }
      for (var i = 0; i < $scope.movimentacao.length; i++) {
-       $scope.movimentacao[i].referencia = $filter('date')($scope.movimentacao[i].referencia , 'MM/yyyy');
+       $scope.movimentacao[i].referencia = $filter('date')($scope.movimentacao[i].referencia, 'MM/yyyy');
        $scope.movimentacao[i].dataInserido = $filter('date')($scope.movimentacao[i].dataInserido , 'dd/MM/yyyy');
      }
     }, function( error ){
@@ -143,6 +143,8 @@ angular.module('condominiofacil').controller('PrincipalController', function(  $
     $scope.referencias = success.data;
     for (var i = 0; i < $scope.referencias.length; i++) {
       $scope.referencias[i].referencia = $filter('date')($scope.referencias[i].referencia , 'MM/yyyy');
+      console.log("Referencia: ");
+      console.log($scope.referencias[i].referencia);
     }
   }, function(error){
     console.log(error);
