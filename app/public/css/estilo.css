@@ -19,12 +19,19 @@ body{
 	}
 
 }
+@media (max-width: 700px){
+	.ajustesMenuHamburguer{
+		margin-right: -20px !important;
+	}
+
+}
 .menuPrincipal{
 	display: flex;
 	align-items: center; 
 	align-content: space-between; 
 	margin-top: -12px; 
 	height: 70px; 
+	margin-left: -14px;
 }
 .posicaoCarrousel{
 	color: #FFF;
@@ -110,6 +117,9 @@ body{
 }
 .inativarIcone{
 	fill: currentColor!important;
+}
+.ajustesMenuHamburguer{
+	border: 0px solid transparent !important;
 }
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;

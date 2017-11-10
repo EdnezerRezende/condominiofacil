@@ -22,7 +22,7 @@ MovimentacaoDAO.prototype.salvaLista = function(contas, callback) {
         for (var i = contas.length - 1; i >= 0; i--) {
             var dataInserido = moment(contas[i].dataPagamento).format('YYYY-MM-DD ');
             var descricao = '';
-            var referencia = moment(contas[i].dataPagamento).set('date', 1).format('YYYY-MM-DD ');
+            var referencia = moment(contas[i].dataPagamento).set('date', 2).format('YYYY-MM-DD ');
 
             
             if ( contas[i].descricaoDespesa != null && contas[i].descricaoDespesa != '' ){

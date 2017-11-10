@@ -27,7 +27,7 @@ module.exports = function(app) {
             var moment = require('moment');
 
             for (var i = contas.length - 1; i >= 0; i--) {
-                var referenciaAtual = moment(contas[i].dataPagamento).set('date', 1).format('YYYY-MM-DD ');
+                var referenciaAtual = moment(contas[i].dataPagamento).set('date', 2).format('YYYY-MM-DD ');
                 if (compararRef != referenciaAtual || compararRef == '' ){
                     compararRef = referenciaAtual;
                     var predio = contas[i].predio;
@@ -79,8 +79,6 @@ module.exports = function(app) {
         var movimentacaoDAO = new app.infra.MovimentacaoDAO(app);
         movimentacaoDAO.listaReferencia(predio, function(err, results) {
         	if(err) throw err;
-            console.log(results);
-            console.log(results.data);
         	res.json(results);
         });
  
@@ -98,7 +96,7 @@ module.exports = function(app) {
         movimentacaoDAO.deletaItem(id, function(err, results) {
             if(err) throw err;
             
-            var referenciaAtual = moment(referencia).set('date', 1).format('YYYY-MM-DD ');
+            var referenciaAtual = moment(referencia).set('date', 2).format('YYYY-MM-DD ');
             
             var values = {
                 referenciaAtual,

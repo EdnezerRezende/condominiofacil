@@ -70,12 +70,13 @@ BoletosDAO.prototype.salvaLista = function(boletos, callback) {
         var sql = 'insert into boletos ( referencia, valor, dataPagamento, loginId, numeroApartamento, descricao, boletoPago, predio ) VALUES ? ' ;
 
         for (var i = boletos.length - 1; i >= 0; i--) {
-            console.log(boletos[i].predio);
+            var dataVencimento = moment(boletos[i].dataPagamentodevelop).format('YYYY-MM-DD HH:mm:ss');
+            console.log("Data Vencimento " + dataVencimento);
             var tratar = [
 
                     boletos[i].referencia,
                     boletos[i].valorBoleto,
-                    boletos[i].dataPagamento,
+                    dataVencimento,
                     boletos[i].loginId,
                     boletos[i].apartamento,
                     boletos[i].descricaoBoleto,
@@ -97,7 +98,7 @@ BoletosDAO.prototype.salvaLista = function(boletos, callback) {
 BoletosDAO.prototype.atualizarBoletos = function(boletosAtualizar, callback) {
     this._app.infra.connectionFactory(function(err, connection) {
         var values = [];
-        var dataHoje =  moment().format('YYYY-MM-DD ');
+        var dataHoje =  moment().format('YYYY-MM-DD HH:mm:ss');
         var sql = 'update boletos b set b.boletoPago = 1, b.dataPago = ? , b.totPago = ? where b.boletoId = ? ';
         
         var tratar = [
