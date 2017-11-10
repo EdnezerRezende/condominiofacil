@@ -142,7 +142,10 @@ angular.module('condominiofacil').controller('PrincipalController', function(  $
   .then(function (success) {
     $scope.referencias = success.data;
     for (var i = 0; i < $scope.referencias.length; i++) {
-      $scope.referencias[i].referencia = $filter('date')($scope.referencias[i].referencia , 'MM/yyyy');
+      var dataRef = $filter('date')($scope.referencias[i].referencia , 'MM/yyyy');
+      console.log(dataRef);
+      $scope.referencias[i].referencia = dataRef;
+      
       console.log("Referencia: ");
       console.log($scope.referencias[i].referencia);
     }
