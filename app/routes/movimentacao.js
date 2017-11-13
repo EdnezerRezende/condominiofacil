@@ -96,7 +96,7 @@ module.exports = function(app) {
         movimentacaoDAO.deletaItem(id, function(err, results) {
             if(err) throw err;
             
-            var referenciaAtual = moment(referencia).set('date', 2).format('YYYY-MM-DD ');
+            var referenciaAtual = moment(referencia).set('date', 2).format('YYYY-MM-DD HH:mm:ss');
             
             var values = {
                 referenciaAtual,
