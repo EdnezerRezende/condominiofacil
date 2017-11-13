@@ -33,7 +33,7 @@ AgendaDAO.prototype.salvaLista = function(eventosAgenda, callback) {
 		var sql = 'insert into agenda ( dataProgramada, descricao, predio ) VALUES ? ' ;
 
 		for (var i = eventosAgenda.length - 1; i >= 0; i--) {
-			var now = moment(eventosAgenda[i].data).format('YYYY-MM-DD ');
+			var now = moment(eventosAgenda[i].data).format('YYYY-MM-DD HH:mm:ss');
 			var tratar = [
 					now,
 					eventosAgenda[i].descricao,

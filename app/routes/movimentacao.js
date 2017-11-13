@@ -27,7 +27,7 @@ module.exports = function(app) {
             var moment = require('moment');
 
             for (var i = contas.length - 1; i >= 0; i--) {
-                var referenciaAtual = moment(contas[i].dataPagamento).set('date', 2).format('YYYY-MM-DD ');
+                var referenciaAtual = moment(contas[i].dataPagamento).set('date', 2).format('YYYY-MM-DD HH:mm:ss');
                 if (compararRef != referenciaAtual || compararRef == '' ){
                     compararRef = referenciaAtual;
                     var predio = contas[i].predio;
