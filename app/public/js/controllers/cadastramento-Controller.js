@@ -150,8 +150,7 @@ $scope.inserirEventoCadastro = function(){
 		var jaInserido = false;
  		
  		$scope.evento.data.setHours(11);
- 		console.log($scope.evento.data);
- 		console.log($scope.evento.data.getHours());
+
 		//Verificar se já tem registro inserido igual ao que está sendo enviado!
 		for (var i = 0; i < $scope.eventos.length; i++) {
 			if ( $scope.evento.data.getDate() == $scope.eventos[i].data.getDate() 
@@ -309,7 +308,7 @@ $scope.gerarBoletosAutomaticamente = function(){
 				if ( countPonto == 1 && temVirgula ) {
 					replac = $scope.valorBoleto.replace(".", "");
 				} 
-
+				$scope.boleto.dataPagamento.setHours(11);
 				var tirarInverterVirgulaParaPonto = replac.replace(",", ".");
 				$scope.boleto.valorBoleto = tirarInverterVirgulaParaPonto;
 				$scope.boleto.predio = $rootScope.predioUsuario;
@@ -548,6 +547,8 @@ $scope.inserirContas = function(){
 	        $scope.mostraErro = true;
 			jaInserido = false;
 		}else{
+			$scope.conta.dataPagamento.setHours(11);
+			console.log($scope.conta.dataPagamento);
 			var countPonto = 0;
 			var temVirgula = false;
 			for (var i = 0; i < $scope.valor.length; i++) {
